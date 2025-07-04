@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import GlobalStyles from './styles/GlobalStyles';
+import { t } from './i18n';
 
 // Import Page Components
 import LanguageSelectionPage from './components/LanguageSelectionPage';
@@ -23,11 +25,12 @@ import SuccessPage_EN from './components/SuccessPage_EN';
 const AppContent = () => {
   const [navigation, setNavigation] = useState({ page: 'languageSelection', flow: null });
   const { theme } = useTheme();
+  const { lang } = useLanguage();
 
   useEffect(() => {
-    document.body.dir = 'ltr';
+    document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.body.setAttribute('data-theme', theme);
-  }, [theme]);
+  }, [theme, lang]);
 
   const handleNavigation = (page) => {
     let currentFlow = navigation.flow;
@@ -51,10 +54,13 @@ const AppContent = () => {
       switch(page) {
             case 'landing': return <LandingPage_EN onNavigate={handleNavigation} />;
             case 'selectUser': return <SelectUserPage_EN onNavigate={handleNavigation} />;
-            
-            case 'personalDocs': return <SimpleDocsPage_EN title="Personal" onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
-            case 'businessmenDocs': return <SimpleDocsPage_EN title="Businessmen" onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
-            case 'guaranteedDocs': return <SimpleDocsPage_EN title="Guaranteed" onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
+
+            case 'personalDocs':
+                return <SimpleDocsPage_EN title={t('personal', lang)} onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
+            case 'businessmenDocs':
+                return <SimpleDocsPage_EN title={t('businessmen', lang)} onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
+            case 'guaranteedDocs':
+                return <SimpleDocsPage_EN title={t('guaranteed', lang)} onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
 
             case 'companiesDocs': return <CompaniesDocsPage_EN onNavigate={handleNavigation} backPage="selectUser" nextPage="companyInfo" />;
             case 'companyInfo': return <CompanyInfoPage_EN onNavigate={handleNavigation} backPage="companiesDocs" nextPage="companyContact" />;
@@ -83,9 +89,11 @@ const AppContent = () => {
 
 export default function App() {
     return (
-        <ThemeProvider>
-            <GlobalStyles />
-            <AppContent />
-        </ThemeProvider>
+        <LanguageProvider>
+            <ThemeProvider>
+                <GlobalStyles />
+                <AppContent />
+            </ThemeProvider>
+        </LanguageProvider>
     );
 }

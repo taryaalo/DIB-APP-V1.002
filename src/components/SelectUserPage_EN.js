@@ -2,9 +2,13 @@
 import React, { useEffect } from 'react';
 import { LOGO_COLOR } from '../assets/imagePaths';
 import ThemeSwitcher from './common/ThemeSwitcher';
+import LanguageSwitcher from './common/LanguageSwitcher';
+import { useLanguage } from '../contexts/LanguageContext';
+import { t } from '../i18n';
 import { PersonalIcon, GuaranteedIcon, BusinessmenIcon, CompaniesIcon } from './common/Icons';
 
 const SelectUserPage_EN = ({ onNavigate }) => {
+  const { lang } = useLanguage();
   useEffect(() => {
     const card = document.querySelector('.tilt-effect');
     if (!card) return;
@@ -31,7 +35,10 @@ const SelectUserPage_EN = ({ onNavigate }) => {
     <div className="app-container">
       <header className="header">
         <img src={LOGO_COLOR} alt="Bank Logo" className="logo" />
-        <ThemeSwitcher />
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <LanguageSwitcher />
+          <ThemeSwitcher />
+        </div>
       </header>
       <main className="main">
         <div className="background">
@@ -39,11 +46,11 @@ const SelectUserPage_EN = ({ onNavigate }) => {
           <div className="overlay"></div>
         </div>
         <div className="menu-card tilt-effect">
-          <h2>Select Service Type</h2>
-          <button onClick={() => onNavigate('personalDocs')}><PersonalIcon /><span>Personal</span></button>
-          <button onClick={() => onNavigate('guaranteedDocs')}><GuaranteedIcon /><span>Guaranteed</span></button>
-          <button onClick={() => onNavigate('businessmenDocs')}><BusinessmenIcon /><span>Businessmen</span></button>
-          <button onClick={() => onNavigate('companiesDocs')}><CompaniesIcon /><span>Companies</span></button>
+          <h2>{t('selectService', lang)}</h2>
+          <button onClick={() => onNavigate('personalDocs')}><PersonalIcon /><span>{t('personal', lang)}</span></button>
+          <button onClick={() => onNavigate('guaranteedDocs')}><GuaranteedIcon /><span>{t('guaranteed', lang)}</span></button>
+          <button onClick={() => onNavigate('businessmenDocs')}><BusinessmenIcon /><span>{t('businessmen', lang)}</span></button>
+          <button onClick={() => onNavigate('companiesDocs')}><CompaniesIcon /><span>{t('companies', lang)}</span></button>
         </div>
       </main>
     </div>

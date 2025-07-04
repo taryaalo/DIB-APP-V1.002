@@ -7,6 +7,7 @@ daman-islamic-bank-app/
 │   ├── components/
 │   │   ├── common/
 │   │   │   ├── Icons.js
+│   │   │   ├── LanguageSwitcher.js
 │   │   │   ├── ThemeSwitcher.js
 │   │   │   └── UploadComponent.js
 │   │   ├── CompaniesDocsPage_EN.js
@@ -23,6 +24,7 @@ daman-islamic-bank-app/
 │   │   ├── SuccessPage_EN.js
 │   │   └── WorkInfoPage_EN.js
 │   ├── contexts/
+│   │   ├── LanguageContext.js
 │   │   └── ThemeContext.js
 │   ├── styles/
 │   │   └── GlobalStyles.js

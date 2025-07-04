@@ -1,16 +1,21 @@
 
 import React from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
+import LanguageSwitcher from './common/LanguageSwitcher';
+import { useLanguage } from '../contexts/LanguageContext';
+import { t } from '../i18n';
 
 const FinancialInfoPage_EN = ({ onNavigate, backPage }) => {
+    const { lang } = useLanguage();
     return (
         <div className="form-page">
             <header className="header docs-header">
                 <img src={LOGO_WHITE} alt="Bank Logo" className="logo" />
                  <button onClick={() => onNavigate(backPage)} className="btn-back">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                    <span>Back</span>
+                    <span>{t('back', lang)}</span>
                 </button>
+                <LanguageSwitcher />
             </header>
             <main className="form-main">
                 <form className="form-container">
@@ -47,7 +52,7 @@ const FinancialInfoPage_EN = ({ onNavigate, backPage }) => {
                             <span>I agree to the <a href="#">Terms and Conditions</a>.</span>
                         </label>
                     </div>
-                    <button className="btn-next" onClick={() => onNavigate('success')}>Submit Request</button>
+                    <button className="btn-next" onClick={() => onNavigate('success')}>{t('submitRequest', lang)}</button>
                 </div>
             </main>
         </div>

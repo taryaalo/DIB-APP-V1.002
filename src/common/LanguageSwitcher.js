@@ -1,6 +1,6 @@
 import React from 'react';
-import { useLanguage } from '../../contexts/LanguageContext';
-import { t } from '../../i18n';
+import { useLanguage } from '../contexts/LanguageContext';
+import { t } from '../i18n';
 
 const LanguageSwitcher = () => {
   const { language, toggleLanguage } = useLanguage();

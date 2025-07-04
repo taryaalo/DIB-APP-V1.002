@@ -8,49 +8,49 @@ import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const PersonalInfoPage_EN = ({ onNavigate, backPage }) => {
+const PersonalInfoPage_EN = ({ onNavigate, backPage, flow }) => {
     const { language } = useLanguage();
     const [form, setForm] = useState({
         fullName: '',
-        nameEn: '',
+        firstNameEn: '',
+        middleNameEn: '',
+        lastNameEn: '',
         dob: '',
         gender: '',
         nationality: '',
-        nid: '',
+        nidDigits: Array(12).fill(''),
         phone: '',
-        email: ''
+        enableEmail: false,
+        email: '',
+        residenceExpiry: '',
+        censusCardNumber: ''
     });
 
     const [agreements, setAgreements] = useState({ agree1: false, agree2: false });
 
-    const handleChange = (e) => {
+    const handleChange = (e, index) => {
         const { name, value, type, checked } = e.target;
         if (name.startsWith('agree')) {
             setAgreements(a => ({ ...a, [name]: checked }));
+        } else if (name === 'enableEmail') {
+            setForm(f => ({ ...f, enableEmail: checked }));
+        } else if (name.startsWith('nidDigit')) {
+            const digits = [...form.nidDigits];
+            digits[index] = value.replace(/[^0-9]/g, '').slice(-1);
+            setForm(f => ({ ...f, nidDigits: digits }));
         } else {
             setForm(f => ({ ...f, [name]: value }));
-            if (name === 'nid') {
-                if (value.length >= 1) {
-                    const g = value[0] === '1' ? 'male' : value[0] === '2' ? 'female' : '';
-                    if (g) setForm(f => ({ ...f, gender: g }));
-                }
-                if (value.length >= 5) {
-                    const year = parseInt(value.slice(1,5));
-                    const age = new Date().getFullYear() - year;
-                    if (!isNaN(year) && age >= 18 && age <= 120) {
-                        setForm(f => ({ ...f, dob: `${year}-01-01` }));
-                    }
-                }
-            }
         }
     };
 
     const validateNID = () => {
-        if (form.nid.length < 5) return false;
-        const genderDigit = form.nid[0];
+        const nid = form.nidDigits.join('');
+        if (flow === 'expat') return true;
+        if (nid.length !== 12) return false;
+        const genderDigit = nid[0];
         if (genderDigit === "1" && form.gender !== "male") return false;
         if (genderDigit === "2" && form.gender !== "female") return false;
-        const year = parseInt(form.nid.slice(1,5));
+        const year = parseInt(nid.slice(1,5));
         if (isNaN(year)) return false;
         const age = new Date().getFullYear() - year;
         if (age < 18 || age > 120) return false;
@@ -76,7 +76,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage }) => {
         <div className="form-page">
             <header className="header docs-header">
                 <img src={LOGO_WHITE} alt="Bank Logo" className="logo" />
-                <div style={{ display: 'flex', gap: '20px' }}>
+                <div style={{ display: 'flex', gap: '30px' }}>
                     <ThemeSwitcher />
                     <LanguageSwitcher />
                 </div>
@@ -88,15 +88,30 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage }) => {
             <main className="form-main">
                 <form className="form-container" onSubmit={e => {e.preventDefault(); handleSubmit();}}>
                     <div className="form-section">
-                        <h3>Personal Information</h3>
-                        <div className="form-group"><input name="fullName" value={form.fullName} onChange={handleChange} required type="text" className="form-input" placeholder="Full Name" /></div>
-                        <div className="form-group"><input name="nameEn" value={form.nameEn} onChange={handleChange} required type="text" className="form-input" placeholder="Full Name (English)" /></div>
-                        <div className="form-group date-input-container"><input name="dob" value={form.dob} required type="text" className="form-input" placeholder="Date of Birth" onFocus={(e) => e.target.type='date'} onBlur={(e) => e.target.type='text'} onChange={handleChange}/><CalendarIcon/></div>
-                        <div className="form-group"><select name="gender" value={form.gender} onChange={handleChange} required className="form-input"><option value="">Gender</option><option value="male">Male</option><option value="female">Female</option></select></div>
-                        <div className="form-group"><select name="nationality" value={form.nationality} onChange={handleChange} className="form-input"><option value="">Nationality</option><option value="libyan">Libyan</option><option value="other">Other</option></select></div>
-                        <div className="form-group"><input name="nid" value={form.nid} onChange={handleChange} required type="text" maxLength="12" className="form-input" placeholder="National ID" /></div>
-                        <div className="form-group"><input name="phone" value={form.phone} onChange={handleChange} required type="tel" className="form-input" placeholder="Phone Number" /></div>
-                        <div className="form-group"><input name="email" value={form.email} onChange={handleChange} type="email" className="form-input" placeholder="Email (optional)" /></div>
+                        <h3>{t('personalInfo', language)}</h3>
+                        <div className="form-group"><input name="fullName" value={form.fullName} onChange={handleChange} required type="text" className="form-input" placeholder={t('fullName', language)} /></div>
+                        <div className="form-group"><input name="firstNameEn" value={form.firstNameEn} onChange={handleChange} required type="text" className="form-input" placeholder={t('firstNameEn', language)} /></div>
+                        <div className="form-group"><input name="middleNameEn" value={form.middleNameEn} onChange={handleChange} required type="text" className="form-input" placeholder={t('middleNameEn', language)} /></div>
+                        <div className="form-group"><input name="lastNameEn" value={form.lastNameEn} onChange={handleChange} required type="text" className="form-input" placeholder={t('lastNameEn', language)} /></div>
+                        <div className="form-group date-input-container"><input name="dob" value={form.dob} required type="text" className="form-input" placeholder={t('dateOfBirth', language)} onFocus={(e) => e.target.type='date'} onBlur={(e) => e.target.type='text'} onChange={handleChange}/><CalendarIcon/></div>
+                        <div className="form-group"><select name="gender" value={form.gender} onChange={handleChange} required className="form-input"><option value="">{t('gender', language)}</option><option value="male">{t('male', language)}</option><option value="female">{t('female', language)}</option></select></div>
+                        <div className="form-group"><select name="nationality" value={form.nationality} onChange={handleChange} className="form-input"><option value="">{t('nationality', language)}</option><option value="libyan">{t('libyan', language)}</option><option value="other">{t('other', language)}</option></select></div>
+                        {flow !== 'expat' && (
+                            <div className="form-group" style={{display:'flex', gap:'5px'}}>
+                                {form.nidDigits.map((d, idx) => (
+                                    <input key={idx} name={`nidDigit${idx}`} value={d} onChange={(e)=>handleChange(e, idx)} required type="text" maxLength="1" className="form-input" style={{width:'30px', textAlign:'center'}} />
+                                ))}
+                            </div>
+                        )}
+                        {flow === 'expat' && (
+                            <>
+                                <div className="form-group date-input-container"><input name="residenceExpiry" value={form.residenceExpiry} onChange={handleChange} required type="text" className="form-input" placeholder={t('residenceExpiry', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
+                                <div className="form-group"><input name="censusCardNumber" value={form.censusCardNumber} onChange={handleChange} required type="text" className="form-input" placeholder={t('censusCardNumber', language)} /></div>
+                            </>
+                        )}
+                        <div className="form-group"><input name="phone" value={form.phone} onChange={handleChange} required type="tel" className="form-input" placeholder={t('phoneNumber', language)} /></div>
+                        <div className="form-group"><label><input type="checkbox" name="enableEmail" checked={form.enableEmail} onChange={handleChange} /> {t('enableEmail', language)}</label></div>
+                        {form.enableEmail && <div className="form-group"><input name="email" value={form.email} onChange={handleChange} required type="email" className="form-input" placeholder={t('email', language)} /></div>}
                     </div>
                     <div className="form-actions">
                         <div className="agreements">

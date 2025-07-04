@@ -1,9 +1,12 @@
 import React from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { t } from '../i18n';
 
 const Footer = () => {
+  const { language } = useLanguage();
   return (
     <footer className="footer">
-      © {new Date().getFullYear()} Daman Islamic Bank
+      {t('copyRight', language)}
     </footer>
   );
 };

@@ -12,7 +12,7 @@ const ExpatDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
         <div className="form-page">
             <header className="header docs-header">
                 <img src={LOGO_WHITE} alt="Bank Logo" className="logo" />
-                <div style={{ display: 'flex', gap: '20px' }}>
+                <div style={{ display: 'flex', gap: '30px' }}>
                     <ThemeSwitcher />
                     <LanguageSwitcher />
                 </div>
@@ -27,8 +27,6 @@ const ExpatDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
                     <div className="upload-box"><p>Passport Photo</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
                     <div className="upload-box"><p>Account Opening Letter from Employer</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
                     <div className="upload-box"><p>Recent Personal Photo</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
-                    <div className="upload-box"><p>رقم بطاقة الحصر</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
-                    <div className="upload-box"><p>تاريخ انتهاء الاقامة</p><div className="upload-placeholder"><input type="date" className="form-input" /></div></div>
                     <div className="upload-box"><p>صورة من بطاقة الحصر</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
                 </div>
                 <div className="form-actions"><button className="btn-next" onClick={() => onNavigate(nextPage)}>{t('next', language)}</button></div>

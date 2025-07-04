@@ -78,7 +78,7 @@ const AppContent = () => {
                 return <ContactInfoPage_EN onNavigate={handleNavigation} backPage={backPage} nextPage="workInfo" />;
             }
             case 'workInfo': return <WorkInfoPage_EN onNavigate={handleNavigation} backPage="contactInfo" nextPage="personalInfo" />;
-            case 'personalInfo': return <PersonalInfoPage_EN onNavigate={handleNavigation} backPage="workInfo" />;
+            case 'personalInfo': return <PersonalInfoPage_EN onNavigate={handleNavigation} backPage="workInfo" flow={flow} />;
             
             case 'success': return <SuccessPage_EN onNavigate={handleNavigation} />;
             default: return <LanguageSelectionPage onNavigate={handleNavigation} />;

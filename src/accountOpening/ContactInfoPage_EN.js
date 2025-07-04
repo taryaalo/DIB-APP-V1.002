@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
-import ThemeSwitcher from './common/ThemeSwitcher';
-import LanguageSwitcher from './common/LanguageSwitcher';
+import ThemeSwitcher from '../common/ThemeSwitcher';
+import LanguageSwitcher from '../common/LanguageSwitcher';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -25,14 +25,17 @@ const ContactInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 <form className="form-container">
                     <div className="form-section">
                         <h3>Address Information</h3>
-                        <div className="form-group"><input type="text" className="form-input" placeholder="Country" /></div>
+                        <div className="form-group">
+                            <select className="form-input">
+                                <option value="">Country</option>
+                                <option value="libya">Libya</option>
+                                <option value="tunisia">Tunisia</option>
+                                <option value="egypt">Egypt</option>
+                            </select>
+                        </div>
                         <div className="form-group"><input type="text" className="form-input" placeholder="City" /></div>
                         <div className="form-group"><input type="text" className="form-input" placeholder="Area" /></div>
-                    </div>
-                    <div className="form-section">
-                        <h3>Contact Information</h3>
-                         <div className="form-group"><div className="phone-input-group"><span className="phone-prefix">+218</span><input type="tel" className="form-input" placeholder="Phone Number" /></div></div>
-                        <div className="form-group"><input type="email" className="form-input" placeholder="Email Address" /></div>
+                        <div className="form-group"><input type="text" className="form-input" placeholder="Residential Address" /></div>
                     </div>
                 </form>
                 <div className="form-actions"><button className="btn-next" onClick={() => onNavigate(nextPage)}>{t('next', language)}</button></div>

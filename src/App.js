@@ -5,19 +5,20 @@ import GlobalStyles from './styles/GlobalStyles';
 
 // Import Page Components
 import LanguageSelectionPage from './components/LanguageSelectionPage';
-// English Pages
-import LandingPage_EN from './components/LandingPage_EN';
-import SelectUserPage_EN from './components/SelectUserPage_EN';
-import SimpleDocsPage_EN from './components/SimpleDocsPage_EN';
-import CompaniesDocsPage_EN from './components/CompaniesDocsPage_EN';
-import ContactInfoPage_EN from './components/ContactInfoPage_EN';
-import WorkInfoPage_EN from './components/WorkInfoPage_EN';
-import PersonalInfoPage_EN from './components/PersonalInfoPage_EN';
-import CompanyInfoPage_EN from './components/CompanyInfoPage_EN';
-import CompanyContactPage_EN from './components/CompanyContactPage_EN';
-import LegalRepInfoPage_EN from './components/LegalRepInfoPage_EN';
-import FinancialInfoPage_EN from './components/FinancialInfoPage_EN';
-import SuccessPage_EN from './components/SuccessPage_EN';
+// English Pages - Account Opening flow
+import LandingPage_EN from './accountOpening/LandingPage_EN';
+import SelectUserPage_EN from './accountOpening/SelectUserPage_EN';
+import SimpleDocsPage_EN from './accountOpening/SimpleDocsPage_EN';
+import CompaniesDocsPage_EN from './accountOpening/CompaniesDocsPage_EN';
+import ContactInfoPage_EN from './accountOpening/ContactInfoPage_EN';
+import WorkInfoPage_EN from './accountOpening/WorkInfoPage_EN';
+import PersonalInfoPage_EN from './accountOpening/PersonalInfoPage_EN';
+import CompanyInfoPage_EN from './accountOpening/CompanyInfoPage_EN';
+import CompanyContactPage_EN from './accountOpening/CompanyContactPage_EN';
+import LegalRepInfoPage_EN from './accountOpening/LegalRepInfoPage_EN';
+import FinancialInfoPage_EN from './accountOpening/FinancialInfoPage_EN';
+import SuccessPage_EN from './accountOpening/SuccessPage_EN';
+import EServicesLanding from './eServices/EServicesLandingPage';
 
 
 // ---=== Main App Component ===---
@@ -52,6 +53,7 @@ const AppContent = () => {
 
       switch(page) {
             case 'landing': return <LandingPage_EN onNavigate={handleNavigation} />;
+            case 'eServices': return <EServicesLanding onNavigate={handleNavigation} />;
             case 'selectUser': return <SelectUserPage_EN onNavigate={handleNavigation} />;
             
             case 'personalDocs': return <SimpleDocsPage_EN title="Personal" onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;

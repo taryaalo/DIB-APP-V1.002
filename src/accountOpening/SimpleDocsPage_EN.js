@@ -1,9 +1,8 @@
 
 import React from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
-import { UploadIcon } from './common/Icons';
-import ThemeSwitcher from './common/ThemeSwitcher';
-import LanguageSwitcher from './common/LanguageSwitcher';
+import ThemeSwitcher from '../common/ThemeSwitcher';
+import LanguageSwitcher from '../common/LanguageSwitcher';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -25,10 +24,10 @@ const SimpleDocsPage_EN = ({ onNavigate, backPage, nextPage, title }) => {
             <main className="form-main">
                 <h2 className="form-title">{t(title.toLowerCase(), language)}</h2>
                 <div className="docs-grid">
-                    <div className="upload-box"><p>Approved National ID</p><div className="upload-placeholder"><UploadIcon /></div></div>
-                    <div className="upload-box"><p>Passport Photo</p><div className="upload-placeholder"><UploadIcon /></div></div>
-                    <div className="upload-box"><p>Account Opening Letter from Employer</p><div className="upload-placeholder"><UploadIcon /></div></div>
-                    <div className="upload-box"><p>Recent Personal Photo</p><div className="upload-placeholder"><UploadIcon /></div></div>
+                    <div className="upload-box"><p>Approved National ID</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
+                    <div className="upload-box"><p>Passport Photo</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
+                    <div className="upload-box"><p>Account Opening Letter from Employer</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
+                    <div className="upload-box"><p>Recent Personal Photo</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
                 </div>
                 <div className="form-actions"><button className="btn-next" onClick={() => onNavigate(nextPage)}>{t('next', language)}</button></div>
             </main>

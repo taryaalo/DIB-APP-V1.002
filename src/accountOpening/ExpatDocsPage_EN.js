@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
 import ThemeSwitcher from '../common/ThemeSwitcher';
@@ -7,7 +6,7 @@ import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const SimpleDocsPage_EN = ({ onNavigate, backPage, nextPage, title }) => {
+const ExpatDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
     const { language } = useLanguage();
     return (
         <div className="form-page">
@@ -23,17 +22,19 @@ const SimpleDocsPage_EN = ({ onNavigate, backPage, nextPage, title }) => {
                 </button>
             </header>
             <main className="form-main">
-                <h2 className="form-title">{t(title.toLowerCase(), language)}</h2>
+                <h2 className="form-title">{t('requiredDocs', language)}</h2>
                 <div className="docs-grid">
-                    <div className="upload-box"><p>Approved National ID</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
                     <div className="upload-box"><p>Passport Photo</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
                     <div className="upload-box"><p>Account Opening Letter from Employer</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
                     <div className="upload-box"><p>Recent Personal Photo</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
+                    <div className="upload-box"><p>رقم بطاقة الحصر</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
+                    <div className="upload-box"><p>تاريخ انتهاء الاقامة</p><div className="upload-placeholder"><input type="date" className="form-input" /></div></div>
+                    <div className="upload-box"><p>صورة من بطاقة الحصر</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
                 </div>
                 <div className="form-actions"><button className="btn-next" onClick={() => onNavigate(nextPage)}>{t('next', language)}</button></div>
             </main>
             <Footer />
         </div>
     );
-}
-export default SimpleDocsPage_EN;
+};
+export default ExpatDocsPage_EN;

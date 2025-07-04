@@ -4,6 +4,7 @@ import { LOGO_WHITE } from '../assets/imagePaths';
 import { CalendarIcon } from '../common/Icons';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
+import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -28,16 +29,32 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage }) => {
             setAgreements(a => ({ ...a, [name]: checked }));
         } else {
             setForm(f => ({ ...f, [name]: value }));
+            if (name === 'nid') {
+                if (value.length >= 1) {
+                    const g = value[0] === '1' ? 'male' : value[0] === '2' ? 'female' : '';
+                    if (g) setForm(f => ({ ...f, gender: g }));
+                }
+                if (value.length >= 5) {
+                    const year = parseInt(value.slice(1,5));
+                    const age = new Date().getFullYear() - year;
+                    if (!isNaN(year) && age >= 18 && age <= 120) {
+                        setForm(f => ({ ...f, dob: `${year}-01-01` }));
+                    }
+                }
+            }
         }
     };
 
     const validateNID = () => {
-        if (form.nid.length !== 12) return false;
-        if (!form.dob || !form.gender) return false;
-        const year = new Date(form.dob).getFullYear() % 100;
-        if (parseInt(form.nid.slice(0,2)) !== year) return false;
-        const genderDigit = parseInt(form.nid[9]);
-        if ((form.gender === 'male' && genderDigit % 2 === 0) || (form.gender === 'female' && genderDigit % 2 !== 0)) return false;
+        if (form.nid.length < 5) return false;
+        const genderDigit = form.nid[0];
+        if (genderDigit === "1" && form.gender !== "male") return false;
+        if (genderDigit === "2" && form.gender !== "female") return false;
+        const year = parseInt(form.nid.slice(1,5));
+        if (isNaN(year)) return false;
+        const age = new Date().getFullYear() - year;
+        if (age < 18 || age > 120) return false;
+        if (form.dob && new Date(form.dob).getFullYear() !== year) return false;
         return true;
     };
 
@@ -59,9 +76,9 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage }) => {
         <div className="form-page">
             <header className="header docs-header">
                 <img src={LOGO_WHITE} alt="Bank Logo" className="logo" />
-                <div style={{ display: 'flex', gap: '10px' }}>
-                    <LanguageSwitcher />
+                <div style={{ display: 'flex', gap: '20px' }}>
                     <ThemeSwitcher />
+                    <LanguageSwitcher />
                 </div>
                  <button onClick={() => onNavigate(backPage)} className="btn-back">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -90,6 +107,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage }) => {
                     </div>
                 </form>
             </main>
+            <Footer />
         </div>
     );
 };

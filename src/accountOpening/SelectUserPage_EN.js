@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { LOGO_COLOR } from '../assets/imagePaths';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
+import Footer from '../common/Footer';
 import { PersonalIcon, GuaranteedIcon, BusinessmenIcon, CompaniesIcon } from '../common/Icons';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -36,9 +37,9 @@ const SelectUserPage_EN = ({ onNavigate }) => {
     <div className="app-container">
       <header className="header">
         <img src={LOGO_COLOR} alt="Bank Logo" className="logo" />
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <LanguageSwitcher />
+        <div style={{ display: 'flex', gap: '20px' }}>
           <ThemeSwitcher />
+          <LanguageSwitcher />
         </div>
       </header>
       <main className="main">
@@ -49,11 +50,13 @@ const SelectUserPage_EN = ({ onNavigate }) => {
         <div className="menu-card tilt-effect">
           <h2>{t('selectService', language)}</h2>
           <button onClick={() => onNavigate('personalDocs')}><PersonalIcon /><span>{t('personal', language)}</span></button>
+          <button onClick={() => onNavigate('expatDocs')}><PersonalIcon /><span>{t('expat', language)}</span></button>
           <button onClick={() => onNavigate('guaranteedDocs')}><GuaranteedIcon /><span>{t('guaranteed', language)}</span></button>
           <button onClick={() => onNavigate('businessmenDocs')}><BusinessmenIcon /><span>{t('businessmen', language)}</span></button>
           <button onClick={() => onNavigate('companiesDocs')}><CompaniesIcon /><span>{t('companies', language)}</span></button>
         </div>
       </main>
+            <Footer />
     </div>
   );
 };

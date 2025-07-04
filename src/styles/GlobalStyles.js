@@ -336,6 +336,13 @@ const GlobalStyles = () => (
     .custom-checkbox input:checked ~ .custom-checkbox-box { border-color: #4caf50; }
     .custom-checkbox-box { width: 28px; height: 28px; background: var(--form-input-bg); border: 2px solid #ccc; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s ease; }
     .company-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 40px; }
+
+    .footer {
+        text-align: center;
+        padding: 20px;
+        color: var(--text-color-dark);
+        background-color: var(--docs-bg);
+    }
     
     /* ---=== Success Page ===--- */
     .success-page {

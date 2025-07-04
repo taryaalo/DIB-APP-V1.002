@@ -10,6 +10,7 @@ import LandingPage_EN from './accountOpening/LandingPage_EN';
 import SelectUserPage_EN from './accountOpening/SelectUserPage_EN';
 import SimpleDocsPage_EN from './accountOpening/SimpleDocsPage_EN';
 import CompaniesDocsPage_EN from './accountOpening/CompaniesDocsPage_EN';
+import ExpatDocsPage_EN from './accountOpening/ExpatDocsPage_EN';
 import ContactInfoPage_EN from './accountOpening/ContactInfoPage_EN';
 import WorkInfoPage_EN from './accountOpening/WorkInfoPage_EN';
 import PersonalInfoPage_EN from './accountOpening/PersonalInfoPage_EN';
@@ -37,6 +38,7 @@ const AppContent = () => {
 
     if (page.startsWith('personal')) currentFlow = 'personal';
     else if (page.startsWith('guaranteed')) currentFlow = 'guaranteed';
+    else if (page.startsWith('expat')) currentFlow = 'expat';
     else if (page.startsWith('businessmen')) currentFlow = 'businessmen';
     else if (page.startsWith('companies')) currentFlow = 'companies';
     else if (page === 'selectUser' || page === 'landing' || page === 'languageSelection' || page === 'success') currentFlow = null;
@@ -59,6 +61,7 @@ const AppContent = () => {
             case 'personalDocs': return <SimpleDocsPage_EN title="Personal" onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
             case 'businessmenDocs': return <SimpleDocsPage_EN title="Businessmen" onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
             case 'guaranteedDocs': return <SimpleDocsPage_EN title="Guaranteed" onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
+            case 'expatDocs': return <ExpatDocsPage_EN onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
 
             case 'companiesDocs': return <CompaniesDocsPage_EN onNavigate={handleNavigation} backPage="selectUser" nextPage="companyInfo" />;
             case 'companyInfo': return <CompanyInfoPage_EN onNavigate={handleNavigation} backPage="companiesDocs" nextPage="companyContact" />;
@@ -71,6 +74,7 @@ const AppContent = () => {
                 if (flow === 'personal') backPage = 'personalDocs';
                 if (flow === 'guaranteed') backPage = 'guaranteedDocs';
                 if (flow === 'businessmen') backPage = 'businessmenDocs';
+                if (flow === 'expat') backPage = 'expatDocs';
                 return <ContactInfoPage_EN onNavigate={handleNavigation} backPage={backPage} nextPage="workInfo" />;
             }
             case 'workInfo': return <WorkInfoPage_EN onNavigate={handleNavigation} backPage="contactInfo" nextPage="personalInfo" />;

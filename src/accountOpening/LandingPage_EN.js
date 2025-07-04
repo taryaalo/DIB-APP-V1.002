@@ -3,6 +3,7 @@ import { LOGO_WHITE } from '../assets/imagePaths';
 import { OpenAccountIcon, CompleteAccountIcon } from '../common/Icons';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import ThemeSwitcher from '../common/ThemeSwitcher';
+import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -10,9 +11,9 @@ const LandingPage_EN = ({ onNavigate }) => {
   const { language } = useLanguage();
   return (
     <div className="landing-container">
-      <div style={{ position: 'absolute', top: 20, right: 20, display: 'flex', gap: '10px' }}>
-        <LanguageSwitcher />
+      <div style={{ position: 'absolute', top: 20, right: 20, display: 'flex', gap: '20px' }}>
         <ThemeSwitcher />
+                    <LanguageSwitcher />
       </div>
       <div className="content-wrapper">
         <img src={LOGO_WHITE} alt="Bank Logo" className="landing-logo" />
@@ -33,6 +34,7 @@ const LandingPage_EN = ({ onNavigate }) => {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

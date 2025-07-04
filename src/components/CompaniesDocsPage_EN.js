@@ -1,7 +1,6 @@
-// --- src/components/english/CompaniesDocsPage_EN.js ---
 import React from 'react';
-import { LOGO_WHITE } from '../../assets/imagePaths';
-import { UploadIcon } from '../common/Icons';
+import { LOGO_WHITE } from '../assets/imagePaths';
+import { UploadIcon } from './common/Icons';
 
 const CompaniesDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
     return (

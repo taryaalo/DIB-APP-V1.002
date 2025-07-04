@@ -1,8 +1,7 @@
 
-// --- src/components/english/LegalRepInfoPage_EN.js ---
 import React from 'react';
-import { LOGO_WHITE } from '../../assets/imagePaths';
-import { CalendarIcon } from '../common/Icons';
+import { LOGO_WHITE } from '../assets/imagePaths';
+import { CalendarIcon } from './common/Icons';
 
 const LegalRepInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
     return (

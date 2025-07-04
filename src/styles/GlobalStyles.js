@@ -142,6 +142,30 @@ const GlobalStyles = () => (
         color: #fff;
     }
 
+    /* --- Language Switcher --- */
+    .language-switcher {
+        display: flex;
+        align-items: center;
+        background-color: rgba(0,0,0,0.1);
+        border-radius: 99px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    .language-switcher span {
+        padding: 6px 12px;
+        color: var(--text-color-dark);
+        user-select: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    body[data-theme='dark'] .language-switcher span {
+        color: var(--text-color-dark-dark);
+    }
+    .language-switcher span.active {
+        background-color: var(--primary-color);
+        color: var(--text-color-light);
+        border-radius: 99px;
+    }
+
 
     /* --- Language Selection --- */
     .lang-selection-page {

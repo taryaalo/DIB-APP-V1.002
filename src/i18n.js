@@ -11,7 +11,15 @@ const translations = {
   completeAccount: { en: 'Complete Account Opening', ar: 'إتمام عملية فتح الحساب' },
   welcomeSub: { en: 'Your gateway to modern banking services', ar: 'بوابتكم للخدمات المصرفية الحديثة' },
   welcomeTitle: { en: 'Daman Islamic Bank', ar: 'مصرف الضمان الإسلامي' },
-  submitRequest: { en: 'Submit Application', ar: 'إرسال الطلب' }
+  submitRequest: { en: 'Submit Application', ar: 'إرسال الطلب' },
+  successTitle: { en: 'Success!', ar: 'تم بنجاح!' },
+  successMsg: {
+    en: 'Your request has been submitted successfully. We will contact you shortly.',
+    ar: 'تم تقديم طلبك بنجاح. سوف نتواصل معك قريباً.'
+  },
+  backToHome: { en: 'Back to Home', ar: 'العودة للرئيسية' },
+  english: { en: 'English', ar: 'الإنجليزية' },
+  arabic: { en: 'Arabic', ar: 'العربية' }
 };
 
 export const t = (key, lang = 'en') => {

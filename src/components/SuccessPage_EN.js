@@ -1,13 +1,22 @@
 import React from 'react';
 import { SuccessIcon } from './common/Icons';
+import ThemeSwitcher from './common/ThemeSwitcher';
+import LanguageSwitcher from './common/LanguageSwitcher';
+import { t } from '../i18n';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const SuccessPage_EN = ({ onNavigate }) => {
+    const { language } = useLanguage();
     return (
         <div className="success-page">
+            <div style={{ position: 'absolute', top: 20, right: 20, display: 'flex', gap: '10px' }}>
+                <LanguageSwitcher />
+                <ThemeSwitcher />
+            </div>
             <SuccessIcon />
-            <h1 className="success-title">Success!</h1>
-            <p className="success-message">Your request has been submitted successfully. We will contact you shortly.</p>
-            <button className="btn-next" onClick={() => onNavigate('languageSelection')}>Back to Home</button>
+            <h1 className="success-title">{t('successTitle', language)}</h1>
+            <p className="success-message">{t('successMsg', language)}</p>
+            <button className="btn-next" onClick={() => onNavigate('languageSelection')}>{t('backToHome', language)}</button>
         </div>
     );
 };

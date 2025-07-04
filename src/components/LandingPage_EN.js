@@ -1,22 +1,31 @@
 import React from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
 import { OpenAccountIcon, CompleteAccountIcon } from './common/Icons';
+import LanguageSwitcher from './common/LanguageSwitcher';
+import ThemeSwitcher from './common/ThemeSwitcher';
+import { t } from '../i18n';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const LandingPage_EN = ({ onNavigate }) => {
+  const { language } = useLanguage();
   return (
     <div className="landing-container">
+      <div style={{ position: 'absolute', top: 20, right: 20, display: 'flex', gap: '10px' }}>
+        <LanguageSwitcher />
+        <ThemeSwitcher />
+      </div>
       <div className="content-wrapper">
         <img src={LOGO_WHITE} alt="Bank Logo" className="landing-logo" />
-        <h1 className="landing-title">Daman Islamic Bank</h1>
-        <p className="landing-subtitle">Your gateway to modern banking services</p>
+        <h1 className="landing-title">{t('welcomeTitle', language)}</h1>
+        <p className="landing-subtitle">{t('welcomeSub', language)}</p>
         <div className="landing-buttons-container">
           <button onClick={() => onNavigate('selectUser')}>
             <OpenAccountIcon />
-            <span>Open a New Account</span>
+            <span>{t('openAccount', language)}</span>
           </button>
           <button onClick={() => onNavigate('selectUser')} className="btn-secondary">
             <CompleteAccountIcon />
-            <span>Complete Account Opening</span>
+            <span>{t('completeAccount', language)}</span>
           </button>
         </div>
       </div>

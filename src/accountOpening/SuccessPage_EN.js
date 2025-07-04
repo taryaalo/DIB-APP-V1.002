@@ -1,7 +1,7 @@
 import React from 'react';
-import { SuccessIcon } from './common/Icons';
-import ThemeSwitcher from './common/ThemeSwitcher';
-import LanguageSwitcher from './common/LanguageSwitcher';
+import { SuccessIcon } from '../common/Icons';
+import ThemeSwitcher from '../common/ThemeSwitcher';
+import LanguageSwitcher from '../common/LanguageSwitcher';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 

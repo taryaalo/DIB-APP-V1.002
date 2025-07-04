@@ -1,8 +1,8 @@
 import React from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
-import { OpenAccountIcon, CompleteAccountIcon } from './common/Icons';
-import LanguageSwitcher from './common/LanguageSwitcher';
-import ThemeSwitcher from './common/ThemeSwitcher';
+import { OpenAccountIcon, CompleteAccountIcon } from '../common/Icons';
+import LanguageSwitcher from '../common/LanguageSwitcher';
+import ThemeSwitcher from '../common/ThemeSwitcher';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -26,6 +26,10 @@ const LandingPage_EN = ({ onNavigate }) => {
           <button onClick={() => onNavigate('selectUser')} className="btn-secondary">
             <CompleteAccountIcon />
             <span>{t('completeAccount', language)}</span>
+          </button>
+          <button onClick={() => onNavigate('eServices')} className="btn-secondary">
+            <CompleteAccountIcon />
+            <span>{language === 'ar' ? 'تسجيل في خدمات الكترونية' : 'Register for E-Services'}</span>
           </button>
         </div>
       </div>

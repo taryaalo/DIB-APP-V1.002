@@ -1,9 +1,9 @@
 
 import React, { useEffect } from 'react';
 import { LOGO_COLOR } from '../assets/imagePaths';
-import ThemeSwitcher from './common/ThemeSwitcher';
-import LanguageSwitcher from './common/LanguageSwitcher';
-import { PersonalIcon, GuaranteedIcon, BusinessmenIcon, CompaniesIcon } from './common/Icons';
+import ThemeSwitcher from '../common/ThemeSwitcher';
+import LanguageSwitcher from '../common/LanguageSwitcher';
+import { PersonalIcon, GuaranteedIcon, BusinessmenIcon, CompaniesIcon } from '../common/Icons';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 

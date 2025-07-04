@@ -1,5 +1,6 @@
 import React from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
+import { t } from '../i18n';
 
 const LanguageSelectionPage = ({ onNavigate }) => {
     return (
@@ -7,7 +8,7 @@ const LanguageSelectionPage = ({ onNavigate }) => {
             <div className="lang-selection-box">
                 <img src={LOGO_WHITE} alt="Daman Islamic Bank" className="lang-logo" />
                 <div className="lang-buttons-container">
-                    <button className="lang-btn" onClick={() => onNavigate('landing')}>English</button>
+                    <button className="lang-btn" onClick={() => onNavigate('landing')}>{t('english')}</button>
                 </div>
             </div>
         </div>

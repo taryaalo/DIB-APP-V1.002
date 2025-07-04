@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import GlobalStyles from './styles/GlobalStyles';
 
 // Import Page Components
@@ -23,11 +24,12 @@ import SuccessPage_EN from './components/SuccessPage_EN';
 const AppContent = () => {
   const [navigation, setNavigation] = useState({ page: 'languageSelection', flow: null });
   const { theme } = useTheme();
+  const { language } = useLanguage();
 
   useEffect(() => {
-    document.body.dir = 'ltr';
+    document.body.dir = language === 'ar' ? 'rtl' : 'ltr';
     document.body.setAttribute('data-theme', theme);
-  }, [theme]);
+  }, [theme, language]);
 
   const handleNavigation = (page) => {
     let currentFlow = navigation.flow;
@@ -83,9 +85,11 @@ const AppContent = () => {
 
 export default function App() {
     return (
-        <ThemeProvider>
-            <GlobalStyles />
-            <AppContent />
-        </ThemeProvider>
+        <LanguageProvider>
+            <ThemeProvider>
+                <GlobalStyles />
+                <AppContent />
+            </ThemeProvider>
+        </LanguageProvider>
     );
 }

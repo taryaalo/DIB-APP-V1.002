@@ -5,50 +5,30 @@ daman-islamic-bank-app/
 │   ├── assets/
 │   │   └── imagePaths.js
 │   ├── components/
-│   │   ├── arabic/
-│   │   │   ├── account-opening/
-│   │   │   │   ├── CompaniesDocsPage_AR.js
-│   │   │   │   ├── CompanyContactPage_AR.js
-│   │   │   │   ├── CompanyInfoPage_AR.js
-│   │   │   │   ├── ContactInfoPage_AR.js
-│   │   │   │   ├── FinancialInfoPage_AR.js
-│   │   │   │   ├── GuaranteedDocsPage_AR.js
-│   │   │   │   ├── LandingPage_AR.js
-│   │   │   │   ├── LegalRepInfoPage_AR.js
-│   │   │   │   ├── PersonalInfoPage_AR.js
-│   │   │   │   ├── SelectUserPage_AR.js
-│   │   │   │   └── SimpleDocsPage_AR.js
-│   │   │   └── eservices/
-│   │   │       └── EservicesPage_AR.js
 │   │   ├── common/
 │   │   │   ├── Icons.js
 │   │   │   ├── ThemeSwitcher.js
 │   │   │   └── UploadComponent.js
-│   │   ├── english/
-│   │   │   ├── account-opening/
-│   │   │   │   ├── CompaniesDocsPage_EN.js
-│   │   │   │   ├── CompanyContactPage_EN.js
-│   │   │   │   ├── CompanyInfoPage_EN.js
-│   │   │   │   ├── ContactInfoPage_EN.js
-│   │   │   │   ├── FinancialInfoPage_EN.js
-│   │   │   │   ├── LandingPage_EN.js
-│   │   │   │   ├── LegalRepInfoPage_EN.js
-│   │   │   │   ├── PersonalInfoPage_EN.js
-│   │   │   │   ├── SelectUserPage_EN.js
-│   │   │   │   └── SimpleDocsPage_EN.js
-│   │   │   └── eservices/
-│   │   │       └── EservicesPage_EN.js
+│   │   ├── CompaniesDocsPage_EN.js
+│   │   ├── CompanyContactPage_EN.js
+│   │   ├── CompanyInfoPage_EN.js
+│   │   ├── ContactInfoPage_EN.js
+│   │   ├── FinancialInfoPage_EN.js
+│   │   ├── LandingPage_EN.js
 │   │   ├── LanguageSelectionPage.js
-│   │   ├── SuccessPage.js
-│   │   └── verification/
-│   │       ├── VerificationStage1.js
-│   │       └── VerificationStage2.js
+│   │   ├── LegalRepInfoPage_EN.js
+│   │   ├── PersonalInfoPage_EN.js
+│   │   ├── SelectUserPage_EN.js
+│   │   ├── SimpleDocsPage_EN.js
+│   │   ├── SuccessPage_EN.js
+│   │   └── WorkInfoPage_EN.js
 │   ├── contexts/
 │   │   └── ThemeContext.js
 │   ├── styles/
 │   │   └── GlobalStyles.js
 │   ├── utils/
 │   │   └── validation.js
+│   ├── i18n.js
 │   ├── App.js
 │   └── index.js
 └── package.json

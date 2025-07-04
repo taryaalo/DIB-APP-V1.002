@@ -1,7 +1,6 @@
 
-// --- src/components/english/WorkInfoPage_EN.js ---
 import React from 'react';
-import { LOGO_WHITE } from '../../assets/imagePaths';
+import { LOGO_WHITE } from '../assets/imagePaths';
 
 const WorkInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
     return (

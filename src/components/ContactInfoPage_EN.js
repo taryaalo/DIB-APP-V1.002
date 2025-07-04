@@ -1,7 +1,6 @@
 
-// --- src/components/english/ContactInfoPage_EN.js ---
 import React from 'react';
-import { LOGO_WHITE } from '../../assets/imagePaths';
+import { LOGO_WHITE } from '../assets/imagePaths';
 
 const ContactInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
     return (

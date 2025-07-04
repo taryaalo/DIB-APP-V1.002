@@ -1,9 +1,8 @@
 
-// --- src/components/english/SimpleDocsPage_EN.js ---
 import React from 'react';
-import { LOGO_WHITE } from '../../assets/imagePaths';
-import { UploadIcon } from '../common/Icons';
-import ThemeSwitcher from '../common/ThemeSwitcher';
+import { LOGO_WHITE } from '../assets/imagePaths';
+import { UploadIcon } from './common/Icons';
+import ThemeSwitcher from './common/ThemeSwitcher';
 
 const SimpleDocsPage_EN = ({ onNavigate, backPage, nextPage, title }) => {
     return (

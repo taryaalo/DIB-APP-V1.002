@@ -1,5 +1,5 @@
 import React from 'react';
-import { SuccessIcon } from '../common/Icons';
+import { SuccessIcon } from './common/Icons';
 
 const SuccessPage_EN = ({ onNavigate }) => {
     return (

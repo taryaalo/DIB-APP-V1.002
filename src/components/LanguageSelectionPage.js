@@ -7,8 +7,7 @@ const LanguageSelectionPage = ({ onNavigate }) => {
             <div className="lang-selection-box">
                 <img src={LOGO_WHITE} alt="Daman Islamic Bank" className="lang-logo" />
                 <div className="lang-buttons-container">
-                    <button className="lang-btn" onClick={() => onNavigate('landing', 'ar')}>اللغة العربية</button>
-                    <button className="lang-btn" onClick={() => onNavigate('landing', 'en')}>English</button>
+                    <button className="lang-btn" onClick={() => onNavigate('landing')}>English</button>
                 </div>
             </div>
         </div>

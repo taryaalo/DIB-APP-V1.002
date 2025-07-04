@@ -1,7 +1,6 @@
-// --- src/components/english/LandingPage_EN.js ---
 import React from 'react';
-import { LOGO_WHITE } from '../../assets/imagePaths';
-import { OpenAccountIcon, CompleteAccountIcon } from '../common/Icons';
+import { LOGO_WHITE } from '../assets/imagePaths';
+import { OpenAccountIcon, CompleteAccountIcon } from './common/Icons';
 
 const LandingPage_EN = ({ onNavigate }) => {
   return (

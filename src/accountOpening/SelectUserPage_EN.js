@@ -44,7 +44,6 @@ const SelectUserPage_EN = ({ onNavigate }) => {
       </header>
       <main className="main">
         <div className="background">
-          <img src="https://images.unsplash.com/photo-1561816544-21ec6a585c13?q=80&w=2835&auto=format&fit=crop" alt="Bank Building" />
           <div className="overlay"></div>
         </div>
         <div className="menu-card tilt-effect">

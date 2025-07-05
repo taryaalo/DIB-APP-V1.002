@@ -10,6 +10,11 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 const LegalRepInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
     const { language } = useLanguage();
+    const handleNIDKeyDown = (e) => {
+        if (e.key === 'Backspace' && !e.target.value && e.target.previousSibling) {
+            e.target.previousSibling.focus();
+        }
+    };
     return (
         <div className="form-page">
             <header className="header docs-header">
@@ -24,26 +29,26 @@ const LegalRepInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 </button>
             </header>
             <main className="form-main">
-                <form className="form-container">
+                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate(nextPage);}}>
                     <div className="form-section">
                         <h3>Legal Representative Information</h3>
                         <p style={{marginTop: "-15px", marginBottom: "20px"}}>This data is for the person responsible for opening the account in the company's name.</p>
                         <div className="form-group">
-                            <input type="text" className="form-input" placeholder="Full Name" />
+                            <input type="text" required className="form-input" placeholder="Full Name" />
                         </div>
                         <div className="form-group">
                             <label>National ID</label>
                             <div className="national-id-group">
                                 {Array.from({ length: 12 }).map((_, index) => (
-                                    <input key={index} type="text" maxLength="1" className="national-id-input" />
+                                    <input key={index} type="text" maxLength="1" onKeyDown={handleNIDKeyDown} className="national-id-input" required />
                                 ))}
                             </div>
                         </div>
                         <div className="form-group">
-                            <input type="text" className="form-input" placeholder="Passport Number" />
+                            <input type="text" required className="form-input" placeholder="Passport Number" />
                         </div>
                         <div className="form-group">
-                            <select className="form-input">
+                            <select className="form-input" required>
                                 <option value="">Legal Representative's Capacity</option>
                                 <option value="owner">Owner</option>
                                 <option value="ceo">CEO</option>
@@ -53,17 +58,17 @@ const LegalRepInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
                         <div className="form-group">
                             <div className="phone-input-group">
                                <span className="phone-prefix">+218</span>
-                               <input type="tel" className="form-input" placeholder="Mobile Phone Number" />
+                               <input type="tel" required className="form-input" placeholder="Mobile Phone Number" />
                             </div>
                         </div>
                         <div className="form-group">
-                            <input type="email" className="form-input" placeholder="Personal Email" />
+                            <input type="email" required className="form-input" placeholder="Personal Email" />
                         </div>
                     </div>
-                </form>
-                <div className="form-actions">
-                    <button className="btn-next" onClick={() => onNavigate(nextPage)}>{t('next', language)}</button>
+                    <div className="form-actions">
+                    <button type="submit" className="btn-next">{t('next', language)}</button>
                 </div>
+                </form>
             </main>
             <Footer />
         </div>

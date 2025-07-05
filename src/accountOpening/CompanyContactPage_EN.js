@@ -22,17 +22,17 @@ const CompanyContactPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 </button>
             </header>
             <main className="form-main">
-                <form className="form-container">
+                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate(nextPage);}}>
                     <div className="form-section">
                         <h3>Company Contact Information</h3>
                         <div className="form-group">
                             <div className="phone-input-group">
                                <span className="phone-prefix">+218</span>
-                               <input type="tel" className="form-input" placeholder="Main Phone Number" />
+                               <input type="tel" required className="form-input" placeholder="Main Phone Number" />
                             </div>
                         </div>
                         <div className="form-group">
-                            <input type="email" className="form-input" placeholder="Official Email" />
+                            <input type="email" required className="form-input" placeholder="Official Email" />
                         </div>
                         <div className="form-group">
                             <input type="text" className="form-input" placeholder="Website (if any)" />
@@ -41,10 +41,10 @@ const CompanyContactPage_EN = ({ onNavigate, backPage, nextPage }) => {
                             <input type="text" className="form-input" placeholder="Branch Address (if any)" />
                         </div>
                     </div>
-                </form>
-                <div className="form-actions">
-                    <button className="btn-next" onClick={() => onNavigate(nextPage)}>{t('next', language)}</button>
+                    <div className="form-actions">
+                    <button type="submit" className="btn-next">{t('next', language)}</button>
                 </div>
+                </form>
             </main>
             <Footer />
         </div>

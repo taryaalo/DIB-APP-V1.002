@@ -23,42 +23,42 @@ const FinancialInfoPage_EN = ({ onNavigate, backPage }) => {
                 </button>
             </header>
             <main className="form-main">
-                <form className="form-container">
+                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate('success');}}>
                     <div className="form-section">
                         <h3>Financial Information</h3>
                         <div className="form-group">
-                            <input type="text" className="form-input" placeholder="Average Monthly Income for the Company" />
+                            <input type="text" required className="form-input" placeholder="Average Monthly Income for the Company" />
                         </div>
                         <div className="form-group">
-                            <input type="text" className="form-input" placeholder="Primary Account Currency" />
+                            <input type="text" required className="form-input" placeholder="Primary Account Currency" />
                         </div>
                         <div className="form-group">
-                            <input type="text" className="form-input" placeholder="Main Source of Revenue" />
+                            <input type="text" required className="form-input" placeholder="Main Source of Revenue" />
                         </div>
                         <div className="form-group">
-                            <input type="text" className="form-input" placeholder="Purpose of Opening the Account" />
+                            <input type="text" required className="form-input" placeholder="Purpose of Opening the Account" />
                         </div>
                     </div>
-                </form>
-                <div className="form-actions">
+                    <div className="form-actions">
                     <div className="agreements">
                         <label className="agreement-item">
                             <div className="custom-checkbox">
-                                <input type="checkbox" defaultChecked/>
+                                <input type="checkbox" defaultChecked required/>
                                 <span className="checkmark"></span>
                             </div>
-                            <span>I certify that all data entered is correct.</span>
+                            <span>{t('certifyCorrect', language)}</span>
                         </label>
                          <label className="agreement-item">
                             <div className="custom-checkbox">
-                                <input type="checkbox" />
+                                <input type="checkbox" required/>
                                 <span className="checkmark"></span>
                             </div>
-                            <span>I agree to the <a href="#">Terms and Conditions</a>.</span>
+                            <span>{t('agreeTerms', language)}</span>
                         </label>
                     </div>
-                    <button className="btn-next" onClick={() => onNavigate('success')}>{t('submitRequest', language)}</button>
+                    <button type="submit" className="btn-next">{t('submitRequest', language)}</button>
                 </div>
+                </form>
             </main>
             <Footer />
         </div>

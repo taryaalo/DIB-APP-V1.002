@@ -24,27 +24,27 @@ const CompanyInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 </button>
             </header>
             <main className="form-main">
-                <form className="form-container">
+                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate(nextPage);}}>
                     <div className="form-section">
                         <h3>Basic Company Information</h3>
                         <div className="company-form-grid">
-                            <div className="form-group"><input type="text" className="form-input" placeholder="Full Company Name" /></div>
-                            <div className="form-group"><input type="text" className="form-input" placeholder="Country" /></div>
-                            <div className="form-group"><input type="text" className="form-input" placeholder="Trade Name" /></div>
-                            <div className="form-group"><input type="text" className="form-input" placeholder="City" /></div>
-                            <div className="form-group"><input type="text" className="form-input" placeholder="Commercial Registration No." /></div>
-                            <div className="form-group"><input type="text" className="form-input" placeholder="Head Office Address" /></div>
-                            <div className="form-group"><input type="text" className="form-input" placeholder="Activity License No." /></div>
-                             <div className="form-group"><input type="text" className="form-input" placeholder="Postal Code" /></div>
-                            <div className="form-group date-input-container"><input type="text" className="form-input" placeholder="Company Registration Date" onFocus={(e) => e.target.type='date'} onBlur={(e) => e.target.type='text'}/><CalendarIcon/></div>
+                            <div className="form-group"><input type="text" required className="form-input" placeholder="Full Company Name" /></div>
+                            <div className="form-group"><input type="text" required className="form-input" placeholder="Country" /></div>
+                            <div className="form-group"><input type="text" required className="form-input" placeholder="Trade Name" /></div>
+                            <div className="form-group"><input type="text" required className="form-input" placeholder="City" /></div>
+                            <div className="form-group"><input type="text" required className="form-input" placeholder="Commercial Registration No." /></div>
+                            <div className="form-group"><input type="text" required className="form-input" placeholder="Head Office Address" /></div>
+                            <div className="form-group"><input type="text" required className="form-input" placeholder="Activity License No." /></div>
+                             <div className="form-group"><input type="text" required className="form-input" placeholder="Postal Code" /></div>
+                            <div className="form-group date-input-container"><input type="text" required className="form-input" placeholder="Company Registration Date" onFocus={(e) => e.target.type='date'} onBlur={(e) => e.target.type='text'}/><CalendarIcon/></div>
                              <div className="form-group"></div>
-                             <div className="form-group"><select className="form-input"><option value="">Company Type</option><option value="limited">Limited Liability</option><option value="joint">Joint Stock</option></select></div>
+                             <div className="form-group"><select className="form-input" required><option value="">Company Type</option><option value="limited">Limited Liability</option><option value="joint">Joint Stock</option></select></div>
                              <div className="form-group"></div>
-                             <div className="form-group"><select className="form-input"><option value="">Business Activity</option><option value="trade">Trade</option><option value="services">Services</option><option value="industry">Industry</option></select></div>
+                             <div className="form-group"><select className="form-input" required><option value="">Business Activity</option><option value="trade">Trade</option><option value="services">Services</option><option value="industry">Industry</option></select></div>
                         </div>
                     </div>
+                    <div className="form-actions"><button type="submit" className="btn-next">{t('next', language)}</button></div>
                 </form>
-                <div className="form-actions"><button className="btn-next" onClick={() => onNavigate(nextPage)}>{t('next', language)}</button></div>
             </main>
             <Footer />
         </div>

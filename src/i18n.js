@@ -41,7 +41,23 @@ const translations = {
   enableEmail: { en: 'Enable Email', ar: 'تفعيل البريد الإلكتروني' },
   email: { en: 'Email', ar: 'البريد الإلكتروني' },
   residenceExpiry: { en: 'Residence Expiry Date', ar: 'تاريخ انتهاء الاقامة' },
-  censusCardNumber: { en: 'Census Card Number', ar: 'رقم بطاقة الحصر' }
+  censusCardNumber: { en: 'Census Card Number', ar: 'رقم بطاقة الحصر' },
+  addressInfoTitle: { en: 'Address Information', ar: 'معلومات العنوان' },
+  country: { en: 'Country', ar: 'الدولة' },
+  city: { en: 'City', ar: 'المدينة' },
+  area: { en: 'Area', ar: 'المنطقة' },
+  residentialAddress: { en: 'Residential Address', ar: 'العنوان السكني' },
+  workInfoTitle: { en: 'Work and Income Information', ar: 'معلومات العمل والدخل' },
+  employmentStatus: { en: 'Employment Status', ar: 'حالة التوظيف' },
+  jobTitle: { en: 'Job Title', ar: 'المسمى الوظيفي' },
+  employer: { en: 'Employer', ar: 'جهة العمل' },
+  employerAddress: { en: "Employer's Address", ar: 'عنوان جهة العمل' },
+  employerPhone: { en: "Employer's Phone", ar: 'هاتف جهة العمل' },
+  sourceOfIncome: { en: 'Main Source of Income', ar: 'المصدر الرئيسي للدخل' },
+  monthlyIncome: { en: 'Average Monthly Income', ar: 'متوسط الدخل الشهري' },
+  certifyCorrect: { en: 'I certify that all data entered is correct.', ar: 'أقر بأن جميع البيانات المدخلة صحيحة.' },
+  agreeTerms: { en: 'I agree to the Terms and Conditions.', ar: 'أوافق على الشروط والأحكام.' },
+  censusCardPhoto: { en: 'Census Card Photo', ar: 'صورة من بطاقة الحصر' }
 };
 
 export const t = (key, lang = 'en') => {

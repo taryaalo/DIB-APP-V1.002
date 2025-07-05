@@ -391,6 +391,29 @@ const GlobalStyles = () => (
         margin-bottom: 40px;
     }
 
+    /* ---=== Upload Extractor Styles ===--- */
+    .upload-area { width: 100%; max-width: 600px; background-color: var(--form-input-bg); border-radius: 15px; padding: 40px; text-align: center; border: 2px dashed #ccc; transition: all 0.3s ease; box-shadow: 0 5px 20px var(--shadow-color); }
+    .upload-area.drag-over { border-color: var(--primary-color); transform: scale(1.02); }
+    .upload-area .upload-icon { color: #ccc; margin-bottom: 20px; }
+    .upload-area h2 { margin: 0 0 10px 0; color: var(--text-color-dark); }
+    .upload-btn { background-color: var(--primary-color); color: white; border: none; padding: 12px 30px; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+    .upload-btn:hover { background-color: var(--primary-dark); }
+    .result-container { display: flex; gap: 30px; width: 100%; max-width: 1200px; flex-grow: 1; min-height: 0; }
+    .image-preview-box, .data-result-box { background-color: var(--form-input-bg); border-radius: 15px; padding: 30px; box-shadow: 0 5px 20px var(--shadow-color); flex: 1; display: flex; flex-direction: column; }
+    .image-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
+    .data-result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .data-result-header h3 { margin: 0; color: var(--text-color-dark); }
+    .copy-btn { background-color: var(--secondary-color); color: var(--text-color-dark); border: 1px solid #ccc; padding: 8px 12px; font-size: 0.9rem; font-weight: 600; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .data-result-content { flex-grow: 1; overflow-y: auto; }
+    .data-item { display: flex; justify-content: space-between; padding: 12px 8px; border-bottom: 1px solid var(--secondary-color); }
+    .data-item:last-child { border-bottom: none; }
+    .data-label { font-weight: 600; color: var(--text-color-dark); }
+    .data-value { color: var(--primary-dark); font-family: var(--font-primary-en); }
+    body[dir="rtl"] .data-value { font-family: var(--font-primary-ar); }
+    .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .error-message { color: #e53e3e; font-weight: 600; background-color: rgba(229, 62, 62, 0.1); padding: 15px; border-radius: 8px; text-align: center; }
+
     /* ---=== RESPONSIVE ADJUSTMENTS ===--- */
     @media (max-width: 768px) {
         .header { padding: 10px 20px; }

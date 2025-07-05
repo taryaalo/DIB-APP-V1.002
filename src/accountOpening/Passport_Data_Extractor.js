@@ -315,7 +315,7 @@ const ExtractorPage = () => {
             }
         };
         
-        const apiKey = ""; 
+        const apiKey = "AIzaSyCO77GJbCQM5fmc877iGUKhBKTWIaMy6zo"; 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
         try {

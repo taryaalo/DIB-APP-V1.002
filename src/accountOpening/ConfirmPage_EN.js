@@ -46,9 +46,9 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
                 </div>
             </header>
             <main className="form-main">
-                <div className="form-section">
-                    <h3>{t('confirmData', language)}</h3>
-                    <ul style={{ listStyle: 'none', padding: 0 }}>
+                <div className="confirmation-document">
+                    <div className="confirmation-header">{t('confirmData', language)}</div>
+                    <ul className="confirmation-list">
                         <li><strong>{t('fullName', language)}:</strong> {form.fullName}</li>
                         <li><strong>{t('firstNameEn', language)}:</strong> {form.firstNameEn}</li>
                         <li><strong>{t('middleNameEn', language)}:</strong> {form.middleNameEn}</li>
@@ -56,6 +56,9 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
                         <li><strong>{t('dateOfBirth', language)}:</strong> {form.dob}</li>
                         <li><strong>{t('gender', language)}:</strong> {form.gender}</li>
                         <li><strong>{t('nationality', language)}:</strong> {form.nationality}</li>
+                        {form.documentType && (
+                            <li><strong>{t('documentType', language)}:</strong> {form.documentType}</li>
+                        )}
                         {form.nidDigits && (
                             <li><strong>{t('nid', language)}:</strong> {form.nidDigits.join('')}</li>
                         )}

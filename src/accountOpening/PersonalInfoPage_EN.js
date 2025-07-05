@@ -26,7 +26,8 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
             enableEmail: false,
             email: '',
             residenceExpiry: '',
-            censusCardNumber: ''
+            censusCardNumber: '',
+            documentType: ''
         },
         ...(formData.personalInfo || {}),
         ...(state?.form || {})
@@ -51,6 +52,15 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
             digits[index] = value.replace(/[^0-9]/g, '').slice(-1);
             setForm(f => ({ ...f, nidDigits: digits }));
             if (value && e.target.nextSibling) e.target.nextSibling.focus();
+        } else if (name === 'fullName') {
+            const arabic = value.replace(/[^\u0600-\u06FF\s]/g, '');
+            setForm(f => ({ ...f, fullName: arabic }));
+        } else if (['firstNameEn', 'middleNameEn', 'lastNameEn'].includes(name)) {
+            const eng = value.replace(/[^A-Za-z\s]/g, '');
+            setForm(f => ({ ...f, [name]: eng }));
+        } else if (name === 'phone') {
+            const digits = value.replace(/[^0-9+]/g, '');
+            setForm(f => ({ ...f, phone: digits }));
         } else {
             setForm(f => ({ ...f, [name]: value }));
         }
@@ -92,6 +102,14 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
     };
 
     const handleSubmit = () => {
+        const arabicRegex = /^[\u0600-\u06FF\s]+$/;
+        const englishRegex = /^[A-Za-z\s]+$/;
+        const phoneRegex = /^(\+218|218|0)?9\d{8}$/;
+        if (!arabicRegex.test(form.fullName)) { alert('Full name must be in Arabic'); return; }
+        if (!englishRegex.test(form.firstNameEn) ||
+            !englishRegex.test(form.middleNameEn) ||
+            !englishRegex.test(form.lastNameEn)) { alert('English names must contain only letters'); return; }
+        if (!phoneRegex.test(form.phone)) { alert('Invalid Libyan phone number'); return; }
         if (!validateNID()) { alert('Invalid National ID'); return; }
         if (!agreements.agree1 || !agreements.agree2) { alert('You must agree to proceed'); return; }
         setFormData(data => ({ ...data, personalInfo: form }));

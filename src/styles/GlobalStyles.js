@@ -340,6 +340,19 @@ const GlobalStyles = () => (
         margin-top: auto;
     }
     .footer-transparent { background-color: transparent; }
+
+    /* ---=== Confirmation Document ===--- */
+    .confirmation-document {
+        background-color: var(--form-input-bg);
+        border: 2px solid var(--primary-color);
+        padding: 40px;
+        max-width: 700px;
+        margin: 0 auto 30px auto;
+        border-radius: 10px;
+    }
+    .confirmation-header { text-align: center; font-size: 1.8rem; font-weight: 700; margin-bottom: 20px; }
+    .confirmation-list { list-style: none; padding: 0; font-size: 1.1rem; }
+    .confirmation-list li { margin-bottom: 8px; }
     
     /* ---=== Success Page ===--- */
     .success-page {

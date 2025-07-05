@@ -293,6 +293,7 @@ const GlobalStyles = () => (
     .form-actions { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; margin-top: auto; padding-top: 20px; }
     .btn-next { background-color: var(--primary-color); color: var(--text-color-light); border: none; padding: 15px 50px; font-size: 1.2rem; font-weight: 700; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; width: 100%; max-width: 400px; }
     .btn-next:hover { background-color: var(--primary-dark); box-shadow: 0 8px 20px rgba(62, 138, 150, 0.4); }
+    .btn-next:disabled { background-color: #999; cursor: not-allowed; box-shadow: none; }
     .btn-back { background: none; border: none; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; }
     
     /* ---=== Form Styles ===--- */
@@ -321,6 +322,9 @@ const GlobalStyles = () => (
     .upload-checklist { list-style: none; padding: 0; margin-bottom: 20px; width: 100%; max-width: 600px; }
     .upload-checklist li { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; font-weight: 600; color: var(--text-color-dark); }
     .passport-info { width: 100%; max-width: 600px; height: 100px; margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; background-color: var(--form-input-bg); color: var(--form-input-text); box-sizing: border-box; }
+    .status-dialog { width: 100%; max-width: 600px; margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; background-color: var(--form-input-bg); color: var(--form-input-text); }
+    .progress-bar { width: 100%; max-width: 600px; height: 10px; background-color: #e0e0e0; border-radius: 5px; overflow: hidden; margin-bottom: 20px; }
+    .progress-bar-fill { height: 100%; background-color: var(--primary-color); width: 0; transition: width 0.2s ease; }
     .agreements { width: 100%; max-width: 600px; margin-bottom: 20px; }
     .agreement-item { display: flex; align-items: center; gap: 15px; font-size: 1.1rem; font-weight: 600; color: var(--text-color-dark); }
     .agreement-item:first-child { margin-bottom: 15px; }

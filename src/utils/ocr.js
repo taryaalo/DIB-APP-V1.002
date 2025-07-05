@@ -1,14 +1,20 @@
 import Tesseract from 'tesseract.js';
 import { parse } from 'mrz';
 
-export async function extractTextFromImage(file, lang = 'eng') {
+export async function extractTextFromImage(file, lang = 'eng', onProgress) {
   if (!file) return '';
-  const { data: { text } } = await Tesseract.recognize(file, lang);
+  const { data: { text } } = await Tesseract.recognize(file, lang, {
+    logger: m => {
+      if (m.status === 'recognizing text' && onProgress) {
+        onProgress(m.progress);
+      }
+    }
+  });
   return text;
 }
 
-export async function extractPassportData(file) {
-  const text = await extractTextFromImage(file, 'eng');
+export async function extractPassportData(file, onProgress) {
+  const text = await extractTextFromImage(file, 'eng', onProgress);
   const lines = text
     .split('\n')
     .map(l => l.trim())
@@ -38,4 +44,33 @@ export async function extractPassportData(file) {
     dob: formatDate(fields.dateOfBirth),
     passportExpiry: formatDate(fields.expirationDate)
   };
+}
+
+export function uploadPassport(file, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/upload');
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          resolve(JSON.parse(xhr.responseText));
+        } catch (err) {
+          reject(err);
+        }
+      } else {
+        reject(new Error('Upload failed'));
+      }
+    };
+    xhr.onerror = () => reject(new Error('Network error'));
+    if (xhr.upload && onProgress) {
+      xhr.upload.onprogress = e => {
+        if (e.lengthComputable) {
+          onProgress(e.loaded / e.total);
+        }
+      };
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    xhr.send(formData);
+  });
 }

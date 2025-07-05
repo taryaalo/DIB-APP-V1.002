@@ -74,7 +74,11 @@ const translations = {
   confirm: { en: 'Confirm', ar: 'تأكيد' },
   upload_prompt: { en: 'Upload your document', ar: 'قم بتحميل المستند' },
   extracting_data: { en: 'Extracting data, please wait...', ar: 'جاري استخراج البيانات، يرجى الانتظار...' },
-  invalidPassport: { en: 'Please upload a valid passport photo.', ar: 'يرجى تحميل صورة جواز سفر صالحة.' }
+  invalidPassport: { en: 'Please upload a valid passport photo.', ar: 'يرجى تحميل صورة جواز سفر صالحة.' },
+  incorrectOtp: { en: 'Incorrect OTP', ar: 'رمز التحقق خاطئ' },
+  incorrectEmailOtp: { en: 'Incorrect email OTP', ar: 'رمز التحقق من البريد الإلكتروني خاطئ' },
+  exportPdf: { en: 'Export PDF', ar: 'تصدير' },
+  registerEServices: { en: 'Register for E-Services', ar: 'تسجيل في خدمات الكترونية' }
 };
 
 export const t = (key, lang = 'en') => {

@@ -14,11 +14,11 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
     const handleConfirm = () => {
         const phoneOtp = Math.floor(1000 + Math.random() * 9000).toString();
         const enteredPhone = prompt(`Enter OTP sent to phone (${phoneOtp})`);
-        if (enteredPhone !== phoneOtp) { alert('Incorrect OTP'); return; }
+        if (enteredPhone !== phoneOtp) { alert(t('incorrectOtp', language)); return; }
         if (form.email) {
             const emailOtp = Math.floor(1000 + Math.random() * 9000).toString();
             const enteredEmail = prompt(`Enter OTP sent to email (${emailOtp})`);
-            if (enteredEmail !== emailOtp) { alert('Incorrect email OTP'); return; }
+            if (enteredEmail !== emailOtp) { alert(t('incorrectEmailOtp', language)); return; }
         }
         onNavigate('success');
     };
@@ -75,7 +75,7 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
                     </ul>
                 </div>
                 <div className="form-actions">
-                    <button className="btn-back" onClick={handleExport} style={{marginRight:'10px'}}>{language === 'ar' ? 'تصدير' : 'Export PDF'}</button>
+                    <button className="btn-back" onClick={handleExport} style={{marginRight:'10px'}}>{t('exportPdf', language)}</button>
                     <button className="btn-next" onClick={handleConfirm}>{t('confirm', language)}</button>
                 </div>
             </main>

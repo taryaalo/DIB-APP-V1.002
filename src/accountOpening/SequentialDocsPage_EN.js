@@ -55,6 +55,25 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
       let result;
       if (DOCS[current].key === 'passport') {
         result = await extractPassportData(file);
+        const fields = [
+          'fullNameArabic',
+          'firstNameEng',
+          'midNameEng',
+          'surnameEng',
+          'passportNo',
+          'dateOfBirth',
+          'placeOfBirth',
+          'dateOfIssue',
+          'issuingPlace',
+          'sex',
+          'nationality',
+          'expiryDate',
+        ];
+        const hasPassportData =
+          result && fields.some((f) => result[f]);
+        if (!hasPassportData) {
+          throw new Error('invalidPassport');
+        }
       } else if (DOCS[current].key === 'nationalId') {
         result = await extractNIDData(file);
       } else {
@@ -64,7 +83,11 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
       setData((d) => ({ ...d, [DOCS[current].key]: result }));
     } catch (e) {
       console.error(e);
-      setError('Failed to extract data');
+      if (DOCS[current].key === 'passport') {
+        setError(t('invalidPassport', language));
+      } else {
+        setError('Failed to extract data');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -138,32 +161,34 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 <div className="image-preview-box">
                   <img src={image} alt="preview" />
                 </div>
-                <div className="data-result-box">
-                  <div className="data-result-header">
-                    <h3>Extracted Data</h3>
-                    {data[doc.key] && !isLoading && (
-                      <button onClick={handleCopy} className="copy-btn">
-                        {isCopied ? 'Copied!' : 'Copy'}
-                      </button>
+                {doc.key !== 'letter' && (
+                  <div className="data-result-box">
+                    <div className="data-result-header">
+                      <h3>Extracted Data</h3>
+                      {data[doc.key] && !isLoading && (
+                        <button onClick={handleCopy} className="copy-btn">
+                          {isCopied ? 'Copied!' : 'Copy'}
+                        </button>
+                      )}
+                    </div>
+                    {isLoading && (
+                      <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',height:'100%'}}>
+                        <div className="loading-spinner"></div>
+                        <p style={{marginTop:'20px'}}>{t('extracting_data', language)}</p>
+                      </div>
+                    )}
+                    {!isLoading && data[doc.key] && (
+                      <div className="data-result-content">
+                        {Object.keys(data[doc.key]).map((k) => (
+                          <div className="data-item" key={k}>
+                            <span className="data-label">{k}</span>
+                            <span className="data-value">{data[doc.key][k] || 'N/A'}</span>
+                          </div>
+                        ))}
+                      </div>
                     )}
                   </div>
-                  {isLoading && (
-                    <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',height:'100%'}}>
-                      <div className="loading-spinner"></div>
-                      <p style={{marginTop:'20px'}}>{t('extracting_data', language)}</p>
-                    </div>
-                  )}
-                  {!isLoading && data[doc.key] && (
-                    <div className="data-result-content">
-                      {Object.keys(data[doc.key]).map((k) => (
-                        <div className="data-item" key={k}>
-                          <span className="data-label">{k}</span>
-                          <span className="data-value">{data[doc.key][k] || 'N/A'}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
             )}
             {error && <p className="error-message">{error}</p>}

@@ -71,7 +71,10 @@ const translations = {
   nationalIdPhotos: { en: 'Photos of National ID or Passport for authorized signatories', ar: 'صور للهوية أو جواز السفر للمخولين بالتوقيع' },
   personalPhotos: { en: 'Recent personal photos for authorized signatories', ar: 'صور شخصية حديثة للمخولين بالتوقيع' },
   confirmData: { en: 'Please confirm your information', ar: 'يرجى تأكيد المعلومات المدخلة' },
-  confirm: { en: 'Confirm', ar: 'تأكيد' }
+  confirm: { en: 'Confirm', ar: 'تأكيد' },
+  upload_prompt: { en: 'Upload your document', ar: 'قم بتحميل المستند' },
+  extracting_data: { en: 'Extracting data, please wait...', ar: 'جاري استخراج البيانات، يرجى الانتظار...' },
+  invalidPassport: { en: 'Please upload a valid passport photo.', ar: 'يرجى تحميل صورة جواز سفر صالحة.' }
 };
 
 export const t = (key, lang = 'en') => {

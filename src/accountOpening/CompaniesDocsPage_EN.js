@@ -24,13 +24,13 @@ const CompaniesDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
             <main className="form-main">
                 <h2 className="form-title">{t('requiredDocs', language)}</h2>
                 <div className="docs-grid">
-                    <div className="upload-box"><p>Bank statement for the last months (if any)</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
-                    <div className="upload-box"><p>Tax Card or Certificate</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
-                    <div className="upload-box"><p>Commercial Chamber Registration Certificate</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
-                    <div className="upload-box"><p>Official authorization for the legal representative</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
-                    <div className="upload-box"><p>Copy of the Commercial Register</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
-                    <div className="upload-box"><p>Photos of National ID or Passport for authorized signatories</p><div className="multi-upload-placeholders"><input type="file" accept="image/*" capture="environment" multiple /></div></div>
-                    <div className="upload-box"><p>Recent personal photos for authorized signatories</p><div className="multi-upload-placeholders"><input type="file" accept="image/*" capture="environment" multiple /></div></div>
+                    <div className="upload-box"><p>{t('bankStatement', language)}</p><div className="upload-placeholder"><input type="file" accept="image/*" required capture="environment" /></div></div>
+                    <div className="upload-box"><p>{t('taxCard', language)}</p><div className="upload-placeholder"><input type="file" accept="image/*" required capture="environment" /></div></div>
+                    <div className="upload-box"><p>{t('commercialChamberCertificate', language)}</p><div className="upload-placeholder"><input type="file" accept="image/*" required capture="environment" /></div></div>
+                    <div className="upload-box"><p>{t('legalRepAuth', language)}</p><div className="upload-placeholder"><input type="file" accept="image/*" required capture="environment" /></div></div>
+                    <div className="upload-box"><p>{t('commercialRegisterCopy', language)}</p><div className="upload-placeholder"><input type="file" accept="image/*" required capture="environment" /></div></div>
+                    <div className="upload-box"><p>{t('nationalIdPhotos', language)}</p><div className="multi-upload-placeholders"><input type="file" accept="image/*" required capture="environment" multiple /></div></div>
+                    <div className="upload-box"><p>{t('personalPhotos', language)}</p><div className="multi-upload-placeholders"><input type="file" accept="image/*" required capture="environment" multiple /></div></div>
                 </div>
                 <div className="form-actions"><button className="btn-next" onClick={() => onNavigate(nextPage)}>{t('next', language)}</button></div>
             </main>

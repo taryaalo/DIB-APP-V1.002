@@ -5,6 +5,7 @@ import LanguageSwitcher from '../common/LanguageSwitcher';
 import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
+import jsPDF from 'jspdf';
 
 const ConfirmPage_EN = ({ onNavigate, state }) => {
     const { language } = useLanguage();
@@ -20,6 +21,19 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
             if (enteredEmail !== emailOtp) { alert('Incorrect email OTP'); return; }
         }
         onNavigate('success');
+    };
+
+    const handleExport = () => {
+        const doc = new jsPDF();
+        doc.text('Account Confirmation', 10, 10);
+        let y = 20;
+        Object.entries(form).forEach(([k, v]) => {
+            if (!v) return;
+            const value = Array.isArray(v) ? v.join('') : v;
+            doc.text(`${k}: ${value}`, 10, y);
+            y += 10;
+        });
+        doc.save('confirmation.pdf');
     };
 
     return (
@@ -58,6 +72,7 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
                     </ul>
                 </div>
                 <div className="form-actions">
+                    <button className="btn-back" onClick={handleExport} style={{marginRight:'10px'}}>{language === 'ar' ? 'تصدير' : 'Export PDF'}</button>
                     <button className="btn-next" onClick={handleConfirm}>{t('confirm', language)}</button>
                 </div>
             </main>

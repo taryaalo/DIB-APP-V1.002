@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
 import { CalendarIcon } from '../common/Icons';
 import ThemeSwitcher from '../common/ThemeSwitcher';
@@ -7,10 +7,36 @@ import LanguageSwitcher from '../common/LanguageSwitcher';
 import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useFormData } from '../contexts/FormContext';
 
 const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
     const { language } = useLanguage();
-    const [form, setForm] = useState(state?.form || {
+    const { formData, setFormData } = useFormData();
+    const [form, setForm] = useState({
+        ...{
+            fullName: '',
+            firstNameEn: '',
+            middleNameEn: '',
+            lastNameEn: '',
+            dob: '',
+            gender: '',
+            nationality: '',
+            nidDigits: Array(12).fill(''),
+            phone: '',
+            enableEmail: false,
+            email: '',
+            residenceExpiry: '',
+            censusCardNumber: ''
+        },
+        ...(formData.personalInfo || {}),
+        ...(state?.form || {})
+    });
+
+    useEffect(() => {
+        if (formData.personalInfo) {
+            setForm(f => ({ ...f, ...formData.personalInfo }));
+        }
+    }, [formData.personalInfo]);
         fullName: '',
         firstNameEn: '',
         middleNameEn: '',
@@ -82,6 +108,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
     const handleSubmit = () => {
         if (!validateNID()) { alert('Invalid National ID'); return; }
         if (!agreements.agree1 || !agreements.agree2) { alert('You must agree to proceed'); return; }
+        setFormData(data => ({ ...data, personalInfo: form }));
         onNavigate('confirm', { form });
     };
 

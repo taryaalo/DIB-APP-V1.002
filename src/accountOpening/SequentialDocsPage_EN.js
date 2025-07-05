@@ -4,6 +4,7 @@ import { t } from '../i18n';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import Footer from '../common/Footer';
+import { UploadIcon } from '../common/Icons';
 import { LOGO_WHITE } from '../assets/imagePaths';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -20,10 +21,32 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [image, setImage] = useState(null);
+  const [isCopied, setIsCopied] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+
+  const handleDragEvents = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') setIsDragging(true);
+    else if (e.type === 'dragleave') setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleUpload(e.dataTransfer.files[0]);
+    }
+  };
 
   const handleUpload = async (file) => {
     if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => setImage(reader.result);
+    reader.readAsDataURL(file);
     setIsLoading(true);
     setError('');
     try {
@@ -37,8 +60,19 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
     }
   };
 
+  const handleCopy = () => {
+    if (!data[DOCS[current].key]) return;
+    const text = JSON.stringify(data[DOCS[current].key], null, 2);
+    navigator.clipboard.writeText(text);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
   const handleConfirm = () => {
     setCurrent((c) => c + 1);
+    setImage(null);
+    setIsCopied(false);
+    setError('');
   };
 
   const allDone = current >= DOCS.length;
@@ -69,18 +103,63 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
         ) : (
           <>
             <h2 className="form-title">{t(doc.labelKey, language)}</h2>
-            <div className="upload-box" onClick={() => fileInputRef.current.click()}>
-              <div className="upload-placeholder">
-                <input type="file" ref={fileInputRef} onChange={(e) => handleUpload(e.target.files[0])} accept="image/*" style={{ display: 'none' }} />
-                <span style={{ cursor: 'pointer' }}>{t('upload_prompt', language)}</span>
+            {!image && (
+              <div
+                className={`upload-area ${isDragging ? 'drag-over' : ''}`}
+                onClick={() => fileInputRef.current.click()}
+                onDragEnter={handleDragEvents}
+                onDragOver={handleDragEvents}
+                onDragLeave={handleDragEvents}
+                onDrop={handleDrop}
+              >
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={(e) => handleUpload(e.target.files[0])}
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                />
+                <div className="upload-icon"><UploadIcon /></div>
+                <h2>{t('upload_prompt', language)}</h2>
               </div>
-            </div>
-            {isLoading && <p>{t('extracting_data', language)}</p>}
+            )}
+            {image && (
+              <div className="result-container">
+                <div className="image-preview-box">
+                  <img src={image} alt="preview" />
+                </div>
+                <div className="data-result-box">
+                  <div className="data-result-header">
+                    <h3>Extracted Data</h3>
+                    {data[doc.key] && !isLoading && (
+                      <button onClick={handleCopy} className="copy-btn">
+                        {isCopied ? 'Copied!' : 'Copy'}
+                      </button>
+                    )}
+                  </div>
+                  {isLoading && (
+                    <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',height:'100%'}}>
+                      <div className="loading-spinner"></div>
+                      <p style={{marginTop:'20px'}}>{t('extracting_data', language)}</p>
+                    </div>
+                  )}
+                  {!isLoading && data[doc.key] && (
+                    <div className="data-result-content">
+                      {Object.keys(data[doc.key]).map((k) => (
+                        <div className="data-item" key={k}>
+                          <span className="data-label">{k}</span>
+                          <span className="data-value">{data[doc.key][k] || 'N/A'}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
             {error && <p className="error-message">{error}</p>}
             {data[doc.key] && !isLoading && (
-              <div className="status-dialog" style={{ textAlign: 'left' }}>
-                <pre>{JSON.stringify(data[doc.key], null, 2)}</pre>
-                <button className="btn-next" onClick={handleConfirm}>{t('confirm', language)}</button>
+              <div className="form-actions">
+                <button className="btn-next" onClick={handleConfirm}>{t('next', language)}</button>
               </div>
             )}
           </>

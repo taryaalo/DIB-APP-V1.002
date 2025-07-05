@@ -58,6 +58,17 @@ const translations = {
   certifyCorrect: { en: 'I certify that all data entered is correct.', ar: 'أقر بأن جميع البيانات المدخلة صحيحة.' },
   agreeTerms: { en: 'I agree to the Terms and Conditions.', ar: 'أوافق على الشروط والأحكام.' },
   censusCardPhoto: { en: 'Census Card Photo', ar: 'صورة من بطاقة الحصر' },
+  approvedNationalId: { en: 'Approved National ID', ar: 'صورة بطاقة الهوية' },
+  passportPhoto: { en: 'Passport Photo', ar: 'صورة جواز السفر' },
+  accountOpeningLetter: { en: 'Account Opening Letter from Employer', ar: 'خطاب فتح حساب من جهة العمل' },
+  recentPersonalPhoto: { en: 'Recent Personal Photo', ar: 'صورة شخصية حديثة' },
+  bankStatement: { en: 'Bank statement for the last months (if any)', ar: 'كشف حساب مصرفي للأشهر الماضية (إن وجد)' },
+  taxCard: { en: 'Tax Card or Certificate', ar: 'بطاقة أو شهادة ضريبية' },
+  commercialChamberCertificate: { en: 'Commercial Chamber Registration Certificate', ar: 'شهادة قيد بالغرفة التجارية' },
+  legalRepAuth: { en: 'Official authorization for the legal representative', ar: 'تفويض رسمي للممثل القانوني' },
+  commercialRegisterCopy: { en: 'Copy of the Commercial Register', ar: 'نسخة من السجل التجاري' },
+  nationalIdPhotos: { en: 'Photos of National ID or Passport for authorized signatories', ar: 'صور للهوية أو جواز السفر للمخولين بالتوقيع' },
+  personalPhotos: { en: 'Recent personal photos for authorized signatories', ar: 'صور شخصية حديثة للمخولين بالتوقيع' },
   confirmData: { en: 'Please confirm your information', ar: 'يرجى تأكيد المعلومات المدخلة' },
   confirm: { en: 'Confirm', ar: 'تأكيد' }
 };

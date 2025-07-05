@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
+import { FormProvider } from './contexts/FormContext';
 import GlobalStyles from './styles/GlobalStyles';
 
 // Import Page Components
@@ -95,8 +96,10 @@ export default function App() {
     return (
         <LanguageProvider>
             <ThemeProvider>
-                <GlobalStyles />
-                <AppContent />
+                <FormProvider>
+                    <GlobalStyles />
+                    <AppContent />
+                </FormProvider>
             </ThemeProvider>
         </LanguageProvider>
     );

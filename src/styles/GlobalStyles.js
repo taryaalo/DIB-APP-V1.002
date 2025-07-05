@@ -339,6 +339,7 @@ const GlobalStyles = () => (
         background-color: var(--docs-bg);
         margin-top: auto;
     }
+    .footer-transparent { background-color: transparent; }
     
     /* ---=== Success Page ===--- */
     .success-page {

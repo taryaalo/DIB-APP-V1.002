@@ -1,14 +1,16 @@
 import React from 'react';
-import { LOGO_WHITE } from '../assets/imagePaths';
+import { LOGO_WHITE, LOGO_COLOR } from '../assets/imagePaths';
 import { OpenAccountIcon, CompleteAccountIcon } from '../common/Icons';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 const LandingPage_EN = ({ onNavigate }) => {
   const { language } = useLanguage();
+  const { theme } = useTheme();
   return (
     <div className="landing-container">
       <div style={{ position: 'absolute', top: 20, right: 20, display: 'flex', gap: '30px' }}>
@@ -16,7 +18,7 @@ const LandingPage_EN = ({ onNavigate }) => {
                     <LanguageSwitcher />
       </div>
       <div className="content-wrapper">
-        <img src={LOGO_WHITE} alt="Bank Logo" className="landing-logo" />
+        <img src={theme === 'light' ? LOGO_COLOR : LOGO_WHITE} alt="Bank Logo" className="landing-logo" />
         <h1 className="landing-title">{t('welcomeTitle', language)}</h1>
         <p className="landing-subtitle">{t('welcomeSub', language)}</p>
         <div className="landing-buttons-container">
@@ -34,7 +36,7 @@ const LandingPage_EN = ({ onNavigate }) => {
           </button>
         </div>
       </div>
-      <Footer />
+      <Footer noBackground />
     </div>
   );
 };

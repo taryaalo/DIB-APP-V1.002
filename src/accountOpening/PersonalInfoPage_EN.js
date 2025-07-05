@@ -8,9 +8,9 @@ import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const PersonalInfoPage_EN = ({ onNavigate, backPage, flow }) => {
+const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
     const { language } = useLanguage();
-    const [form, setForm] = useState({
+    const [form, setForm] = useState(state?.form || {
         fullName: '',
         firstNameEn: '',
         middleNameEn: '',
@@ -50,6 +50,20 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow }) => {
         }
     };
 
+    const handleNIDPaste = (e, index) => {
+        const paste = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, form.nidDigits.length - index);
+        if (!paste) return;
+        e.preventDefault();
+        const digits = [...form.nidDigits];
+        for (let i = 0; i < paste.length; i++) {
+            digits[index + i] = paste[i];
+        }
+        setForm(f => ({ ...f, nidDigits: digits }));
+        const inputs = e.target.parentElement.querySelectorAll('input');
+        const next = index + paste.length;
+        if (inputs[next]) inputs[next].focus();
+    };
+
     const validateNID = () => {
         const nid = form.nidDigits.join('');
         if (flow === 'expat') return true;
@@ -68,15 +82,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow }) => {
     const handleSubmit = () => {
         if (!validateNID()) { alert('Invalid National ID'); return; }
         if (!agreements.agree1 || !agreements.agree2) { alert('You must agree to proceed'); return; }
-        const phoneOtp = Math.floor(1000 + Math.random()*9000).toString();
-        const enteredPhone = prompt(`Enter OTP sent to phone (${phoneOtp})`);
-        if (enteredPhone !== phoneOtp) { alert('Incorrect OTP'); return; }
-        if (form.email) {
-            const emailOtp = Math.floor(1000 + Math.random()*9000).toString();
-            const enteredEmail = prompt(`Enter OTP sent to email (${emailOtp})`);
-            if (enteredEmail !== emailOtp) { alert('Incorrect email OTP'); return; }
-        }
-        onNavigate('success');
+        onNavigate('confirm', { form });
     };
 
     return (
@@ -106,7 +112,18 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow }) => {
                         {flow !== 'expat' && (
                             <div className="form-group" style={{display:'flex', gap:'5px'}}>
                                 {form.nidDigits.map((d, idx) => (
-                                    <input key={idx} name={`nidDigit${idx}`} value={d} onChange={(e)=>handleChange(e, idx)} onKeyDown={(e)=>handleNIDKeyDown(e, idx)} required type="text" maxLength="1" className="form-input" style={{width:'30px', textAlign:'center'}} />
+                                    <input
+                                        key={idx}
+                                        name={`nidDigit${idx}`}
+                                        value={d}
+                                        onChange={(e)=>handleChange(e, idx)}
+                                        onKeyDown={(e)=>handleNIDKeyDown(e, idx)}
+                                        onPaste={(e)=>handleNIDPaste(e, idx)}
+                                        required
+                                        type="text"
+                                        maxLength="1"
+                                        className="national-id-input"
+                                    />
                                 ))}
                             </div>
                         )}

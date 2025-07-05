@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { extractDocumentData } from '../utils/docExtractor';
+import { extractPassportData, extractNIDData } from '../utils/passportNidExtractors';
 import { t } from '../i18n';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
@@ -50,7 +51,14 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
     setIsLoading(true);
     setError('');
     try {
-      const result = await extractDocumentData(file, DOCS[current].key);
+      let result;
+      if (DOCS[current].key === 'passport') {
+        result = await extractPassportData(file);
+      } else if (DOCS[current].key === 'nationalId') {
+        result = await extractNIDData(file);
+      } else {
+        result = await extractDocumentData(file, DOCS[current].key);
+      }
       setData((d) => ({ ...d, [DOCS[current].key]: result }));
     } catch (e) {
       console.error(e);

@@ -25,6 +25,7 @@ const ExpatDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 ...data,
                 personalInfo: {
                     ...data.personalInfo,
+                    documentType: 'Passport',
                     fullName: `${fields.lastName.replace(/</g,' ')} ${fields.firstName.replace(/</g,' ')}`.trim(),
                     firstNameEn: fields.firstName.replace(/</g,' '),
                     lastNameEn: fields.lastName.replace(/</g,' '),

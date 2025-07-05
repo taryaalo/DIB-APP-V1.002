@@ -37,6 +37,7 @@ const translations = {
   libyan: { en: 'Libyan', ar: 'ليبي' },
   other: { en: 'Other', ar: 'أخرى' },
   nid: { en: 'National ID', ar: 'الرقم الوطني' },
+  documentType: { en: 'Document Type', ar: 'نوع المستند' },
   phoneNumber: { en: 'Phone Number', ar: 'رقم الهاتف' },
   enableEmail: { en: 'Enable Email', ar: 'تفعيل البريد الإلكتروني' },
   email: { en: 'Email', ar: 'البريد الإلكتروني' },

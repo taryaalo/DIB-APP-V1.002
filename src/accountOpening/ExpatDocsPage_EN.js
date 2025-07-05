@@ -27,7 +27,7 @@ const ExpatDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
                     <div className="upload-box"><p>Passport Photo</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
                     <div className="upload-box"><p>Account Opening Letter from Employer</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
                     <div className="upload-box"><p>Recent Personal Photo</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
-                    <div className="upload-box"><p>صورة من بطاقة الحصر</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
+                    <div className="upload-box"><p>{t('censusCardPhoto', language)}</p><div className="upload-placeholder"><input type="file" accept="image/*" capture="environment" /></div></div>
                 </div>
                 <div className="form-actions"><button className="btn-next" onClick={() => onNavigate(nextPage)}>{t('next', language)}</button></div>
             </main>

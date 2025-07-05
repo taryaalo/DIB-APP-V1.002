@@ -38,8 +38,15 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow }) => {
             const digits = [...form.nidDigits];
             digits[index] = value.replace(/[^0-9]/g, '').slice(-1);
             setForm(f => ({ ...f, nidDigits: digits }));
+            if (value && e.target.nextSibling) e.target.nextSibling.focus();
         } else {
             setForm(f => ({ ...f, [name]: value }));
+        }
+    };
+
+    const handleNIDKeyDown = (e, index) => {
+        if (e.key === 'Backspace' && !e.target.value && e.target.previousSibling) {
+            e.target.previousSibling.focus();
         }
     };
 
@@ -99,7 +106,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow }) => {
                         {flow !== 'expat' && (
                             <div className="form-group" style={{display:'flex', gap:'5px'}}>
                                 {form.nidDigits.map((d, idx) => (
-                                    <input key={idx} name={`nidDigit${idx}`} value={d} onChange={(e)=>handleChange(e, idx)} required type="text" maxLength="1" className="form-input" style={{width:'30px', textAlign:'center'}} />
+                                    <input key={idx} name={`nidDigit${idx}`} value={d} onChange={(e)=>handleChange(e, idx)} onKeyDown={(e)=>handleNIDKeyDown(e, idx)} required type="text" maxLength="1" className="form-input" style={{width:'30px', textAlign:'center'}} />
                                 ))}
                             </div>
                         )}
@@ -115,8 +122,8 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow }) => {
                     </div>
                     <div className="form-actions">
                         <div className="agreements">
-                            <label className="agreement-item"><div className="custom-checkbox"><input name="agree1" type="checkbox" checked={agreements.agree1} onChange={handleChange} required/><span className="checkmark"></span></div><span>I certify that all data entered is correct.</span></label>
-                            <label className="agreement-item"><div className="custom-checkbox"><input name="agree2" type="checkbox" checked={agreements.agree2} onChange={handleChange} required/><span className="checkmark"></span></div><span>I agree to the <a href="#">Terms and Conditions</a>.</span></label>
+                            <label className="agreement-item"><div className="custom-checkbox"><input name="agree1" type="checkbox" checked={agreements.agree1} onChange={handleChange} required/><span className="checkmark"></span></div><span>{t('certifyCorrect', language)}</span></label>
+                            <label className="agreement-item"><div className="custom-checkbox"><input name="agree2" type="checkbox" checked={agreements.agree2} onChange={handleChange} required/><span className="checkmark"></span></div><span>{t('agreeTerms', language)}</span></label>
                         </div>
                         <button className="btn-next" type="submit">{t('submitRequest', language)}</button>
                     </div>

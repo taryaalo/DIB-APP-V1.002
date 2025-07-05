@@ -23,23 +23,23 @@ const ContactInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 </button>
             </header>
             <main className="form-main">
-                <form className="form-container">
+                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate(nextPage);}}>
                     <div className="form-section">
-                        <h3>Address Information</h3>
+                        <h3>{t('addressInfoTitle', language)}</h3>
                         <div className="form-group">
-                            <select className="form-input">
-                                <option value="">Country</option>
+                            <select className="form-input" required>
+                                <option value="">{t('country', language)}</option>
                                 <option value="libya">Libya</option>
                                 <option value="tunisia">Tunisia</option>
                                 <option value="egypt">Egypt</option>
                             </select>
                         </div>
-                        <div className="form-group"><input type="text" className="form-input" placeholder="City" /></div>
-                        <div className="form-group"><input type="text" className="form-input" placeholder="Area" /></div>
-                        <div className="form-group"><input type="text" className="form-input" placeholder="Residential Address" /></div>
+                        <div className="form-group"><input type="text" required className="form-input" placeholder={t('city', language)} /></div>
+                        <div className="form-group"><input type="text" required className="form-input" placeholder={t('area', language)} /></div>
+                        <div className="form-group"><input type="text" required className="form-input" placeholder={t('residentialAddress', language)} /></div>
                     </div>
+                    <div className="form-actions"><button type="submit" className="btn-next">{t('next', language)}</button></div>
                 </form>
-                <div className="form-actions"><button className="btn-next" onClick={() => onNavigate(nextPage)}>{t('next', language)}</button></div>
             </main>
             <Footer />
         </div>

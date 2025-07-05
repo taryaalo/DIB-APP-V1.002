@@ -1,5 +1,4 @@
 import React from 'react';
-import { LANG_SELECT_BG } from '../assets/imagePaths';
 
 const GlobalStyles = () => (
   <style>{`
@@ -176,9 +175,6 @@ const GlobalStyles = () => (
         padding: 20px;
         text-align: center;
         background-color: #3E8A96;
-        background-image: url(${LANG_SELECT_BG});
-        background-size: cover;
-        background-position: center;
     }
 
     .lang-selection-box { animation: fadeInSlideUp 1s ease-out forwards; }
@@ -249,8 +245,6 @@ const GlobalStyles = () => (
     body[dir="rtl"] .main { justify-content: flex-start; }
     body[dir="ltr"] .main { justify-content: flex-end; }
     .background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-    .background img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); transform: scale(1.05); transition: transform 6s ease-in-out; }
-    .main:hover .background img { transform: scale(1); }
     .overlay { position: absolute; inset: 0; }
     body[dir="rtl"] .overlay { background: linear-gradient(to right, transparent 0%, var(--glass-bg) 50%, var(--glass-bg) 100%); }
     body[dir="ltr"] .overlay { background: linear-gradient(to left, transparent 0%, var(--glass-bg) 50%, var(--glass-bg) 100%); }

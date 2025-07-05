@@ -11,7 +11,7 @@ const LandingPage_EN = ({ onNavigate }) => {
   const { language } = useLanguage();
   return (
     <div className="landing-container">
-      <div style={{ position: 'absolute', top: 20, right: 20, display: 'flex', gap: '20px' }}>
+      <div style={{ position: 'absolute', top: 20, right: 20, display: 'flex', gap: '30px' }}>
         <ThemeSwitcher />
                     <LanguageSwitcher />
       </div>

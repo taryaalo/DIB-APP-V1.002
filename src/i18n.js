@@ -22,7 +22,26 @@ const translations = {
   eservicesTitle: { en: 'E-Services Registration', ar: 'التسجيل في الخدمات الإلكترونية' },
   eservicesSub: { en: 'This service is under construction.', ar: 'هذه الخدمة قيد التطوير' },
   english: { en: 'English', ar: 'الإنجليزية' },
-  arabic: { en: 'Arabic', ar: 'العربية' }
+  arabic: { en: 'Arabic', ar: 'العربية' },
+  copyRight: { en: `© ${new Date().getFullYear()} Daman Islamic Bank`, ar: `© ${new Date().getFullYear()} مصرف الضمان الإسلامي` },
+  personalInfo: { en: 'Personal Information', ar: 'المعلومات الشخصية' },
+  fullName: { en: 'Full Name', ar: 'الاسم الكامل' },
+  firstNameEn: { en: 'First Name (English)', ar: 'الاسم الأول بالإنجليزية' },
+  middleNameEn: { en: 'Middle Name (English)', ar: 'اسم الأب بالإنجليزية' },
+  lastNameEn: { en: 'Last Name (English)', ar: 'اسم العائلة بالإنجليزية' },
+  dateOfBirth: { en: 'Date of Birth', ar: 'تاريخ الميلاد' },
+  gender: { en: 'Gender', ar: 'الجنس' },
+  male: { en: 'Male', ar: 'ذكر' },
+  female: { en: 'Female', ar: 'أنثى' },
+  nationality: { en: 'Nationality', ar: 'الجنسية' },
+  libyan: { en: 'Libyan', ar: 'ليبي' },
+  other: { en: 'Other', ar: 'أخرى' },
+  nid: { en: 'National ID', ar: 'الرقم الوطني' },
+  phoneNumber: { en: 'Phone Number', ar: 'رقم الهاتف' },
+  enableEmail: { en: 'Enable Email', ar: 'تفعيل البريد الإلكتروني' },
+  email: { en: 'Email', ar: 'البريد الإلكتروني' },
+  residenceExpiry: { en: 'Residence Expiry Date', ar: 'تاريخ انتهاء الاقامة' },
+  censusCardNumber: { en: 'Census Card Number', ar: 'رقم بطاقة الحصر' }
 };
 
 export const t = (key, lang = 'en') => {

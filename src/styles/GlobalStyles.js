@@ -205,6 +205,7 @@ const GlobalStyles = () => (
     /* --- Landing Page --- */
     .landing-container {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
@@ -215,7 +216,7 @@ const GlobalStyles = () => (
         animation: gradient-animation 15s ease infinite;
         color: var(--text-color-light);
     }
-    .content-wrapper { display: flex; flex-direction: column; align-items: center; max-width: 500px; animation: fadeInSlideUp 1s ease-out forwards; }
+    .content-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; max-width: 500px; animation: fadeInSlideUp 1s ease-out forwards; }
     .landing-logo { height: 140px; margin-bottom: 20px; filter: drop-shadow(0px 8px 20px rgba(0, 0, 0, 0.3)); }
     .landing-title { font-size: 3rem; font-weight: 700; margin: 0 0 10px 0; letter-spacing: 1px; }
     .landing-subtitle { font-size: 1.25rem; font-weight: 400; opacity: 0.9; margin-bottom: 40px; }
@@ -286,11 +287,11 @@ const GlobalStyles = () => (
     .form-main { padding: 40px; display: flex; flex-direction: column; align-items: center; flex-grow: 1; }
     .form-title { font-size: 2.5rem; font-weight: 700; color: var(--text-color-dark); margin-bottom: 40px; align-self: flex-start; }
     .docs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; width: 100%; max-width: 900px; margin-bottom: 50px; }
-    .upload-box { background-color: var(--form-input-bg); border-radius: 15px; padding: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px var(--shadow-color); transition: all 0.3s ease; gap: 15px; }
+    .upload-box { background-color: var(--form-input-bg); border-radius: 15px; padding: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px var(--shadow-color); transition: all 0.3s ease; gap: 15px; border: 2px dashed var(--primary-color); }
     .upload-box p { color: var(--text-color-dark); }
-    .upload-box:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+    .upload-box:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); background-color: var(--secondary-color); }
     .upload-box p { font-size: 1.1rem; font-weight: 600; margin: 0; flex-grow: 1; }
-    .upload-placeholder { width: 100px; height: 100px; border: 2px dashed #ccc; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #aaa; cursor: pointer; flex-shrink: 0; }
+    .upload-placeholder { width: 100px; height: 100px; border: 2px dashed var(--primary-color); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary-color); cursor: pointer; flex-shrink: 0; }
     .multi-upload-placeholders { display: flex; gap: 10px; }
     .multi-upload-placeholders .upload-placeholder { width: 60px; height: 60px; }
     .multi-upload-placeholders .upload-icon { width: 32px; height: 32px; }
@@ -342,6 +343,7 @@ const GlobalStyles = () => (
         padding: 20px;
         color: var(--text-color-dark);
         background-color: var(--docs-bg);
+        margin-top: auto;
     }
     
     /* ---=== Success Page ===--- */

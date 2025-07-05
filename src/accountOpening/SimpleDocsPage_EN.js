@@ -13,7 +13,7 @@ const SimpleDocsPage_EN = ({ onNavigate, backPage, nextPage, title }) => {
         <div className="form-page">
             <header className="header docs-header">
                 <img src={LOGO_WHITE} alt="Bank Logo" className="logo" />
-                <div style={{ display: 'flex', gap: '20px' }}>
+                <div style={{ display: 'flex', gap: '30px' }}>
                     <ThemeSwitcher />
                     <LanguageSwitcher />
                 </div>

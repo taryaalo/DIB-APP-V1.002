@@ -37,7 +37,7 @@ const SelectUserPage_EN = ({ onNavigate }) => {
     <div className="app-container">
       <header className="header">
         <img src={LOGO_COLOR} alt="Bank Logo" className="logo" />
-        <div style={{ display: 'flex', gap: '20px' }}>
+        <div style={{ display: 'flex', gap: '30px' }}>
           <ThemeSwitcher />
           <LanguageSwitcher />
         </div>

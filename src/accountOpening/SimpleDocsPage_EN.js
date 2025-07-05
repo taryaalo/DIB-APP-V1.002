@@ -7,7 +7,7 @@ import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFormData } from '../contexts/FormContext';
-import { extractPassportData } from '../utils/ocr';
+import { uploadPassport } from '../utils/ocr';
 
 const SimpleDocsPage_EN = ({ onNavigate, backPage, nextPage, title }) => {
     const { language } = useLanguage();
@@ -21,14 +21,17 @@ const SimpleDocsPage_EN = ({ onNavigate, backPage, nextPage, title }) => {
     const [passportInfo, setPassportInfo] = useState(null);
     const [verifying, setVerifying] = useState(false);
     const [verified, setVerified] = useState(false);
+    const [progress, setProgress] = useState(0);
 
     const handlePassportUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
         setVerifying(true);
+        setProgress(0);
         try {
-            const info = await extractPassportData(file);
-            if (info) {
+            const resp = await uploadPassport(file, p => setProgress(p));
+            if (resp && resp.fields) {
+                const info = resp.fields;
                 setPassportInfo(info);
                 setFormData(data => ({
                     ...data,
@@ -80,8 +83,15 @@ const SimpleDocsPage_EN = ({ onNavigate, backPage, nextPage, title }) => {
                     <li><input type="checkbox" readOnly checked={uploaded.letter} /> {t('accountOpeningLetter', language)}</li>
                     <li><input type="checkbox" readOnly checked={uploaded.photo} /> {t('recentPersonalPhoto', language)}</li>
                 </ul>
+                {verifying && (
+                    <div className="progress-bar"><div className="progress-bar-fill" style={{ width: `${Math.round(progress * 100)}%` }}></div></div>
+                )}
                 {passportInfo && (
-                    <textarea className="passport-info" readOnly value={`Name: ${passportInfo.fullName}\nBirth Date: ${passportInfo.dob}\nExpiry Date: ${passportInfo.passportExpiry}`} />
+                    <div className="status-dialog">
+                        <p>Name: {passportInfo.fullName}</p>
+                        <p>Birth Date: {passportInfo.dob}</p>
+                        <p>Expiry Date: {passportInfo.passportExpiry}</p>
+                    </div>
                 )}
                 <div className="form-actions">
                     <button className="btn-next" onClick={() => setVerified(true)} disabled={!allUploaded || verifying}>Upload</button>

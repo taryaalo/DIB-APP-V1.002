@@ -78,7 +78,8 @@ const translations = {
   incorrectOtp: { en: 'Incorrect OTP', ar: 'رمز التحقق خاطئ' },
   incorrectEmailOtp: { en: 'Incorrect email OTP', ar: 'رمز التحقق من البريد الإلكتروني خاطئ' },
   exportPdf: { en: 'Export PDF', ar: 'تصدير' },
-  registerEServices: { en: 'Register for E-Services', ar: 'تسجيل في خدمات الكترونية' }
+  registerEServices: { en: 'Register for E-Services', ar: 'تسجيل في خدمات الكترونية' },
+  refresh: { en: 'Refresh', ar: 'تحديث' }
 };
 
 export const t = (key, lang = 'en') => {

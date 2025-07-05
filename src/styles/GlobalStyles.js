@@ -295,6 +295,7 @@ const GlobalStyles = () => (
     .btn-next:hover { background-color: var(--primary-dark); box-shadow: 0 8px 20px rgba(62, 138, 150, 0.4); }
     .btn-next:disabled { background-color: #999; cursor: not-allowed; box-shadow: none; }
     .btn-back { background: none; border: none; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+    .btn-refresh { background: none; border: none; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; }
     
     /* ---=== Form Styles ===--- */
     .form-container { width: 100%; max-width: 600px; }

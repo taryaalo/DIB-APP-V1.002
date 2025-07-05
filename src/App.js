@@ -19,12 +19,13 @@ import CompanyContactPage_EN from './accountOpening/CompanyContactPage_EN';
 import LegalRepInfoPage_EN from './accountOpening/LegalRepInfoPage_EN';
 import FinancialInfoPage_EN from './accountOpening/FinancialInfoPage_EN';
 import SuccessPage_EN from './accountOpening/SuccessPage_EN';
+import ConfirmPage_EN from './accountOpening/ConfirmPage_EN';
 import EServicesLanding from './eServices/EServicesLandingPage';
 
 
 // ---=== Main App Component ===---
 const AppContent = () => {
-  const [navigation, setNavigation] = useState({ page: 'languageSelection', flow: null });
+  const [navigation, setNavigation] = useState({ page: 'languageSelection', flow: null, state: null });
   const { theme } = useTheme();
   const { language } = useLanguage();
 
@@ -33,7 +34,7 @@ const AppContent = () => {
     document.body.setAttribute('data-theme', theme);
   }, [theme, language]);
 
-  const handleNavigation = (page) => {
+  const handleNavigation = (page, state = null) => {
     let currentFlow = navigation.flow;
 
     if (page.startsWith('personal')) currentFlow = 'personal';
@@ -43,11 +44,11 @@ const AppContent = () => {
     else if (page.startsWith('companies')) currentFlow = 'companies';
     else if (page === 'selectUser' || page === 'landing' || page === 'languageSelection' || page === 'success') currentFlow = null;
 
-    setNavigation({ page, flow: currentFlow });
+    setNavigation({ page, flow: currentFlow, state });
   };
 
   const renderPage = () => {
-      const { page, flow } = navigation;
+      const { page, flow, state } = navigation;
 
       if (page === 'languageSelection') {
           return <LanguageSelectionPage onNavigate={handleNavigation} />;
@@ -78,7 +79,8 @@ const AppContent = () => {
                 return <ContactInfoPage_EN onNavigate={handleNavigation} backPage={backPage} nextPage="workInfo" />;
             }
             case 'workInfo': return <WorkInfoPage_EN onNavigate={handleNavigation} backPage="contactInfo" nextPage="personalInfo" />;
-            case 'personalInfo': return <PersonalInfoPage_EN onNavigate={handleNavigation} backPage="workInfo" flow={flow} />;
+            case 'personalInfo': return <PersonalInfoPage_EN onNavigate={handleNavigation} backPage="workInfo" flow={flow} state={state} />;
+            case 'confirm': return <ConfirmPage_EN onNavigate={handleNavigation} state={state} />;
             
             case 'success': return <SuccessPage_EN onNavigate={handleNavigation} />;
             default: return <LanguageSelectionPage onNavigate={handleNavigation} />;

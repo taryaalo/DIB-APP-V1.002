@@ -318,6 +318,9 @@ const GlobalStyles = () => (
     body[dir="ltr"] .date-input-container svg { right: 15px; }
     .national-id-group { display: flex; gap: 10px; justify-content: space-between; }
     .national-id-input { width: 40px; height: 50px; text-align: center; font-size: 1.5rem; border: 1px solid #ccc; border-radius: 8px; background-color: var(--form-input-bg); color: var(--form-input-text); }
+    .upload-checklist { list-style: none; padding: 0; margin-bottom: 20px; width: 100%; max-width: 600px; }
+    .upload-checklist li { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; font-weight: 600; color: var(--text-color-dark); }
+    .passport-info { width: 100%; max-width: 600px; height: 100px; margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; background-color: var(--form-input-bg); color: var(--form-input-text); box-sizing: border-box; }
     .agreements { width: 100%; max-width: 600px; margin-bottom: 20px; }
     .agreement-item { display: flex; align-items: center; gap: 15px; font-size: 1.1rem; font-weight: 600; color: var(--text-color-dark); }
     .agreement-item:first-child { margin-bottom: 15px; }

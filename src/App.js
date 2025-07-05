@@ -22,6 +22,7 @@ import FinancialInfoPage_EN from './accountOpening/FinancialInfoPage_EN';
 import SuccessPage_EN from './accountOpening/SuccessPage_EN';
 import ConfirmPage_EN from './accountOpening/ConfirmPage_EN';
 import EServicesLanding from './eServices/EServicesLandingPage';
+import SequentialDocsPage_EN from './accountOpening/SequentialDocsPage_EN';
 
 
 // ---=== Main App Component ===---
@@ -66,6 +67,7 @@ const AppContent = () => {
             case 'expatDocs': return <ExpatDocsPage_EN onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
 
             case 'companiesDocs': return <CompaniesDocsPage_EN onNavigate={handleNavigation} backPage="selectUser" nextPage="companyInfo" />;
+            case 'sequentialDocs': return <SequentialDocsPage_EN onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
             case 'companyInfo': return <CompanyInfoPage_EN onNavigate={handleNavigation} backPage="companiesDocs" nextPage="companyContact" />;
             case 'companyContact': return <CompanyContactPage_EN onNavigate={handleNavigation} backPage="companyInfo" nextPage="legalRepInfo" />;
             case 'legalRepInfo': return <LegalRepInfoPage_EN onNavigate={handleNavigation} backPage="companyContact" nextPage="financialInfo" />;

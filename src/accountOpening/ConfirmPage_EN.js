@@ -59,6 +59,15 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
                         {form.documentType && (
                             <li><strong>{t('documentType', language)}:</strong> {form.documentType}</li>
                         )}
+                        {form.passportNumber && (
+                            <li><strong>{t('passportNumber', language)}:</strong> {form.passportNumber}</li>
+                        )}
+                        {form.passportIssueDate && (
+                            <li><strong>{t('passportIssueDate', language)}:</strong> {form.passportIssueDate}</li>
+                        )}
+                        {form.passportExpiry && (
+                            <li><strong>{t('passportExpiry', language)}:</strong> {form.passportExpiry}</li>
+                        )}
                         {form.nidDigits && (
                             <li><strong>{t('nid', language)}:</strong> {form.nidDigits.join('')}</li>
                         )}

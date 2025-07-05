@@ -27,7 +27,10 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
             email: '',
             residenceExpiry: '',
             censusCardNumber: '',
-            documentType: ''
+            documentType: '',
+            passportNumber: '',
+            passportIssueDate: '',
+            passportExpiry: ''
         },
         ...(formData.personalInfo || {}),
         ...(state?.form || {})

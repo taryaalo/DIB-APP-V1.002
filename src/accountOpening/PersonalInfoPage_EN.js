@@ -37,20 +37,6 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
             setForm(f => ({ ...f, ...formData.personalInfo }));
         }
     }, [formData.personalInfo]);
-        fullName: '',
-        firstNameEn: '',
-        middleNameEn: '',
-        lastNameEn: '',
-        dob: '',
-        gender: '',
-        nationality: '',
-        nidDigits: Array(12).fill(''),
-        phone: '',
-        enableEmail: false,
-        email: '',
-        residenceExpiry: '',
-        censusCardNumber: ''
-    });
 
     const [agreements, setAgreements] = useState({ agree1: false, agree2: false });
 

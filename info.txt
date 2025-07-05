@@ -18,7 +18,7 @@ daman-islamic-bank-app/
 │   │   ├── LegalRepInfoPage_EN.js
 │   │   ├── PersonalInfoPage_EN.js
 │   │   ├── SelectUserPage_EN.js
-│   │   ├── SimpleDocsPage_EN.js
+│   │   ├── SequentialDocsPage_EN.js
 │   │   ├── SuccessPage_EN.js
 │   │   └── WorkInfoPage_EN.js
 │   ├── eServices/

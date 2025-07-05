@@ -9,9 +9,7 @@ import LanguageSelectionPage from './components/LanguageSelectionPage';
 // English Pages - Account Opening flow
 import LandingPage_EN from './accountOpening/LandingPage_EN';
 import SelectUserPage_EN from './accountOpening/SelectUserPage_EN';
-import SimpleDocsPage_EN from './accountOpening/SimpleDocsPage_EN';
 import CompaniesDocsPage_EN from './accountOpening/CompaniesDocsPage_EN';
-import ExpatDocsPage_EN from './accountOpening/ExpatDocsPage_EN';
 import ContactInfoPage_EN from './accountOpening/ContactInfoPage_EN';
 import WorkInfoPage_EN from './accountOpening/WorkInfoPage_EN';
 import PersonalInfoPage_EN from './accountOpening/PersonalInfoPage_EN';
@@ -61,13 +59,13 @@ const AppContent = () => {
             case 'eServices': return <EServicesLanding onNavigate={handleNavigation} />;
             case 'selectUser': return <SelectUserPage_EN onNavigate={handleNavigation} />;
             
-            case 'personalDocs': return <SimpleDocsPage_EN title="Personal" onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
-            case 'businessmenDocs': return <SimpleDocsPage_EN title="Businessmen" onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
-            case 'guaranteedDocs': return <SimpleDocsPage_EN title="Guaranteed" onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
-            case 'expatDocs': return <ExpatDocsPage_EN onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
+            case 'personalDocs':
+            case 'businessmenDocs':
+            case 'guaranteedDocs':
+            case 'expatDocs':
+              return <SequentialDocsPage_EN onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
 
             case 'companiesDocs': return <CompaniesDocsPage_EN onNavigate={handleNavigation} backPage="selectUser" nextPage="companyInfo" />;
-            case 'sequentialDocs': return <SequentialDocsPage_EN onNavigate={handleNavigation} backPage="selectUser" nextPage="contactInfo" />;
             case 'companyInfo': return <CompanyInfoPage_EN onNavigate={handleNavigation} backPage="companiesDocs" nextPage="companyContact" />;
             case 'companyContact': return <CompanyContactPage_EN onNavigate={handleNavigation} backPage="companyInfo" nextPage="legalRepInfo" />;
             case 'legalRepInfo': return <LegalRepInfoPage_EN onNavigate={handleNavigation} backPage="companyContact" nextPage="financialInfo" />;

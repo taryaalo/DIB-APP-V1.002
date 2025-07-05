@@ -9,6 +9,7 @@ import Footer from '../common/Footer';
 import { UploadIcon } from '../common/Icons';
 import { LOGO_WHITE } from '../assets/imagePaths';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useFormData } from '../contexts/FormContext';
 
 const DOCS = [
   { key: 'passport', labelKey: 'passportPhoto' },
@@ -19,6 +20,7 @@ const DOCS = [
 
 const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
   const { language } = useLanguage();
+  const { setFormData } = useFormData();
   const [current, setCurrent] = useState(0);
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -69,10 +71,25 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
           'nationality',
           'expiryDate',
         ];
-        const hasPassportData =
-          result && fields.some((f) => result[f]);
+        const hasPassportData = result && result.passportNo;
         if (!hasPassportData) {
           throw new Error('invalidPassport');
+        }
+        if (result) {
+          setFormData((d) => ({
+            ...d,
+            personalInfo: {
+              ...(d.personalInfo || {}),
+              fullName: result.fullNameArabic || (d.personalInfo?.fullName || ''),
+              firstNameEn: result.firstNameEng || (d.personalInfo?.firstNameEn || ''),
+              middleNameEn: result.midNameEng || (d.personalInfo?.middleNameEn || ''),
+              lastNameEn: result.surnameEng || (d.personalInfo?.lastNameEn || ''),
+              dob: result.dateOfBirth || (d.personalInfo?.dob || ''),
+              gender: result.sex || (d.personalInfo?.gender || ''),
+              nationality: result.nationality || (d.personalInfo?.nationality || ''),
+            },
+            passportData: result,
+          }));
         }
       } else if (DOCS[current].key === 'nationalId') {
         result = await extractNIDData(file);

@@ -32,7 +32,7 @@ const LandingPage_EN = ({ onNavigate }) => {
           </button>
           <button onClick={() => onNavigate('eServices')} className="btn-secondary">
             <CompleteAccountIcon />
-            <span>{language === 'ar' ? 'تسجيل في خدمات الكترونية' : 'Register for E-Services'}</span>
+            <span>{t('registerEServices', language)}</span>
           </button>
         </div>
       </div>

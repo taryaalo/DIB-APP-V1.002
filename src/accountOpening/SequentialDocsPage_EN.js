@@ -152,8 +152,8 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
       <header className="header docs-header">
         <img src={LOGO_WHITE} alt="Bank Logo" className="logo" />
         <div className="header-switchers" style={{ alignItems: 'center' }}>
-          <ThemeSwitcher />
           <AIProviderSwitcher provider={provider} onChange={setProvider} />
+          <ThemeSwitcher />
           <LanguageSwitcher />
         </div>
         <button onClick={() => onNavigate(backPage)} className="btn-back">
@@ -162,6 +162,13 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
         </button>
       </header>
       <main className="form-main" style={{ textAlign: 'center' }}>
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={(e) => handleUpload(e.target.files[0])}
+          accept="image/*"
+          style={{ display: 'none' }}
+        />
         {!allDone && (
           <button onClick={handleRefresh} className="btn-refresh" style={{ alignSelf: 'flex-end' }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0114.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 01-14.13 3.36L1 14"></path></svg>
@@ -188,13 +195,6 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 onDragLeave={handleDragEvents}
                 onDrop={handleDrop}
               >
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={(e) => handleUpload(e.target.files[0])}
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                />
                 <div className="upload-icon"><UploadIcon /></div>
                 <h2>{t('upload_prompt', language)}</h2>
               </div>

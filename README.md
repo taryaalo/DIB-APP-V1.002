@@ -9,6 +9,7 @@ cp .env.example .env
 ```
 
 Edit `.env` and replace the placeholders with your actual keys. `REACT_APP_GEMINI_API_KEY` is used for Google Gemini requests and `REACT_APP_OPENAI_API_KEY` for ChatGPT requests.
+`REACT_APP_API_BASE_URL` should point to the Express server URL (default `http://localhost:5000`).
 
 ## Running the server
 

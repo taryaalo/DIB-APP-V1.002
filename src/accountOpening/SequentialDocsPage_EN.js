@@ -57,24 +57,6 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
       let result;
       if (DOCS[current].key === 'passport') {
         result = await extractPassportData(file);
-        const fields = [
-          'fullNameArabic',
-          'firstNameEng',
-          'midNameEng',
-          'surnameEng',
-          'passportNo',
-          'dateOfBirth',
-          'placeOfBirth',
-          'dateOfIssue',
-          'issuingPlace',
-          'sex',
-          'nationality',
-          'expiryDate',
-        ];
-        const hasPassportData = result && result.passportNo;
-        if (!hasPassportData) {
-          throw new Error('invalidPassport');
-        }
         if (result) {
           setFormData((d) => ({
             ...d,
@@ -100,11 +82,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
       setData((d) => ({ ...d, [DOCS[current].key]: result }));
     } catch (e) {
       console.error(e);
-      if (DOCS[current].key === 'passport') {
-        setError(t('invalidPassport', language));
-      } else {
-        setError('Failed to extract data');
-      }
+      setError('Failed to extract data');
     } finally {
       setIsLoading(false);
     }

@@ -86,7 +86,8 @@ const translations = {
   registerEServices: { en: 'Register for E-Services', ar: 'تسجيل في خدمات الكترونية' },
   refresh: { en: 'Refresh', ar: 'تحديث' },
   gemini: { en: 'Gemini', ar: 'Gemini' },
-  chatgpt: { en: 'ChatGPT', ar: 'شات جي بي تي' }
+  chatgpt: { en: 'ChatGPT', ar: 'شات جي بي تي' },
+  change_document: { en: 'Change Document', ar: 'تغيير المستند' }
 };
 
 export const t = (key, lang = 'en') => {

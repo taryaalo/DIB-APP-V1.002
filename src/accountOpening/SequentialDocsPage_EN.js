@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { extractDocumentData } from '../utils/docExtractor';
 import { extractPassportData, extractNIDData } from '../utils/passportNidExtractors';
 import { uploadDocument } from '../utils/fileUploader';
+import { cacheExtractedData } from '../utils/dataCacher';
 import { t } from '../i18n';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
@@ -59,6 +60,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
     setError('');
     try {
       let result;
+      await uploadDocument(file, DOCS[current].key);
       if (DOCS[current].key === 'passport') {
         result = await extractPassportData(file, provider);
         if (result) {
@@ -108,10 +110,10 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
           });
         }
       } else {
-        await uploadDocument(file, DOCS[current].key);
         result = { uploaded: true };
       }
       setData((d) => ({ ...d, [DOCS[current].key]: result }));
+      await cacheExtractedData(DOCS[current].key, result);
     } catch (e) {
       console.error(e);
       setError('Failed to extract data');
@@ -151,8 +153,8 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
         <img src={LOGO_WHITE} alt="Bank Logo" className="logo" />
         <div className="header-switchers" style={{ alignItems: 'center' }}>
           <ThemeSwitcher />
-          <LanguageSwitcher />
           <AIProviderSwitcher provider={provider} onChange={setProvider} />
+          <LanguageSwitcher />
         </div>
         <button onClick={() => onNavigate(backPage)} className="btn-back">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -201,6 +203,14 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
               <div className="result-container">
                 <div className="image-preview-box">
                   <img src={image} alt="preview" />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current.click()}
+                    className="btn-change"
+                    style={{ marginTop: '10px' }}
+                  >
+                    {t('change_document', language)}
+                  </button>
                 </div>
                 {doc.key !== 'letter' && (
                   <div className="data-result-box">

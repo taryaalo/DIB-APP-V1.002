@@ -87,15 +87,23 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
         result = await extractNIDData(file, provider);
         if (result) {
           const nidDigits = result.nationalId ? result.nationalId.replace(/\D/g, '').slice(0, 12).split('') : [];
-          setFormData((d) => ({
-            ...d,
-            personalInfo: {
-              ...(d.personalInfo || {}),
-              familyRecordNumber: result.familyId || d.personalInfo?.familyRecordNumber || '',
-              nidDigits: nidDigits.length ? nidDigits : d.personalInfo?.nidDigits || Array(12).fill(''),
-            },
-            nidData: result,
-          }));
+          setFormData((d) => {
+            const genderVal = result.sex === 'M' ? 'male' : result.sex === 'F' ? 'female' : (result.sex || '');
+            const dob = result.birthYear && result.birthMonth && result.birthDay
+              ? `${result.birthYear}-${result.birthMonth.toString().padStart(2, '0')}-${result.birthDay.toString().padStart(2, '0')}`
+              : d.personalInfo?.dob || '';
+            return {
+              ...d,
+              personalInfo: {
+                ...(d.personalInfo || {}),
+                familyRecordNumber: result.familyId || d.personalInfo?.familyRecordNumber || '',
+                nidDigits: nidDigits.length ? nidDigits : d.personalInfo?.nidDigits || Array(12).fill(''),
+                gender: d.personalInfo?.gender || genderVal || '',
+                dob: d.personalInfo?.dob || dob,
+              },
+              nidData: result,
+            };
+          });
         }
       } else {
         await uploadDocument(file, DOCS[current].key);

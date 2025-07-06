@@ -12,8 +12,7 @@ const passportSchema = {
   type: 'OBJECT',
   properties: {
     fullNameArabic: { type: 'STRING' },
-    firstNameEng: { type: 'STRING' },
-    midNameEng: { type: 'STRING' },
+    givenNameEng: { type: 'STRING' },
     surnameEng: { type: 'STRING' },
     passportNo: { type: 'STRING' },
     dateOfBirth: { type: 'STRING' },

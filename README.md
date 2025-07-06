@@ -10,3 +10,12 @@ cp .env.example .env
 
 Edit `.env` and replace the placeholders with your actual keys. `REACT_APP_GEMINI_API_KEY` is used for Google Gemini requests and `REACT_APP_OPENAI_API_KEY` for ChatGPT requests.
 
+## Running the server
+
+An Express server is included for caching uploaded files and form data. Start it alongside the React app:
+
+```bash
+npm install
+node server.js
+```
+

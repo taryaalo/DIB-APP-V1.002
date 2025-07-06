@@ -296,7 +296,7 @@ const GlobalStyles = () => (
     .btn-next:disabled { background-color: #999; cursor: not-allowed; box-shadow: none; }
     .btn-back { background: none; border: none; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; }
     .btn-refresh {
-        background: none;
+        background-color: var(--primary-color);
         border: none;
         color: var(--text-color-light);
         font-size: 1rem;
@@ -305,17 +305,24 @@ const GlobalStyles = () => (
         display: flex;
         align-items: center;
         gap: 5px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px var(--shadow-color);
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .btn-refresh:hover {
+        background-color: var(--primary-dark);
+        transform: scale(1.05);
     }
 
     .api-provider-label {
         color: var(--text-color-light);
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    .api-provider-select {
-        padding: 6px 12px;
-        border-radius: 6px;
-        border: 1px solid var(--primary-color);
-        background-color: var(--form-input-bg);
-        color: var(--form-input-text);
+    .ai-provider-switcher span {
+        cursor: pointer;
     }
     
     /* ---=== Form Styles ===--- */

@@ -5,6 +5,7 @@ import { uploadDocument } from '../utils/fileUploader';
 import { t } from '../i18n';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
+import AIProviderSwitcher from '../common/AIProviderSwitcher';
 import Footer from '../common/Footer';
 import { UploadIcon } from '../common/Icons';
 import { LOGO_WHITE } from '../assets/imagePaths';
@@ -145,10 +146,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
           <LanguageSwitcher />
           <label className="api-provider-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {t('apiProvider', language)}:
-            <select value={provider} onChange={(e) => setProvider(e.target.value)} className="api-provider-select">
-              <option value="gemini">{t('gemini', language)}</option>
-              <option value="chatgpt">{t('chatgpt', language)}</option>
-            </select>
+            <AIProviderSwitcher provider={provider} onChange={setProvider} />
           </label>
         </div>
         <button onClick={() => onNavigate(backPage)} className="btn-back">

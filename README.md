@@ -2,11 +2,11 @@
 
 ## Configuration
 
-Create a `.env` file in the project root based on `.env.example` and provide your Google API key:
+Create a `.env` file in the project root based on `.env.example` and provide your API keys:
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` and replace `YOUR_API_KEY_HERE` with your actual key. The application reads this key from `process.env.REACT_APP_GEMINI_API_KEY`.
+Edit `.env` and replace the placeholders with your actual keys. `REACT_APP_GEMINI_API_KEY` is used for Google Gemini requests and `REACT_APP_OPENAI_API_KEY` for ChatGPT requests.
 

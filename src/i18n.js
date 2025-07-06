@@ -84,7 +84,10 @@ const translations = {
   incorrectEmailOtp: { en: 'Incorrect email OTP', ar: 'رمز التحقق من البريد الإلكتروني خاطئ' },
   exportPdf: { en: 'Export PDF', ar: 'تصدير' },
   registerEServices: { en: 'Register for E-Services', ar: 'تسجيل في خدمات الكترونية' },
-  refresh: { en: 'Refresh', ar: 'تحديث' }
+  refresh: { en: 'Refresh', ar: 'تحديث' },
+  apiProvider: { en: 'AI Provider', ar: 'مُقدم الذكاء الاصطناعي' },
+  gemini: { en: 'Gemini', ar: 'Gemini' },
+  chatgpt: { en: 'ChatGPT', ar: 'شات جي بي تي' }
 };
 
 export const t = (key, lang = 'en') => {

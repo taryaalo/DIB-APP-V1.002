@@ -46,22 +46,7 @@ const DOC_CONFIGS = {
   },
 };
 
-export async function extractDocumentData(file, docType) {
-  const config = DOC_CONFIGS[docType] || DOC_CONFIGS.passport;
-  const base64Data = await fileToBase64(file);
-  const payload = {
-    contents: [{
-      parts: [
-        { text: config.instruction },
-        { inlineData: { mimeType: file.type || 'image/png', data: base64Data } },
-      ],
-    }],
-    generationConfig: {
-      responseMimeType: 'application/json',
-      responseSchema: config.schema,
-    },
-  };
-
+async function callGemini(payload) {
   const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
   const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
@@ -80,4 +65,61 @@ export async function extractDocumentData(file, docType) {
     }
   }
   return null;
+}
+
+async function callChatGPT(prompt, base64Data, mimeType) {
+  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+  const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o',
+      messages: [
+        { role: 'system', content: 'You extract data from images and return JSON.' },
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: `${prompt} Only return valid JSON.` },
+            { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64Data}` } },
+          ],
+        },
+      ],
+      max_tokens: 1000,
+      response_format: { type: 'json_object' },
+    }),
+  });
+
+  const result = await resp.json();
+  if (result.choices && result.choices[0].message && result.choices[0].message.content) {
+    try {
+      return JSON.parse(result.choices[0].message.content);
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
+export async function extractDocumentData(file, docType, provider = 'gemini') {
+  const config = DOC_CONFIGS[docType] || DOC_CONFIGS.passport;
+  const base64Data = await fileToBase64(file);
+  if (provider === 'chatgpt') {
+    return callChatGPT(config.instruction, base64Data, file.type || 'image/png');
+  }
+  const payload = {
+    contents: [{
+      parts: [
+        { text: config.instruction },
+        { inlineData: { mimeType: file.type || 'image/png', data: base64Data } },
+      ],
+    }],
+    generationConfig: {
+      responseMimeType: 'application/json',
+      responseSchema: config.schema,
+    },
+  };
+  return callGemini(payload);
 }

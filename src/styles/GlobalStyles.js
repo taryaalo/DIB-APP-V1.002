@@ -320,6 +320,22 @@ const GlobalStyles = () => (
         background-color: var(--primary-dark);
         transform: scale(1.05);
     }
+    .btn-change {
+        background-color: var(--secondary-color);
+        border: none;
+        color: var(--text-color-dark);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px var(--shadow-color);
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .btn-change:hover {
+        background-color: var(--secondary-dark);
+        transform: scale(1.05);
+    }
 
     .ai-provider-switcher span {
         cursor: pointer;

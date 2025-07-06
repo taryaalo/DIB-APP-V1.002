@@ -25,6 +25,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
             dob: '',
             gender: '',
             nationality: '',
+            familyRecordNumber: '',
             nidDigits: Array(12).fill(''),
             phone: '',
             enableEmail: false,
@@ -65,6 +66,9 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
         } else if (name === 'phone') {
             const digits = value.replace(/[^0-9+]/g, '');
             setForm(f => ({ ...f, phone: digits }));
+        } else if (name === 'familyRecordNumber') {
+            const digits = value.replace(/[^0-9]/g, '');
+            setForm(f => ({ ...f, familyRecordNumber: digits }));
         } else {
             setForm(f => ({ ...f, [name]: value }));
         }
@@ -124,6 +128,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                         <div className="form-group date-input-container"><input name="passportIssueDate" value={form.passportIssueDate} onChange={handleChange} type="text" className="form-input" placeholder={t('passportIssueDate', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
                         <div className="form-group date-input-container"><input name="passportExpiryDate" value={form.passportExpiryDate} onChange={handleChange} type="text" className="form-input" placeholder={t('passportExpiryDate', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
                         <div className="form-group"><input name="birthPlace" value={form.birthPlace} onChange={handleChange} type="text" className="form-input" placeholder={t('birthPlace', language)} /></div>
+                        <div className="form-group"><input name="familyRecordNumber" value={form.familyRecordNumber} onChange={handleChange} required type="text" className="form-input" placeholder={t('familyRecordNumber', language)} /></div>
                         {flow !== 'expat' && (
                             <div className="form-group" style={{display:'flex', gap:'5px'}}>
                                 {form.nidDigits.map((d, idx) => (

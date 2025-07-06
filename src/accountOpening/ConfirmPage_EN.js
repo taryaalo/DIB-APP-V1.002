@@ -55,6 +55,9 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
                         {form.documentType && (
                             <li><strong>{t('documentType', language)}:</strong> {form.documentType}</li>
                         )}
+                        {form.familyRecordNumber && (
+                            <li><strong>{t('familyRecordNumber', language)}:</strong> {form.familyRecordNumber}</li>
+                        )}
                         {form.nidDigits && (
                             <li><strong>{t('nid', language)}:</strong> {form.nidDigits.join('')}</li>
                         )}

@@ -47,6 +47,7 @@ const translations = {
   email: { en: 'Email', ar: 'البريد الإلكتروني' },
   residenceExpiry: { en: 'Residence Expiry Date', ar: 'تاريخ انتهاء الاقامة' },
   censusCardNumber: { en: 'Census Card Number', ar: 'رقم بطاقة الحصر' },
+  familyRecordNumber: { en: 'Family Record Number', ar: 'رقم قيد العائلة' },
   addressInfoTitle: { en: 'Address Information', ar: 'معلومات العنوان' },
   country: { en: 'Country', ar: 'الدولة' },
   city: { en: 'City', ar: 'المدينة' },

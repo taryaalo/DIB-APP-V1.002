@@ -23,7 +23,7 @@ const ContactInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 </button>
             </header>
             <main className="form-main">
-                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate(nextPage);}}>
+                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate(nextPage);}} noValidate>
                     <div className="form-section">
                         <h3>{t('addressInfoTitle', language)}</h3>
                         <div className="form-group">

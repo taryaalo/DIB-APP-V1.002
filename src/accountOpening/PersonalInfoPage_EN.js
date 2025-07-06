@@ -86,32 +86,8 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
         if (inputs[next]) inputs[next].focus();
     };
 
-    const validateNID = () => {
-        const nid = form.nidDigits.join('');
-        if (flow === 'expat') return true;
-        if (nid.length !== 12) return false;
-        const genderDigit = nid[0];
-        if (genderDigit === "1" && form.gender !== "male") return false;
-        if (genderDigit === "2" && form.gender !== "female") return false;
-        const year = parseInt(nid.slice(1,5));
-        if (isNaN(year)) return false;
-        const age = new Date().getFullYear() - year;
-        if (age < 18 || age > 120) return false;
-        if (form.dob && new Date(form.dob).getFullYear() !== year) return false;
-        return true;
-    };
 
     const handleSubmit = () => {
-        const arabicRegex = /^[\u0600-\u06FF\s]+$/;
-        const englishRegex = /^[A-Za-z\s]+$/;
-        const phoneRegex = /^(\+218|218|0)?9\d{8}$/;
-        if (!arabicRegex.test(form.fullName)) { alert('Full name must be in Arabic'); return; }
-        if (!englishRegex.test(form.firstNameEn) ||
-            !englishRegex.test(form.middleNameEn) ||
-            !englishRegex.test(form.lastNameEn)) { alert('English names must contain only letters'); return; }
-        if (!phoneRegex.test(form.phone)) { alert('Invalid Libyan phone number'); return; }
-        if (!validateNID()) { alert('Invalid National ID'); return; }
-        if (!agreements.agree1 || !agreements.agree2) { alert('You must agree to proceed'); return; }
         setFormData(data => ({ ...data, personalInfo: form }));
         onNavigate('confirm', { form });
     };
@@ -130,7 +106,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                 </button>
             </header>
             <main className="form-main">
-                <form className="form-container" onSubmit={e => {e.preventDefault(); handleSubmit();}}>
+                <form className="form-container" onSubmit={e => {e.preventDefault(); handleSubmit();}} noValidate>
                     <div className="form-section">
                         <h3>{t('personalInfo', language)}</h3>
                         <div className="form-group"><input name="fullName" value={form.fullName} onChange={handleChange} required type="text" className="form-input" placeholder={t('fullName', language)} /></div>

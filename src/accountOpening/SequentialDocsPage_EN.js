@@ -29,7 +29,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
   const [image, setImage] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [provider, setProvider] = useState('gemini');
+  const [provider, setProvider] = useState('chatgpt');
   const fileInputRef = useRef(null);
 
   const handleDragEvents = (e) => {
@@ -144,10 +144,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
         <div className="header-switchers" style={{ alignItems: 'center' }}>
           <ThemeSwitcher />
           <LanguageSwitcher />
-          <label className="api-provider-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {t('apiProvider', language)}:
-            <AIProviderSwitcher provider={provider} onChange={setProvider} />
-          </label>
+          <AIProviderSwitcher provider={provider} onChange={setProvider} />
         </div>
         <button onClick={() => onNavigate(backPage)} className="btn-back">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>

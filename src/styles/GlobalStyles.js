@@ -321,12 +321,6 @@ const GlobalStyles = () => (
         transform: scale(1.05);
     }
 
-    .api-provider-label {
-        color: var(--text-color-light);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
     .ai-provider-switcher span {
         cursor: pointer;
     }

@@ -59,27 +59,43 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
       if (DOCS[current].key === 'passport') {
         result = await extractPassportData(file, provider);
         if (result) {
+          const names = (result.givenNameEng || '').trim().split(/\s+/);
+          const firstName = names[0] || '';
+          const middleName = names.slice(1).join(' ');
+          const genderVal = result.sex === 'M' ? 'male' : result.sex === 'F' ? 'female' : (result.sex || '');
           setFormData((d) => ({
             ...d,
             personalInfo: {
               ...(d.personalInfo || {}),
-              fullName: result.fullNameArabic || (d.personalInfo?.fullName || ''),
-              firstNameEn: result.givenNameEng || (d.personalInfo?.firstNameEn || ''),
-              middleNameEn: d.personalInfo?.middleNameEn || '',
-              lastNameEn: result.surnameEng || (d.personalInfo?.lastNameEn || ''),
-              dob: result.dateOfBirth || (d.personalInfo?.dob || ''),
-              gender: result.sex || (d.personalInfo?.gender || ''),
-              nationality: result.nationality || (d.personalInfo?.nationality || ''),
-              passportNumber: result.passportNo || (d.personalInfo?.passportNumber || ''),
-              passportIssueDate: result.dateOfIssue || (d.personalInfo?.passportIssueDate || ''),
-              passportExpiryDate: result.expiryDate || (d.personalInfo?.passportExpiryDate || ''),
-              birthPlace: result.placeOfBirth || (d.personalInfo?.birthPlace || ''),
+              fullName: result.fullNameArabic || d.personalInfo?.fullName || '',
+              firstNameEn: firstName || d.personalInfo?.firstNameEn || '',
+              middleNameEn: middleName || d.personalInfo?.middleNameEn || '',
+              lastNameEn: result.surnameEng || d.personalInfo?.lastNameEn || '',
+              dob: result.dateOfBirth || d.personalInfo?.dob || '',
+              gender: genderVal || d.personalInfo?.gender || '',
+              nationality: result.nationality || d.personalInfo?.nationality || '',
+              passportNumber: result.passportNo || d.personalInfo?.passportNumber || '',
+              passportIssueDate: result.dateOfIssue || d.personalInfo?.passportIssueDate || '',
+              passportExpiryDate: result.expiryDate || d.personalInfo?.passportExpiryDate || '',
+              birthPlace: result.placeOfBirth || d.personalInfo?.birthPlace || '',
             },
             passportData: result,
           }));
         }
       } else if (DOCS[current].key === 'nationalId') {
         result = await extractNIDData(file, provider);
+        if (result) {
+          const nidDigits = result.nationalId ? result.nationalId.replace(/\D/g, '').slice(0, 12).split('') : [];
+          setFormData((d) => ({
+            ...d,
+            personalInfo: {
+              ...(d.personalInfo || {}),
+              familyRecordNumber: result.familyId || d.personalInfo?.familyRecordNumber || '',
+              nidDigits: nidDigits.length ? nidDigits : d.personalInfo?.nidDigits || Array(12).fill(''),
+            },
+            nidData: result,
+          }));
+        }
       } else {
         await uploadDocument(file, DOCS[current].key);
         result = { uploaded: true };
@@ -127,9 +143,9 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
         <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
           <ThemeSwitcher />
           <LanguageSwitcher />
-          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'white' }}>
+          <label className="api-provider-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {t('apiProvider', language)}:
-            <select value={provider} onChange={(e) => setProvider(e.target.value)}>
+            <select value={provider} onChange={(e) => setProvider(e.target.value)} className="api-provider-select">
               <option value="gemini">{t('gemini', language)}</option>
               <option value="chatgpt">{t('chatgpt', language)}</option>
             </select>

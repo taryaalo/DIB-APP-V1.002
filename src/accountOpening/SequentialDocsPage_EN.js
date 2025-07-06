@@ -27,6 +27,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [image, setImage] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [provider, setProvider] = useState('chatgpt');
@@ -50,6 +51,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
 
   const handleUpload = async (file) => {
     if (!file) return;
+    setUploadedFile(file);
     const reader = new FileReader();
     reader.onloadend = () => setImage(reader.result);
     reader.readAsDataURL(file);
@@ -134,12 +136,10 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
   };
 
   const handleRefresh = () => {
-    setCurrent(0);
-    setData({});
-    setImage(null);
-    setIsCopied(false);
-    setError('');
-    setIsLoading(false);
+    if (uploadedFile) {
+      setIsCopied(false);
+      handleUpload(uploadedFile);
+    }
   };
 
   const allDone = current >= DOCS.length;

@@ -10,6 +10,7 @@ const passportSchema = {
   properties: {
     fullNameArabic: { type: 'STRING' },
     firstNameEng: { type: 'STRING' },
+    givenNameEng: { type: 'STRING' },
     midNameEng: { type: 'STRING' },
     surnameEng: { type: 'STRING' },
     passportNo: { type: 'STRING' },
@@ -26,11 +27,11 @@ const passportSchema = {
 const nidSchema = {
   type: 'OBJECT',
   properties: {
-    nationalId: { type: 'STRING' },
     familyId: { type: 'STRING' },
-    tripleName: { type: 'STRING' },
-    surname: { type: 'STRING' },
+    nationalId: { type: 'STRING' },
     sex: { type: 'STRING' },
+    birthDay: { type: 'STRING' },
+    birthMonth: { type: 'STRING' },
     birthYear: { type: 'STRING' }
   }
 };
@@ -59,7 +60,7 @@ export async function extractPassportData(file) {
   const payload = {
     contents: [{
       parts: [
-        { text: 'Extract the following fields from the passport image: Full Name (Arabic), First Name (English), Mid Name (English), Surname (English), Passport No, Date of Birth, Place of Birth, Date of Issue, Issuing Place, Sex, Nationality, and Expiry Date. Return the data in the specified JSON format.' },
+        { text: 'Extract the following fields from the passport image: Full Name (Arabic), Given Name (English), First Name (English), Mid Name (English), Surname (English), Passport No, Date of Birth, Place of Birth, Date of Issue, Issuing Place, Sex, Nationality, and Expiry Date. Return the data in the specified JSON format.' },
         { inlineData: { mimeType: file.type || "image/png", data: base64Data } }
       ]
     }],
@@ -76,7 +77,7 @@ export async function extractNIDData(file) {
   const payload = {
     contents: [{
       parts: [
-        { text: 'Extract the following fields from the NID document image: National ID (\u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0648\u0637\u0646\u064a), Family Record Number (\u0631\u0642\u0645 \u0642\u064a\u062f \u0627\u0644\u0639\u0627\u0626\u0644\u0629), Triple Name (\u0627\u0644\u0627\u0633\u0645 \u062b\u0644\u0627\u062b\u064a), Surname (\u0627\u0644\u0644\u0642\u0628), Sex (\u0627\u0644\u062c\u0646\u0633), and Year of Birth (\u0633\u0646\u0629 \u0627\u0644\u0645\u064a\u0644\u0627\u062f). Return the data in the specified JSON format.' },
+        { text: 'Extract the following fields from the NID document image: Family Record Number (\u0631\u0642\u0645 \u0642\u064a\u062f \u0627\u0644\u0639\u0627\u0626\u0644\u0629), National ID (\u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0648\u0637\u0646\u064a), Sex (\u0627\u0644\u062c\u0646\u0633), Day of Birth, Month of Birth, and Year of Birth. Return the data in the specified JSON format.' },
         { inlineData: { mimeType: file.type || "image/png", data: base64Data } }
       ]
     }],

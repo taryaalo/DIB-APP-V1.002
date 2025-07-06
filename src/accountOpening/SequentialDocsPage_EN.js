@@ -28,6 +28,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
   const [image, setImage] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [provider, setProvider] = useState('gemini');
   const fileInputRef = useRef(null);
 
   const handleDragEvents = (e) => {
@@ -56,7 +57,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
     try {
       let result;
       if (DOCS[current].key === 'passport') {
-        result = await extractPassportData(file);
+        result = await extractPassportData(file, provider);
         if (result) {
           setFormData((d) => ({
             ...d,
@@ -78,7 +79,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
           }));
         }
       } else if (DOCS[current].key === 'nationalId') {
-        result = await extractNIDData(file);
+        result = await extractNIDData(file, provider);
       } else {
         await uploadDocument(file, DOCS[current].key);
         result = { uploaded: true };
@@ -123,9 +124,16 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
     <div className="form-page">
       <header className="header docs-header">
         <img src={LOGO_WHITE} alt="Bank Logo" className="logo" />
-        <div style={{ display: 'flex', gap: '30px' }}>
+        <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
           <ThemeSwitcher />
           <LanguageSwitcher />
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'white' }}>
+            {t('apiProvider', language)}:
+            <select value={provider} onChange={(e) => setProvider(e.target.value)}>
+              <option value="gemini">{t('gemini', language)}</option>
+              <option value="chatgpt">{t('chatgpt', language)}</option>
+            </select>
+          </label>
         </div>
         <button onClick={() => onNavigate(backPage)} className="btn-back">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>

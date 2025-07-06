@@ -53,13 +53,52 @@ async function callGemini(payload) {
   return null;
 }
 
-export async function extractPassportData(file) {
+async function callChatGPT(prompt, base64Data, mimeType) {
+  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+  const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o',
+      messages: [
+        { role: 'system', content: 'You extract data from images and return JSON.' },
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: `${prompt} Only return valid JSON.` },
+            { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64Data}` } }
+          ]
+        }
+      ],
+      max_tokens: 1000,
+      response_format: { type: 'json_object' }
+    }),
+  });
+  const result = await resp.json();
+  if (result.choices && result.choices[0].message && result.choices[0].message.content) {
+    try {
+      return JSON.parse(result.choices[0].message.content);
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
+export async function extractPassportData(file, provider = 'gemini') {
   const base64Data = await fileToBase64(file);
+  const prompt = 'Extract the following fields from the passport image: Full Name (Arabic), Given Name (English), Surname (English), Passport No, Date of Birth, Place of Birth, Date of Issue, Issuing Place, Sex, Nationality, and Expiry Date. Return the data in the specified JSON format.';
+  if (provider === 'chatgpt') {
+    return callChatGPT(prompt, base64Data, file.type || 'image/png');
+  }
   const payload = {
     contents: [{
       parts: [
-        { text: 'Extract the following fields from the passport image: Full Name (Arabic), Given Name (English), Surname (English), Passport No, Date of Birth, Place of Birth, Date of Issue, Issuing Place, Sex, Nationality, and Expiry Date. Return the data in the specified JSON format.' },
-        { inlineData: { mimeType: file.type || "image/png", data: base64Data } }
+        { text: prompt },
+        { inlineData: { mimeType: file.type || 'image/png', data: base64Data } }
       ]
     }],
     generationConfig: {
@@ -70,13 +109,17 @@ export async function extractPassportData(file) {
   return callGemini(payload);
 }
 
-export async function extractNIDData(file) {
+export async function extractNIDData(file, provider = 'gemini') {
   const base64Data = await fileToBase64(file);
+  const prompt = 'Extract the following fields from the NID document image: Family Record Number (\u0631\u0642\u0645 \u0642\u064a\u062f \u0627\u0644\u0639\u0627\u0626\u0644\u0629), National ID (\u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0648\u0637\u0646\u064a), Sex (\u0627\u0644\u062c\u0646\u0633), Day of Birth, Month of Birth, and Year of Birth. Return the data in the specified JSON format.';
+  if (provider === 'chatgpt') {
+    return callChatGPT(prompt, base64Data, file.type || 'image/png');
+  }
   const payload = {
     contents: [{
       parts: [
-        { text: 'Extract the following fields from the NID document image: Family Record Number (\u0631\u0642\u0645 \u0642\u064a\u062f \u0627\u0644\u0639\u0627\u0626\u0644\u0629), National ID (\u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0648\u0637\u0646\u064a), Sex (\u0627\u0644\u062c\u0646\u0633), Day of Birth, Month of Birth, and Year of Birth. Return the data in the specified JSON format.' },
-        { inlineData: { mimeType: file.type || "image/png", data: base64Data } }
+        { text: prompt },
+        { inlineData: { mimeType: file.type || 'image/png', data: base64Data } }
       ]
     }],
     generationConfig: {

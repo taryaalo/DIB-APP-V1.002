@@ -116,7 +116,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
       await cacheExtractedData(DOCS[current].key, result);
     } catch (e) {
       console.error(e);
-      setError('Failed to extract data');
+      setError(t('error_extracting_data', language));
     } finally {
       setIsLoading(false);
     }

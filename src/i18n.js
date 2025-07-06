@@ -87,7 +87,11 @@ const translations = {
   refresh: { en: 'Refresh', ar: 'تحديث' },
   gemini: { en: 'Gemini', ar: 'Gemini' },
   chatgpt: { en: 'ChatGPT', ar: 'شات جي بي تي' },
-  change_document: { en: 'Change Document', ar: 'تغيير المستند' }
+  change_document: { en: 'Change Document', ar: 'تغيير المستند' },
+  error_extracting_data: {
+    en: 'Failed to extract data. Please try again.',
+    ar: 'فشل استخراج البيانات. يرجى المحاولة مرة أخرى.'
+  }
 };
 
 export const t = (key, lang = 'en') => {

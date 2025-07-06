@@ -321,9 +321,9 @@ const GlobalStyles = () => (
         transform: scale(1.05);
     }
     .btn-change {
-        background-color: var(--secondary-color);
+        background-color: var(--primary-color);
         border: none;
-        color: var(--text-color-dark);
+        color: var(--text-color-light);
         font-size: 1rem;
         font-weight: 600;
         cursor: pointer;
@@ -333,7 +333,7 @@ const GlobalStyles = () => (
         transition: background-color 0.3s ease, transform 0.3s ease;
     }
     .btn-change:hover {
-        background-color: var(--secondary-dark);
+        background-color: var(--primary-dark);
         transform: scale(1.05);
     }
 

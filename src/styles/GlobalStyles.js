@@ -237,6 +237,11 @@ const GlobalStyles = () => (
         align-items: center;
         transition: background-color 0.3s ease;
     }
+.header-switchers {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
     .header.docs-header { background-color: var(--primary-color); }
     .logo { height: 60px; transition: transform 0.3s ease-out; }
     .logo:hover { transform: scale(1.05); }
@@ -244,6 +249,7 @@ const GlobalStyles = () => (
     .main { position: relative; flex-grow: 1; display: flex; align-items: center; padding: 0 80px; overflow: hidden; }
     body[dir="rtl"] .main { justify-content: flex-start; }
     body[dir="ltr"] .main { justify-content: flex-end; }
+.center-main { justify-content: center !important; }
     .background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
     .overlay { position: absolute; inset: 0; }
     body[dir="rtl"] .overlay { background: linear-gradient(to right, transparent 0%, var(--glass-bg) 50%, var(--glass-bg) 100%); }
@@ -465,6 +471,9 @@ const GlobalStyles = () => (
         .upload-box { flex-direction: column; text-align: center; }
         .national-id-group { flex-wrap: wrap; gap: 5px; }
         .national-id-input { width: calc(25% - 10px); }
+        .theme-switcher-button { width: 26px; height: 26px; }
+        .language-switcher span { padding: 4px 8px; }
+        .header-switchers { gap: 15px; }
     }
   `}</style>
 );

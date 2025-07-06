@@ -10,7 +10,7 @@ const EServicesLanding = ({ onNavigate }) => {
   const { language } = useLanguage();
   return (
     <div className="landing-container">
-      <div style={{ position: 'absolute', top: 20, right: 20, display: 'flex', gap: '30px' }}>
+      <div className="header-switchers" style={{ position: 'absolute', top: 20, right: 20 }}>
         <ThemeSwitcher />
         <LanguageSwitcher />
       </div>

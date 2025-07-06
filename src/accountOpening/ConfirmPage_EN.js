@@ -12,14 +12,6 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
     const form = state?.form || {};
 
     const handleConfirm = () => {
-        const phoneOtp = Math.floor(1000 + Math.random() * 9000).toString();
-        const enteredPhone = prompt(`Enter OTP sent to phone (${phoneOtp})`);
-        if (enteredPhone !== phoneOtp) { alert(t('incorrectOtp', language)); return; }
-        if (form.email) {
-            const emailOtp = Math.floor(1000 + Math.random() * 9000).toString();
-            const enteredEmail = prompt(`Enter OTP sent to email (${emailOtp})`);
-            if (enteredEmail !== emailOtp) { alert(t('incorrectEmailOtp', language)); return; }
-        }
         onNavigate('success');
     };
 

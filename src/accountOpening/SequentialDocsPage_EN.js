@@ -191,7 +191,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
               </div>
             )}
             {error && <p className="error-message">{error}</p>}
-            {data[doc.key] && !isLoading && (
+            {!isLoading && (
               <div className="form-actions">
                 <button className="btn-next" onClick={handleConfirm}>{t('next', language)}</button>
               </div>

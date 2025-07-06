@@ -23,7 +23,7 @@ const FinancialInfoPage_EN = ({ onNavigate, backPage }) => {
                 </button>
             </header>
             <main className="form-main">
-                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate('success');}}>
+                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate('success');}} noValidate>
                     <div className="form-section">
                         <h3>Financial Information</h3>
                         <div className="form-group">

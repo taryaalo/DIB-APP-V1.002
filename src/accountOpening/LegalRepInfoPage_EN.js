@@ -29,7 +29,7 @@ const LegalRepInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 </button>
             </header>
             <main className="form-main">
-                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate(nextPage);}}>
+                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate(nextPage);}} noValidate>
                     <div className="form-section">
                         <h3>Legal Representative Information</h3>
                         <p style={{marginTop: "-15px", marginBottom: "20px"}}>This data is for the person responsible for opening the account in the company's name.</p>

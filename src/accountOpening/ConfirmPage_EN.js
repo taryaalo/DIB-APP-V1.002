@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
@@ -11,7 +11,28 @@ import jsPDF from 'jspdf';
 const ConfirmPage_EN = ({ onNavigate, state }) => {
     const { language } = useLanguage();
     const { formData } = useFormData();
-    const form = state?.form || formData.personalInfo || {};
+    const initialForm = state?.form || formData.personalInfo || {};
+    const [form, setForm] = useState(initialForm);
+
+    useEffect(() => {
+        async function cacheAndLoad() {
+            try {
+                await fetch('/api/cache-form', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(initialForm)
+                });
+                const resp = await fetch('/api/cache-form');
+                if (resp.ok) {
+                    const data = await resp.json();
+                    setForm(data);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        cacheAndLoad();
+    }, []);
 
     const handleConfirm = () => {
         onNavigate('success');

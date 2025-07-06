@@ -5,11 +5,13 @@ import LanguageSwitcher from '../common/LanguageSwitcher';
 import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useFormData } from '../contexts/FormContext';
 import jsPDF from 'jspdf';
 
 const ConfirmPage_EN = ({ onNavigate, state }) => {
     const { language } = useLanguage();
-    const form = state?.form || {};
+    const { formData } = useFormData();
+    const form = state?.form || formData.personalInfo || {};
 
     const handleConfirm = () => {
         onNavigate('success');
@@ -32,7 +34,7 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
         <div className="form-page">
             <header className="header docs-header">
                 <img src={LOGO_WHITE} alt="Bank Logo" className="logo" />
-                <div style={{ display: 'flex', gap: '30px' }}>
+                <div className="header-switchers">
                     <ThemeSwitcher />
                     <LanguageSwitcher />
                 </div>

@@ -141,7 +141,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
     <div className="form-page">
       <header className="header docs-header">
         <img src={LOGO_WHITE} alt="Bank Logo" className="logo" />
-        <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
+        <div className="header-switchers" style={{ alignItems: 'center' }}>
           <ThemeSwitcher />
           <LanguageSwitcher />
           <label className="api-provider-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

@@ -13,9 +13,9 @@ const LandingPage_EN = ({ onNavigate }) => {
   const { theme } = useTheme();
   return (
     <div className="landing-container">
-      <div style={{ position: 'absolute', top: 20, right: 20, display: 'flex', gap: '30px' }}>
+      <div className="header-switchers" style={{ position: 'absolute', top: 20, right: 20 }}>
         <ThemeSwitcher />
-                    <LanguageSwitcher />
+        <LanguageSwitcher />
       </div>
       <div className="content-wrapper">
         <img src={theme === 'light' ? LOGO_COLOR : LOGO_WHITE} alt="Bank Logo" className="landing-logo" />

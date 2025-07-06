@@ -9,9 +9,7 @@ const passportSchema = {
   type: 'OBJECT',
   properties: {
     fullNameArabic: { type: 'STRING' },
-    firstNameEng: { type: 'STRING' },
     givenNameEng: { type: 'STRING' },
-    midNameEng: { type: 'STRING' },
     surnameEng: { type: 'STRING' },
     passportNo: { type: 'STRING' },
     dateOfBirth: { type: 'STRING' },
@@ -60,7 +58,7 @@ export async function extractPassportData(file) {
   const payload = {
     contents: [{
       parts: [
-        { text: 'Extract the following fields from the passport image: Full Name (Arabic), Given Name (English), First Name (English), Mid Name (English), Surname (English), Passport No, Date of Birth, Place of Birth, Date of Issue, Issuing Place, Sex, Nationality, and Expiry Date. Return the data in the specified JSON format.' },
+        { text: 'Extract the following fields from the passport image: Full Name (Arabic), Given Name (English), Surname (English), Passport No, Date of Birth, Place of Birth, Date of Issue, Issuing Place, Sex, Nationality, and Expiry Date. Return the data in the specified JSON format.' },
         { inlineData: { mimeType: file.type || "image/png", data: base64Data } }
       ]
     }],

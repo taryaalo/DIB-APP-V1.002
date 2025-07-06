@@ -48,6 +48,10 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
                         <li><strong>{t('dateOfBirth', language)}:</strong> {form.dob}</li>
                         <li><strong>{t('gender', language)}:</strong> {form.gender}</li>
                         <li><strong>{t('nationality', language)}:</strong> {form.nationality}</li>
+                        <li><strong>{t('passportNumber', language)}:</strong> {form.passportNumber}</li>
+                        <li><strong>{t('passportIssueDate', language)}:</strong> {form.passportIssueDate}</li>
+                        <li><strong>{t('passportExpiryDate', language)}:</strong> {form.passportExpiryDate}</li>
+                        <li><strong>{t('birthPlace', language)}:</strong> {form.birthPlace}</li>
                         {form.documentType && (
                             <li><strong>{t('documentType', language)}:</strong> {form.documentType}</li>
                         )}

@@ -69,6 +69,10 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
               dob: result.dateOfBirth || (d.personalInfo?.dob || ''),
               gender: result.sex || (d.personalInfo?.gender || ''),
               nationality: result.nationality || (d.personalInfo?.nationality || ''),
+              passportNumber: result.passportNo || (d.personalInfo?.passportNumber || ''),
+              passportIssueDate: result.dateOfIssue || (d.personalInfo?.passportIssueDate || ''),
+              passportExpiryDate: result.expiryDate || (d.personalInfo?.passportExpiryDate || ''),
+              birthPlace: result.placeOfBirth || (d.personalInfo?.birthPlace || ''),
             },
             passportData: result,
           }));

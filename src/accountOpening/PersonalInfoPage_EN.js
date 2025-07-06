@@ -18,6 +18,10 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
             firstNameEn: '',
             middleNameEn: '',
             lastNameEn: '',
+            passportNumber: '',
+            passportIssueDate: '',
+            passportExpiryDate: '',
+            birthPlace: '',
             dob: '',
             gender: '',
             nationality: '',
@@ -116,6 +120,10 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                         <div className="form-group date-input-container"><input name="dob" value={form.dob} required type="text" className="form-input" placeholder={t('dateOfBirth', language)} onFocus={(e) => e.target.type='date'} onBlur={(e) => e.target.type='text'} onChange={handleChange}/><CalendarIcon/></div>
                         <div className="form-group"><select name="gender" value={form.gender} onChange={handleChange} required className="form-input"><option value="">{t('gender', language)}</option><option value="male">{t('male', language)}</option><option value="female">{t('female', language)}</option></select></div>
                         <div className="form-group"><select name="nationality" value={form.nationality} onChange={handleChange} className="form-input"><option value="">{t('nationality', language)}</option><option value="libyan">{t('libyan', language)}</option><option value="other">{t('other', language)}</option></select></div>
+                        <div className="form-group"><input name="passportNumber" value={form.passportNumber} onChange={handleChange} type="text" className="form-input" placeholder={t('passportNumber', language)} /></div>
+                        <div className="form-group date-input-container"><input name="passportIssueDate" value={form.passportIssueDate} onChange={handleChange} type="text" className="form-input" placeholder={t('passportIssueDate', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
+                        <div className="form-group date-input-container"><input name="passportExpiryDate" value={form.passportExpiryDate} onChange={handleChange} type="text" className="form-input" placeholder={t('passportExpiryDate', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
+                        <div className="form-group"><input name="birthPlace" value={form.birthPlace} onChange={handleChange} type="text" className="form-input" placeholder={t('birthPlace', language)} /></div>
                         {flow !== 'expat' && (
                             <div className="form-group" style={{display:'flex', gap:'5px'}}>
                                 {form.nidDigits.map((d, idx) => (

@@ -9,6 +9,7 @@ import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFormData } from '../contexts/FormContext';
 import { getCachedExtracted } from '../utils/dataCacher';
+import { normalizeNationality } from '../utils/normalizeNationality';
 
 const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
     const { language } = useLanguage();
@@ -69,7 +70,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                         lastNameEn: passportResp.surnameEng || updated.lastNameEn,
                         dob: passportResp.dateOfBirth || updated.dob,
                         gender: genderVal || updated.gender,
-                        nationality: passportResp.nationality || updated.nationality,
+                        nationality: normalizeNationality(passportResp.nationality) || updated.nationality,
                         passportNumber: passportResp.passportNo || updated.passportNumber,
                         passportIssueDate: passportResp.dateOfIssue || updated.passportIssueDate,
                         passportExpiryDate: passportResp.expiryDate || updated.passportExpiryDate,

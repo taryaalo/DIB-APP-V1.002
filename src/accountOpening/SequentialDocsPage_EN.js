@@ -3,6 +3,7 @@ import { extractDocumentData } from '../utils/docExtractor';
 import { extractPassportData, extractNIDData } from '../utils/passportNidExtractors';
 import { uploadDocument } from '../utils/fileUploader';
 import { cacheExtractedData } from '../utils/dataCacher';
+import { normalizeNationality } from '../utils/normalizeNationality';
 import { t } from '../i18n';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
@@ -78,7 +79,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
               lastNameEn: result.surnameEng || d.personalInfo?.lastNameEn || '',
               dob: result.dateOfBirth || d.personalInfo?.dob || '',
               gender: genderVal || d.personalInfo?.gender || '',
-              nationality: result.nationality || d.personalInfo?.nationality || '',
+              nationality: normalizeNationality(result.nationality) || d.personalInfo?.nationality || '',
               passportNumber: result.passportNo || d.personalInfo?.passportNumber || '',
               passportIssueDate: result.dateOfIssue || d.personalInfo?.passportIssueDate || '',
               passportExpiryDate: result.expiryDate || d.personalInfo?.passportExpiryDate || '',

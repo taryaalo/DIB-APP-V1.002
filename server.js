@@ -3,6 +3,7 @@ const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const { callChatGPT } = require('./ai');
 
 const logsDir = path.join(__dirname, 'logs');
 if (!fs.existsSync(logsDir)) {
@@ -75,43 +76,14 @@ app.post('/api/log', (req, res) => {
 
 app.post('/api/chatgpt', async (req, res) => {
   const { prompt, base64Data, mimeType } = req.body || {};
-  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-  if (!apiKey) {
-    logMessage('Missing OpenAI API key');
-    return res.status(400).json({ error: 'Missing API key' });
-  }
-  const openaiUrl = process.env.REACT_APP_OPENAI_URL ||
-    'https://api.openai.com/v1/chat/completions';
   try {
-    const resp = await fetch(openaiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o',
-        messages: [
-          { role: 'system', content: 'You extract data from images and return JSON.' },
-          {
-            role: 'user',
-            content: [
-              { type: 'text', text: `${prompt} Only return valid JSON.` },
-              { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64Data}` } },
-            ],
-          },
-        ],
-        max_tokens: 1000,
-        response_format: { type: 'json_object' },
-      }),
-    });
-
-    const data = await resp.json();
+    const data = await callChatGPT(prompt, base64Data, mimeType);
     logMessage(`CHATGPT_RESPONSE ${JSON.stringify(data)}`);
-    res.status(resp.ok ? 200 : resp.status).json(data);
+    res.json(data);
   } catch (e) {
     logMessage(`CHATGPT_ERROR ${e.message}`);
-    res.status(500).json({ error: 'OpenAI request failed' });
+    const status = e.message === 'Missing API key' ? 400 : 500;
+    res.status(status).json({ error: e.message });
   }
 });
 

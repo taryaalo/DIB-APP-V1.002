@@ -33,6 +33,8 @@ The ChatGPT provider relies on a working internet connection. If requests fail w
 ## Logs
 
 All errors and ChatGPT responses are written to daily log files under the `logs/`
-directory. These files are created automatically when the server runs.
+directory. Each AI reply is also stored in files prefixed `ai_respo_` followed by
+the date (e.g. `logs/ai_respo_2024-05-30.log`). These files are created
+automatically when the server runs.
 
 

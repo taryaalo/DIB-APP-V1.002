@@ -1,3 +1,6 @@
+import { logToServer } from './logger';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
+
 export const fileToBase64 = (file) => new Promise((resolve, reject) => {
   const reader = new FileReader();
   reader.onloadend = () => resolve(reader.result.split(',')[1]);
@@ -54,46 +57,33 @@ async function callGemini(payload) {
 }
 
 async function callChatGPT(prompt, base64Data, mimeType) {
-  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-  if (!apiKey) {
-    throw new Error('Missing OpenAI API key');
-  }
-  const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: 'gpt-4o',
-      messages: [
-        { role: 'system', content: 'You extract data from images and return JSON.' },
-        {
-          role: 'user',
-          content: [
-            { type: 'text', text: `${prompt} Only return valid JSON.` },
-            { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64Data}` } }
-          ]
-        }
-      ],
-      max_tokens: 1000,
-      response_format: { type: 'json_object' }
-    }),
-  });
+  try {
+    const resp = await fetch(`${API_BASE_URL}/api/chatgpt`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, base64Data, mimeType }),
+    });
 
-  if (!resp.ok) {
-    throw new Error(`OpenAI request failed: ${resp.status}`);
-  }
-
-  const result = await resp.json();
-  if (result.choices && result.choices[0].message && result.choices[0].message.content) {
-    try {
-      return JSON.parse(result.choices[0].message.content);
-    } catch {
-      return null;
+    if (!resp.ok) {
+      const text = await resp.text();
+      logToServer(`CHATGPT_ERROR ${resp.status} ${text}`);
+      throw new Error(`OpenAI request failed: ${resp.status}`);
     }
+
+    const result = await resp.json();
+    logToServer(`CHATGPT_RESPONSE ${JSON.stringify(result)}`);
+    if (result.choices && result.choices[0].message && result.choices[0].message.content) {
+      try {
+        return JSON.parse(result.choices[0].message.content);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  } catch (e) {
+    logToServer(`CHATGPT_ERROR ${e.message}`);
+    throw e;
   }
-  return null;
 }
 
 export async function extractPassportData(file, provider = 'gemini') {

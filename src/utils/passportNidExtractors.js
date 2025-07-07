@@ -55,6 +55,9 @@ async function callGemini(payload) {
 
 async function callChatGPT(prompt, base64Data, mimeType) {
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error('Missing OpenAI API key');
+  }
   const resp = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -77,6 +80,11 @@ async function callChatGPT(prompt, base64Data, mimeType) {
       response_format: { type: 'json_object' }
     }),
   });
+
+  if (!resp.ok) {
+    throw new Error(`OpenAI request failed: ${resp.status}`);
+  }
+
   const result = await resp.json();
   if (result.choices && result.choices[0].message && result.choices[0].message.content) {
     try {

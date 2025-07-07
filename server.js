@@ -80,8 +80,10 @@ app.post('/api/chatgpt', async (req, res) => {
     logMessage('Missing OpenAI API key');
     return res.status(400).json({ error: 'Missing API key' });
   }
+  const openaiUrl = process.env.REACT_APP_OPENAI_URL ||
+    'https://api.openai.com/v1/chat/completions';
   try {
-    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    const resp = await fetch(openaiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

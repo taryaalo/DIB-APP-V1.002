@@ -9,7 +9,7 @@ cp .env.example .env
 ```
 
 Edit `.env` and replace the placeholders with your actual keys. `REACT_APP_GEMINI_API_KEY` is used for Google Gemini requests and `REACT_APP_OPENAI_API_KEY` for ChatGPT requests. Ensure the keys are on a single line and keep them private.
-`REACT_APP_API_BASE_URL` should point to the Express server URL (default `http://localhost:5000`).
+`REACT_APP_API_BASE_URL` should point to the Express server URL (default `http://localhost:7003`).
 
 ## Running the server
 
@@ -19,10 +19,11 @@ An Express server is included for caching uploaded files and form data. Start it
 npm install
 node server.js
 ```
-If you run the server on a different port (e.g. 3001), update `REACT_APP_API_BASE_URL` in your `.env` to match:
+The React development server started with `npm start` runs on port `7002`.
+If you run the server on a different port (e.g. 7003), update `REACT_APP_API_BASE_URL` in your `.env` to match:
 
 ```bash
-REACT_APP_API_BASE_URL=http://localhost:3001
+REACT_APP_API_BASE_URL=http://localhost:7003
 ```
 
 The ChatGPT provider relies on a working internet connection. If requests fail with

@@ -43,7 +43,12 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
         const doc = new jsPDF();
         const fontResp = await fetch(arabicFont);
         const fontData = await fontResp.arrayBuffer();
-        const fontBase64 = btoa(String.fromCharCode(...new Uint8Array(fontData)));
+        let binary = '';
+        const bytes = new Uint8Array(fontData);
+        for (let i = 0; i < bytes.length; i += 1) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        const fontBase64 = btoa(binary);
         doc.addFileToVFS('NotoSansArabic.ttf', fontBase64);
         doc.addFont('NotoSansArabic.ttf', 'NotoSansArabic', 'normal');
         doc.setFont('NotoSansArabic');

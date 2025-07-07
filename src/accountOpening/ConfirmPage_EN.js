@@ -7,6 +7,7 @@ import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFormData } from '../contexts/FormContext';
 import jsPDF from 'jspdf';
+import arabicFont from '../assets/NotoSansArabic-Regular.ttf';
 
 const ConfirmPage_EN = ({ onNavigate, state }) => {
     const { language } = useLanguage();
@@ -38,14 +39,20 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
         onNavigate('success');
     };
 
-    const handleExport = () => {
+    const handleExport = async () => {
         const doc = new jsPDF();
-        doc.text('Account Confirmation', 10, 10);
+        const fontResp = await fetch(arabicFont);
+        const fontData = await fontResp.arrayBuffer();
+        const fontBase64 = btoa(String.fromCharCode(...new Uint8Array(fontData)));
+        doc.addFileToVFS('NotoSansArabic.ttf', fontBase64);
+        doc.addFont('NotoSansArabic.ttf', 'NotoSansArabic', 'normal');
+        doc.setFont('NotoSansArabic');
+        doc.text('Account Confirmation', 10, 10, { lang: 'ar' });
         let y = 20;
         Object.entries(form).forEach(([k, v]) => {
             if (!v) return;
             const value = Array.isArray(v) ? v.join('') : v;
-            doc.text(`${k}: ${value}`, 10, y);
+            doc.text(`${k}: ${value}`, 10, y, { lang: 'ar' });
             y += 10;
         });
         doc.save('confirmation.pdf');

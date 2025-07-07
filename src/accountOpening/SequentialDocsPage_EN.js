@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { extractDocumentData } from '../utils/docExtractor';
 import { extractPassportData, extractNIDData } from '../utils/passportNidExtractors';
+import { mapExtractedFields } from '../utils/fieldMapper';
 import { uploadDocument } from '../utils/fileUploader';
 import { cacheExtractedData } from '../utils/dataCacher';
 import { normalizeNationality } from '../utils/normalizeNationality';
@@ -64,6 +65,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
       await uploadDocument(file, DOCS[current].key);
       if (DOCS[current].key === 'passport') {
         result = await extractPassportData(file, provider);
+        result = mapExtractedFields('passport', result);
         if (result) {
           const names = (result.givenNameEng || '').trim().split(/\s+/);
           const firstName = names[0] || '';
@@ -90,6 +92,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
         }
       } else if (DOCS[current].key === 'nationalId') {
         result = await extractNIDData(file, provider);
+        result = mapExtractedFields('nationalId', result);
         if (result) {
           const nidDigits = result.nationalId ? result.nationalId.replace(/\D/g, '').slice(0, 12).split('') : [];
           setFormData((d) => {

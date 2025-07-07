@@ -10,6 +10,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useFormData } from '../contexts/FormContext';
 import { getCachedExtracted } from '../utils/dataCacher';
 import { normalizeNationality } from '../utils/normalizeNationality';
+import { mapExtractedFields } from '../utils/fieldMapper';
 
 const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
     const { language } = useLanguage();
@@ -54,8 +55,10 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
             setLoading(true);
             setError('');
             try {
-                const passportResp = await getCachedExtracted('passport');
-                const nidResp = await getCachedExtracted('nationalId');
+                const passportRaw = await getCachedExtracted('passport');
+                const nidRaw = await getCachedExtracted('nationalId');
+                const passportResp = mapExtractedFields('passport', passportRaw || {});
+                const nidResp = mapExtractedFields('nationalId', nidRaw || {});
                 let updated = { ...(formData.personalInfo || form) };
                 if (passportResp && Object.keys(passportResp).length) {
                     const names = (passportResp.givenNameEng || '').trim().split(/\s+/);

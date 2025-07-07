@@ -17,12 +17,16 @@ function logMessage(msg) {
   });
 }
 
+const https = require('https');
+const http = require('http');
+
 const app = express();
 const upload = multer({ dest: 'uploads/' });
-const PORT = process.env.PORT || 5000;
+const HTTP_PORT = process.env.PORT || 7003;
+const HTTPS_PORT = process.env.HTTPS_PORT || 7103;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 let cachedForm = {};
 let cachedUploads = {};
@@ -114,6 +118,20 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Server error' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+http.createServer(app).listen(HTTP_PORT, () => {
+  console.log(`HTTP server running on port ${HTTP_PORT}`);
 });
+
+try {
+  const keyPath = process.env.SSL_KEY_PATH || path.join(__dirname, 'key.pem');
+  const certPath = process.env.SSL_CERT_PATH || path.join(__dirname, 'cert.pem');
+  const httpsOptions = {
+    key: fs.readFileSync(keyPath),
+    cert: fs.readFileSync(certPath),
+  };
+  https.createServer(httpsOptions, app).listen(HTTPS_PORT, () => {
+    console.log(`HTTPS server running on port ${HTTPS_PORT}`);
+  });
+} catch (e) {
+  console.warn('HTTPS disabled:', e.message);
+}

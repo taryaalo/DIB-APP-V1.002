@@ -8,6 +8,7 @@ import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFormData } from '../contexts/FormContext';
+import { getCachedExtracted } from '../utils/dataCacher';
 
 const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
     const { language } = useLanguage();
@@ -38,11 +39,69 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
         ...(state?.form || {})
     });
 
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
     useEffect(() => {
         if (formData.personalInfo) {
             setForm(f => ({ ...f, ...formData.personalInfo }));
         }
     }, [formData.personalInfo]);
+
+    useEffect(() => {
+        async function loadExtracted() {
+            setLoading(true);
+            setError('');
+            try {
+                const passportResp = await getCachedExtracted('passport');
+                const nidResp = await getCachedExtracted('nationalId');
+                let updated = { ...(formData.personalInfo || form) };
+                if (passportResp && Object.keys(passportResp).length) {
+                    const names = (passportResp.givenNameEng || '').trim().split(/\s+/);
+                    const firstName = names[0] || '';
+                    const middleName = names.slice(1).join(' ');
+                    const genderVal = passportResp.sex === 'M' ? 'male' : passportResp.sex === 'F' ? 'female' : (passportResp.sex || '');
+                    updated = {
+                        ...updated,
+                        fullName: passportResp.fullNameArabic || updated.fullName,
+                        firstNameEn: firstName || updated.firstNameEn,
+                        middleNameEn: middleName || updated.middleNameEn,
+                        lastNameEn: passportResp.surnameEng || updated.lastNameEn,
+                        dob: passportResp.dateOfBirth || updated.dob,
+                        gender: genderVal || updated.gender,
+                        nationality: passportResp.nationality || updated.nationality,
+                        passportNumber: passportResp.passportNo || updated.passportNumber,
+                        passportIssueDate: passportResp.dateOfIssue || updated.passportIssueDate,
+                        passportExpiryDate: passportResp.expiryDate || updated.passportExpiryDate,
+                        birthPlace: passportResp.placeOfBirth || updated.birthPlace,
+                    };
+                }
+                if (nidResp && Object.keys(nidResp).length) {
+                    const nidDigits = nidResp.nationalId ? nidResp.nationalId.replace(/\D/g, '').slice(0, 12).split('') : [];
+                    const genderVal = nidResp.sex === 'M' ? 'male' : nidResp.sex === 'F' ? 'female' : (nidResp.sex || '');
+                    const dob = nidResp.birthYear && nidResp.birthMonth && nidResp.birthDay
+                        ? `${nidResp.birthYear}-${nidResp.birthMonth.toString().padStart(2,'0')}-${nidResp.birthDay.toString().padStart(2,'0')}`
+                        : updated.dob;
+                    updated = {
+                        ...updated,
+                        familyRecordNumber: nidResp.familyId || updated.familyRecordNumber,
+                        nidDigits: nidDigits.length ? nidDigits : updated.nidDigits,
+                        gender: updated.gender || genderVal,
+                        dob: updated.dob || dob,
+                    };
+                }
+                setForm(updated);
+                setFormData(d => ({ ...d, personalInfo: updated }));
+            } catch (e) {
+                console.error(e);
+                setError(t('error_extracting_data', language));
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadExtracted();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const [agreements, setAgreements] = useState({ agree1: false, agree2: false });
 
@@ -114,6 +173,13 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                 </button>
             </header>
             <main className="form-main">
+                {loading && (
+                    <div style={{display:'flex',flexDirection:'column',alignItems:'center',marginBottom:'20px'}}>
+                        <div className="loading-spinner"></div>
+                        <p style={{marginTop:'20px'}}>{t('extracting_data', language)}</p>
+                    </div>
+                )}
+                {error && <p className="error-message">{error}</p>}
                 <form className="form-container" onSubmit={e => {e.preventDefault(); handleSubmit();}} noValidate>
                     <div className="form-section">
                         <h3>{t('personalInfo', language)}</h3>
@@ -155,7 +221,19 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                         )}
                         <div className="form-group"><input name="phone" value={form.phone} onChange={handleChange} required type="tel" className="form-input" placeholder={t('phoneNumber', language)} /></div>
                         <div className="form-group"><label><input type="checkbox" name="enableEmail" checked={form.enableEmail} onChange={handleChange} /> {t('enableEmail', language)}</label></div>
-                        {form.enableEmail && <div className="form-group"><input name="email" value={form.email} onChange={handleChange} required type="email" className="form-input" placeholder={t('email', language)} /></div>}
+                        {form.enableEmail && (
+                            <div className="form-group">
+                                <input
+                                    name="email"
+                                    value={form.email}
+                                    onChange={handleChange}
+                                    required
+                                    type="email"
+                                    className="form-input"
+                                    placeholder={t('email', language)}
+                                />
+                            </div>
+                        )}
                     </div>
                     <div className="form-actions">
                         <div className="agreements">

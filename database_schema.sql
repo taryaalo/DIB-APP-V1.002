@@ -62,3 +62,17 @@ CREATE TABLE uploaded_documents (
     confirmed_by_admin BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Activity log table
+CREATE TABLE activity_log (
+    id SERIAL PRIMARY KEY,
+    activity TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Error log table
+CREATE TABLE error_log (
+    id SERIAL PRIMARY KEY,
+    error TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

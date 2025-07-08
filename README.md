@@ -39,6 +39,8 @@ The server exposes an endpoint `/api/test-db` which performs a simple database q
 All errors and ChatGPT responses are written to daily log files under the `logs/`
 directory. Each AI reply is also stored in files prefixed `ai_respo_` followed by
 the date (e.g. `logs/ai_respo_2024-05-30.log`). These files are created
-automatically when the server runs.
+automatically when the server runs. In addition to file logs, activities are
+inserted into an `activity_log` table and errors into an `error_log` table in the
+database.
 
 

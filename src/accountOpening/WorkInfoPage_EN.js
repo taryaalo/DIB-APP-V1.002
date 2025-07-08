@@ -1,14 +1,36 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useFormData } from '../contexts/FormContext';
 
 const WorkInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
     const { language } = useLanguage();
+    const { formData, setFormData } = useFormData();
+    const [form, setForm] = useState({
+        employmentStatus: '',
+        jobTitle: '',
+        employer: '',
+        employerAddress: '',
+        employerPhone: '',
+        sourceOfIncome: '',
+        monthlyIncome: '',
+        ...(formData.workInfo || {})
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm(f => ({ ...f, [name]: value }));
+    };
+
+    const handleSubmit = () => {
+        setFormData(d => ({ ...d, workInfo: form }));
+        onNavigate(nextPage);
+    };
     return (
         <div className="form-page">
             <header className="header docs-header">
@@ -23,16 +45,16 @@ const WorkInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 </button>
             </header>
             <main className="form-main">
-                 <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate(nextPage);}} noValidate>
+                 <form className="form-container" onSubmit={e => {e.preventDefault(); handleSubmit();}} noValidate>
                     <div className="form-section">
                         <h3>{t('workInfoTitle', language)}</h3>
-                        <div className="form-group"><input type="text" required className="form-input" placeholder={t('employmentStatus', language)} /></div>
-                        <div className="form-group"><select className="form-input" required><option value="">{t('jobTitle', language)}</option><option value="manager">Manager</option><option value="employee">Employee</option><option value="specialist">Specialist</option></select></div>
-                        <div className="form-group"><input type="text" required className="form-input" placeholder={t('employer', language)} /></div>
-                        <div className="form-group"><input type="text" required className="form-input" placeholder={t('employerAddress', language)} /></div>
-                        <div className="form-group"><input type="tel" required className="form-input" placeholder={t('employerPhone', language)} /></div>
-                        <div className="form-group"><select className="form-input" required><option value="">{t('sourceOfIncome', language)}</option><option value="salary">Salary</option><option value="business">Freelance</option><option value="investment">Investment</option></select></div>
-                        <div className="form-group"><select className="form-input" required><option value="">{t('monthlyIncome', language)}</option><option value="low">Less than 2000</option><option value="medium">2000 - 5000</option><option value="high">More than 5000</option></select></div>
+                        <div className="form-group"><input name="employmentStatus" value={form.employmentStatus} onChange={handleChange} type="text" required className="form-input" placeholder={t('employmentStatus', language)} /></div>
+                        <div className="form-group"><select name="jobTitle" value={form.jobTitle} onChange={handleChange} className="form-input" required><option value="">{t('jobTitle', language)}</option><option value="manager">Manager</option><option value="employee">Employee</option><option value="specialist">Specialist</option></select></div>
+                        <div className="form-group"><input name="employer" value={form.employer} onChange={handleChange} type="text" required className="form-input" placeholder={t('employer', language)} /></div>
+                        <div className="form-group"><input name="employerAddress" value={form.employerAddress} onChange={handleChange} type="text" required className="form-input" placeholder={t('employerAddress', language)} /></div>
+                        <div className="form-group"><input name="employerPhone" value={form.employerPhone} onChange={handleChange} type="tel" required className="form-input" placeholder={t('employerPhone', language)} /></div>
+                        <div className="form-group"><select name="sourceOfIncome" value={form.sourceOfIncome} onChange={handleChange} className="form-input" required><option value="">{t('sourceOfIncome', language)}</option><option value="salary">Salary</option><option value="business">Freelance</option><option value="investment">Investment</option></select></div>
+                        <div className="form-group"><select name="monthlyIncome" value={form.monthlyIncome} onChange={handleChange} className="form-input" required><option value="">{t('monthlyIncome', language)}</option><option value="low">Less than 2000</option><option value="medium">2000 - 5000</option><option value="high">More than 5000</option></select></div>
                     </div>
                     <div className="form-actions"><button type="submit" className="btn-next">{t('next', language)}</button></div>
                 </form>

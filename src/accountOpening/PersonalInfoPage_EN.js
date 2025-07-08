@@ -108,6 +108,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
     }, []);
 
     const [agreements, setAgreements] = useState({ agree1: false, agree2: false });
+    const [agreeError, setAgreeError] = useState(false);
 
     const handleChange = (e, index) => {
         const { name, value, type, checked } = e.target;
@@ -159,6 +160,11 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
 
 
     const handleSubmit = () => {
+        if (!agreements.agree1 || !agreements.agree2) {
+            setAgreeError(true);
+            return;
+        }
+        setAgreeError(false);
         setFormData(data => ({ ...data, personalInfo: form }));
         onNavigate('confirm', { form });
     };
@@ -244,7 +250,8 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                             <label className="agreement-item"><div className="custom-checkbox"><input name="agree1" type="checkbox" checked={agreements.agree1} onChange={handleChange} required/><span className="checkmark"></span></div><span>{t('certifyCorrect', language)}</span></label>
                             <label className="agreement-item"><div className="custom-checkbox"><input name="agree2" type="checkbox" checked={agreements.agree2} onChange={handleChange} required/><span className="checkmark"></span></div><span>{t('agreeTerms', language)}</span></label>
                         </div>
-                        <button className="btn-next" type="submit">{t('submitRequest', language)}</button>
+                        {agreeError && <p className="error-message">{t('agreeError', language)}</p>}
+                        <button className="btn-next" type="submit" disabled={!agreements.agree1 || !agreements.agree2}>{t('submitRequest', language)}</button>
                     </div>
                 </form>
             </main>

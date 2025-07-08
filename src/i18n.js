@@ -66,6 +66,7 @@ const translations = {
   monthlyIncome: { en: 'Average Monthly Income', ar: 'متوسط الدخل الشهري' },
   certifyCorrect: { en: 'I certify that all data entered is correct.', ar: 'أقر بأن جميع البيانات المدخلة صحيحة.' },
   agreeTerms: { en: 'I agree to the Terms and Conditions.', ar: 'أوافق على الشروط والأحكام.' },
+  agreeError: { en: 'You must accept the terms to continue.', ar: 'يجب قبول الشروط للاستمرار.' },
   censusCardPhoto: { en: 'Census Card Photo', ar: 'صورة من بطاقة الحصر' },
   approvedNationalId: { en: 'Approved National ID', ar: 'صورة بطاقة الهوية' },
   passportPhoto: { en: 'Passport Photo', ar: 'صورة جواز السفر' },

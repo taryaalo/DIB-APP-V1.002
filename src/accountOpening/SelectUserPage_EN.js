@@ -7,6 +7,7 @@ import Footer from '../common/Footer';
 import { PersonalIcon, GuaranteedIcon, BusinessmenIcon, CompaniesIcon } from '../common/Icons';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useFormData } from '../contexts/FormContext';
 
 const SelectUserPage_EN = ({ onNavigate }) => {
   useEffect(() => {
@@ -32,6 +33,12 @@ const SelectUserPage_EN = ({ onNavigate }) => {
   }, []);
 
   const { language } = useLanguage();
+  const { setFormData } = useFormData();
+
+  const selectService = (type, page) => {
+    setFormData(d => ({ ...d, serviceType: type }));
+    onNavigate(page);
+  };
 
   return (
     <div className="app-container">
@@ -48,11 +55,11 @@ const SelectUserPage_EN = ({ onNavigate }) => {
         </div>
         <div className="menu-card tilt-effect">
           <h2>{t('selectService', language)}</h2>
-          <button onClick={() => onNavigate('personalDocs')}><PersonalIcon /><span>{t('personal', language)}</span></button>
-          <button onClick={() => onNavigate('expatDocs')}><PersonalIcon /><span>{t('expat', language)}</span></button>
-          <button onClick={() => onNavigate('guaranteedDocs')}><GuaranteedIcon /><span>{t('guaranteed', language)}</span></button>
-          <button onClick={() => onNavigate('businessmenDocs')}><BusinessmenIcon /><span>{t('businessmen', language)}</span></button>
-          <button onClick={() => onNavigate('companiesDocs')}><CompaniesIcon /><span>{t('companies', language)}</span></button>
+          <button onClick={() => selectService('personal', 'personalDocs')}><PersonalIcon /><span>{t('personal', language)}</span></button>
+          <button onClick={() => selectService('expat', 'expatDocs')}><PersonalIcon /><span>{t('expat', language)}</span></button>
+          <button onClick={() => selectService('guaranteed', 'guaranteedDocs')}><GuaranteedIcon /><span>{t('guaranteed', language)}</span></button>
+          <button onClick={() => selectService('businessmen', 'businessmenDocs')}><BusinessmenIcon /><span>{t('businessmen', language)}</span></button>
+          <button onClick={() => selectService('companies', 'companiesDocs')}><CompaniesIcon /><span>{t('companies', language)}</span></button>
         </div>
       </main>
             <Footer />

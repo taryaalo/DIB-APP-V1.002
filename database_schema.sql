@@ -24,7 +24,8 @@ CREATE TABLE personal_info (
     residence_expiry DATE,
     census_card_number VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ai_model VARCHAR(20)
+    ai_model VARCHAR(20),
+    service_type VARCHAR(50)
 );
 
 -- Address information linked to personal_info

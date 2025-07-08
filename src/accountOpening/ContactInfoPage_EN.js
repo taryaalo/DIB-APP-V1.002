@@ -1,14 +1,34 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import Footer from '../common/Footer';
 import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useFormData } from '../contexts/FormContext';
 
 const ContactInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
     const { language } = useLanguage();
+    const { formData, setFormData } = useFormData();
+    const [form, setForm] = useState({
+        country: '',
+        city: '',
+        area: '',
+        residentialAddress: '',
+        ...(formData.addressInfo || {})
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm(f => ({ ...f, [name]: value }));
+    };
+
+    const handleSubmit = () => {
+        setFormData(d => ({ ...d, addressInfo: form }));
+        onNavigate(nextPage);
+    };
+
     return (
         <div className="form-page">
             <header className="header docs-header">
@@ -23,20 +43,20 @@ const ContactInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
                 </button>
             </header>
             <main className="form-main">
-                <form className="form-container" onSubmit={e => {e.preventDefault(); onNavigate(nextPage);}} noValidate>
+                <form className="form-container" onSubmit={e => {e.preventDefault(); handleSubmit();}} noValidate>
                     <div className="form-section">
                         <h3>{t('addressInfoTitle', language)}</h3>
                         <div className="form-group">
-                            <select className="form-input" required>
+                            <select className="form-input" required name="country" value={form.country} onChange={handleChange}>
                                 <option value="">{t('country', language)}</option>
                                 <option value="libya">Libya</option>
                                 <option value="tunisia">Tunisia</option>
                                 <option value="egypt">Egypt</option>
                             </select>
                         </div>
-                        <div className="form-group"><input type="text" required className="form-input" placeholder={t('city', language)} /></div>
-                        <div className="form-group"><input type="text" required className="form-input" placeholder={t('area', language)} /></div>
-                        <div className="form-group"><input type="text" required className="form-input" placeholder={t('residentialAddress', language)} /></div>
+                        <div className="form-group"><input name="city" value={form.city} onChange={handleChange} type="text" required className="form-input" placeholder={t('city', language)} /></div>
+                        <div className="form-group"><input name="area" value={form.area} onChange={handleChange} type="text" required className="form-input" placeholder={t('area', language)} /></div>
+                        <div className="form-group"><input name="residentialAddress" value={form.residentialAddress} onChange={handleChange} type="text" required className="form-input" placeholder={t('residentialAddress', language)} /></div>
                     </div>
                     <div className="form-actions"><button type="submit" className="btn-next">{t('next', language)}</button></div>
                 </form>

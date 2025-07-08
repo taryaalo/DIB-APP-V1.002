@@ -145,14 +145,11 @@ app.post('/api/submit-form', async (req, res) => {
     const result = await pool.query(query, values);
     const id = result.rows[0].id;
     const createdAt = result.rows[0].created_at;
- codex/log-all-activity-and-errors-in-database
-    const referenceNumber = generateReference(id);
-    logActivity(`DB_INSERT personal_info ${referenceNumber}`);
 
     const referenceNumber = generateReference(createdAt);
     await pool.query('UPDATE personal_info SET reference_number=$1 WHERE id=$2', [referenceNumber, id]);
+    logActivity(`DB_INSERT personal_info ${referenceNumber}`);
     logMessage(`DB_INSERT personal_info ${referenceNumber}`);
- main
 
     if (form.addressInfo) {
       const a = form.addressInfo;
@@ -185,9 +182,10 @@ app.post('/api/submit-form', async (req, res) => {
       } catch (err) {
         logError(`MOVE_FILE_ERROR ${err.message}`);
       }
+      const docReference = generateReference(new Date());
       await pool.query(
         'INSERT INTO uploaded_documents (personal_id, doc_type, file_name, reference_number) VALUES ($1,$2,$3,$4)',
-        [id, docType, newPath, referenceNumber]
+        [id, docType, newPath, docReference]
       );
     }
     cachedForm = {};

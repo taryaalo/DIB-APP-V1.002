@@ -7,7 +7,6 @@ import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFormData } from '../contexts/FormContext';
 import jsPDF from 'jspdf';
-import arabicFont from '../assets/NotoSansArabic-Regular.ttf';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 const ConfirmPage_EN = ({ onNavigate, state }) => {
@@ -62,17 +61,9 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
 
     const handleExport = async () => {
         const doc = new jsPDF();
-        const fontResp = await fetch(arabicFont);
-        const fontData = await fontResp.arrayBuffer();
-        let binary = '';
-        const bytes = new Uint8Array(fontData);
-        for (let i = 0; i < bytes.length; i += 1) {
-            binary += String.fromCharCode(bytes[i]);
-        }
-        const fontBase64 = btoa(binary);
-        doc.addFileToVFS('NotoSansArabic.ttf', fontBase64);
-        doc.addFont('NotoSansArabic.ttf', 'NotoSansArabic', 'normal');
-        doc.setFont('NotoSansArabic');
+        // Using the built-in Helvetica font avoids issues with missing
+        // font metrics in some environments.
+        doc.setFont('helvetica');
         doc.setFontSize(18);
         doc.text(t('confirmData', language), 105, 20, { align: 'center', lang: 'ar' });
 

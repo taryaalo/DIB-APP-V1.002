@@ -24,6 +24,7 @@ CREATE TABLE personal_info (
     residence_expiry DATE,
     census_card_number VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reference_number VARCHAR(100) UNIQUE,
     ai_model VARCHAR(20)
 );
 

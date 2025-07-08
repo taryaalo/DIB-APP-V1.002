@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const { callChatGPT } = require('./ai');
+const { Pool } = require('pg');
 
 // Load environment variables from the .env file if present
 require('dotenv').config();
@@ -23,6 +24,14 @@ function logMessage(msg) {
 
 const https = require('https');
 const http = require('http');
+
+const pool = new Pool({
+  host: process.env.PG_HOST || 'localhost',
+  port: process.env.PG_PORT || 5432,
+  user: process.env.PG_USER || 'postgres',
+  password: process.env.PG_PASSWORD || '',
+  database: process.env.PG_DATABASE || 'dib_app_data',
+});
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
@@ -76,6 +85,48 @@ app.post('/api/log', (req, res) => {
     logMessage(message);
   }
   res.json({ success: true });
+});
+
+function generateReference() {
+  return 'REF' + Math.floor(100000 + Math.random() * 900000);
+}
+
+app.post('/api/submit-form', async (req, res) => {
+  const form = req.body || {};
+  const referenceNumber = generateReference();
+  const values = [
+    form.fullName,
+    form.firstNameEn || null,
+    form.middleNameEn || null,
+    form.lastNameEn || null,
+    form.passportNumber || null,
+    form.passportIssueDate || null,
+    form.passportExpiryDate || null,
+    form.birthPlace || null,
+    form.dob || null,
+    form.gender || null,
+    form.nationality || null,
+    form.familyRecordNumber || null,
+    form.phone || null,
+    form.email || null,
+    form.residenceExpiry || null,
+    form.censusCardNumber || null
+  ];
+  const query = `INSERT INTO personal_info (
+      full_name, first_name, middle_name, last_name, passport_number,
+      passport_issue_date, passport_expiry_date, birth_place, dob, gender,
+      nationality, family_record_number, phone, email, residence_expiry,
+      census_card_number
+    ) VALUES (
+      $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16
+    )`;
+  try {
+    await pool.query(query, values);
+    res.json({ referenceNumber });
+  } catch (e) {
+    logMessage(`SUBMIT_ERROR ${e.message}`);
+    res.status(500).json({ error: 'Failed to save' });
+  }
 });
 
 app.post('/api/chatgpt', async (req, res) => {

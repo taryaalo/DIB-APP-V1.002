@@ -142,6 +142,16 @@ app.post('/api/chatgpt', async (req, res) => {
   }
 });
 
+app.get('/api/test-db', async (req, res) => {
+  try {
+    await pool.query('SELECT 1');
+    res.json({ connected: true });
+  } catch (e) {
+    logMessage(`DB_TEST_ERROR ${e.message}`);
+    res.status(500).json({ connected: false, error: e.message });
+  }
+});
+
 app.use((err, req, res, next) => {
   logMessage(`ERROR ${err.message}`);
   res.status(500).json({ error: 'Server error' });

@@ -92,7 +92,11 @@ const translations = {
   error_extracting_data: {
     en: 'Failed to extract data. Please try again.',
     ar: 'فشل استخراج البيانات. يرجى المحاولة مرة أخرى.'
-  }
+  },
+  testDb: { en: 'Test DB Connection', ar: 'اختبار الاتصال بقاعدة البيانات' },
+  testingDb: { en: 'Testing connection...', ar: 'جاري اختبار الاتصال...' },
+  dbConnected: { en: 'Database connected!', ar: 'تم الاتصال بقاعدة البيانات!' },
+  dbFailed: { en: 'Database connection failed.', ar: 'فشل الاتصال بقاعدة البيانات.' }
 };
 
 export const t = (key, lang = 'en') => {

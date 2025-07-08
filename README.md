@@ -30,6 +30,10 @@ The ChatGPT provider relies on a working internet connection. If requests fail w
 "Failed to fetch", ensure that your environment allows outbound HTTPS requests to
 `api.openai.com` and that your API key is valid.
 
+### Testing the database connection
+
+The server exposes an endpoint `/api/test-db` which performs a simple database query. On the language selection page a "Test DB Connection" button calls this endpoint and shows whether the connection succeeds.
+
 ## Logs
 
 All errors and ChatGPT responses are written to daily log files under the `logs/`

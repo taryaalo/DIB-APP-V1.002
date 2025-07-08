@@ -458,6 +458,9 @@ const GlobalStyles = () => (
     .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .error-message { color: #e53e3e; font-weight: 600; background-color: rgba(229, 62, 62, 0.1); padding: 15px; border-radius: 8px; text-align: center; }
+    .db-status { margin-top: 10px; font-weight: 600; }
+    .db-status.success { color: var(--success-color); }
+    .db-status.error { color: #e53e3e; }
 
     /* ---=== RESPONSIVE ADJUSTMENTS ===--- */
     @media (max-width: 768px) {

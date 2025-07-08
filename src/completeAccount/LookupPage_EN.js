@@ -78,26 +78,33 @@ const LookupPage_EN = ({ onNavigate }) => {
           </div>
           {error && <div className="status-dialog">{t(error, language) || error}</div>}
           {data && (
-            <div className="confirmation-document">
-              {data.personalInfo && (
-                <>
-                  <div className="confirmation-header">{t('personalInfo', language)}</div>
-                  {renderList(data.personalInfo)}
-                </>
-              )}
-              {data.addressInfo && (
-                <>
-                  <div className="confirmation-header">{t('addressInfoTitle', language)}</div>
-                  {renderList(data.addressInfo)}
-                </>
-              )}
-              {data.workInfo && (
-                <>
-                  <div className="confirmation-header">{t('workInfoTitle', language)}</div>
-                  {renderList(data.workInfo)}
-                </>
-              )}
-            </div>
+            <>
+              <div className="confirmation-document">
+                {data.personalInfo && (
+                  <>
+                    <div className="confirmation-header">{t('personalInfo', language)}</div>
+                    {renderList(data.personalInfo)}
+                  </>
+                )}
+                {data.addressInfo && (
+                  <>
+                    <div className="confirmation-header">{t('addressInfoTitle', language)}</div>
+                    {renderList(data.addressInfo)}
+                  </>
+                )}
+                {data.workInfo && (
+                  <>
+                    <div className="confirmation-header">{t('workInfoTitle', language)}</div>
+                    {renderList(data.workInfo)}
+                  </>
+                )}
+              </div>
+              <div className="form-actions">
+                <button type="button" className="btn-next" onClick={() => onNavigate('reviewDocs', data)}>
+                  {t('reviewDocuments', language)}
+                </button>
+              </div>
+            </>
           )}
         </div>
       </main>

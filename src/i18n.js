@@ -97,6 +97,8 @@ const translations = {
   not_found: { en: 'No data found.', ar: 'لم يتم العثور على بيانات.' },
   server_error: { en: 'Server error.', ar: 'خطأ في الخادم.' },
   missing_identifier: { en: 'Please enter a reference number or national ID.', ar: 'يرجى إدخال رقم المرجع أو الرقم الوطني.' },
+  reviewDocuments: { en: 'Review Uploaded Documents', ar: 'مراجعة المستندات المرفوعة' },
+  valid: { en: 'Valid', ar: 'صالح' },
   error_extracting_data: {
     en: 'Failed to extract data. Please try again.',
     ar: 'فشل استخراج البيانات. يرجى المحاولة مرة أخرى.'

@@ -83,7 +83,7 @@ const AppContent = () => {
             case 'personalInfo': return <PersonalInfoPage_EN onNavigate={handleNavigation} backPage="workInfo" flow={flow} state={state} />;
             case 'confirm': return <ConfirmPage_EN onNavigate={handleNavigation} state={state} />;
             
-            case 'success': return <SuccessPage_EN onNavigate={handleNavigation} />;
+            case 'success': return <SuccessPage_EN onNavigate={handleNavigation} state={state} />;
             default: return <LanguageSelectionPage onNavigate={handleNavigation} />;
         }
   }

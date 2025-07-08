@@ -8,6 +8,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useFormData } from '../contexts/FormContext';
 import jsPDF from 'jspdf';
 import arabicFont from '../assets/NotoSansArabic-Regular.ttf';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 const ConfirmPage_EN = ({ onNavigate, state }) => {
     const { language } = useLanguage();
@@ -35,8 +36,23 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
         cacheAndLoad();
     }, []);
 
-    const handleConfirm = () => {
-        onNavigate('success');
+    const handleConfirm = async () => {
+        try {
+            const resp = await fetch(`${API_BASE_URL}/api/submit-form`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form)
+            });
+            if (resp.ok) {
+                const data = await resp.json();
+                onNavigate('success', { referenceNumber: data.referenceNumber });
+            } else {
+                onNavigate('success', { referenceNumber: null });
+            }
+        } catch (e) {
+            console.error(e);
+            onNavigate('success', { referenceNumber: null });
+        }
     };
 
     const handleExport = async () => {

@@ -105,9 +105,10 @@ app.post('/api/log', (req, res) => {
   res.json({ success: true });
 });
 
-function generateReference(id) {
-  const padded = id.toString().padStart(6, '0');
-  return `REF-${padded}`;
+function generateReference(createdAt) {
+   const datePart = createdAt.toISOString().split('T')[0].replace(/-/g, '');
+   const randomPart = Math.floor(1000000000 + Math.random() * 9000000000);
+   return `REF-${datePart}-${randomPart}`;
 }
 
 app.post('/api/submit-form', async (req, res) => {
@@ -144,8 +145,14 @@ app.post('/api/submit-form', async (req, res) => {
     const result = await pool.query(query, values);
     const id = result.rows[0].id;
     const createdAt = result.rows[0].created_at;
+ codex/log-all-activity-and-errors-in-database
     const referenceNumber = generateReference(id);
     logActivity(`DB_INSERT personal_info ${referenceNumber}`);
+
+    const referenceNumber = generateReference(createdAt);
+    await pool.query('UPDATE personal_info SET reference_number=$1 WHERE id=$2', [referenceNumber, id]);
+    logMessage(`DB_INSERT personal_info ${referenceNumber}`);
+ main
 
     if (form.addressInfo) {
       const a = form.addressInfo;

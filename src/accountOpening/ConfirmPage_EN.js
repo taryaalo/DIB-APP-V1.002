@@ -41,11 +41,11 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
             const resp = await fetch(`${API_BASE_URL}/api/submit-form`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form)
+                body: JSON.stringify({ ...form, aiModel: formData.provider })
             });
             if (resp.ok) {
                 const data = await resp.json();
-                onNavigate('success', { referenceNumber: data.referenceNumber });
+                onNavigate('success', { referenceNumber: data.referenceNumber, createdAt: data.createdAt, aiModel: formData.provider });
             } else {
                 onNavigate('success', { referenceNumber: null });
             }

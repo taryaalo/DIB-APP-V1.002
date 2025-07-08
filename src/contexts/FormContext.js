@@ -4,7 +4,7 @@ const FormContext = createContext();
 export const useFormData = () => useContext(FormContext);
 
 export const FormProvider = ({ children }) => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ provider: 'gemini' });
   return (
     <FormContext.Provider value={{ formData, setFormData }}>
       {children}

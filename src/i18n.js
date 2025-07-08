@@ -19,6 +19,8 @@ const translations = {
     ar: 'تم تقديم طلبك بنجاح. سوف نتواصل معك قريباً.'
   },
   referenceLabel: { en: 'Reference Number', ar: 'رقم المرجع' },
+  createdAt: { en: 'Created At', ar: 'تاريخ الإنشاء' },
+  aiModelUsed: { en: 'AI Model', ar: 'نموذج الذكاء الاصطناعي' },
   backToHome: { en: 'Back to Home', ar: 'العودة للرئيسية' },
   eservicesTitle: { en: 'E-Services Registration', ar: 'التسجيل في الخدمات الإلكترونية' },
   eservicesSub: { en: 'This service is under construction.', ar: 'هذه الخدمة قيد التطوير' },

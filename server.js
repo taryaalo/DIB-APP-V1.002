@@ -91,8 +91,9 @@ app.post('/api/log', (req, res) => {
   res.json({ success: true });
 });
 
-function generateReference() {
-  return 'REF' + Math.floor(100000 + Math.random() * 900000);
+function generateReference(id) {
+  const padded = id.toString().padStart(6, '0');
+  return `REF-${padded}`;
 }
 
 app.post('/api/submit-form', async (req, res) => {
@@ -113,21 +114,24 @@ app.post('/api/submit-form', async (req, res) => {
     form.phone || null,
     form.email || null,
     form.residenceExpiry || null,
-    form.censusCardNumber || null
+    form.censusCardNumber || null,
+    form.aiModel || null
   ];
   const query = `INSERT INTO personal_info (
       full_name, first_name, middle_name, last_name, passport_number,
       passport_issue_date, passport_expiry_date, birth_place, dob, gender,
       nationality, family_record_number, phone, email, residence_expiry,
-      census_card_number
+      census_card_number, ai_model
     ) VALUES (
-      $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16
-    ) RETURNING id`;
+      $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17
+    ) RETURNING id, created_at`;
   try {
     const result = await pool.query(query, values);
-    const referenceNumber = result.rows[0].id;
+    const id = result.rows[0].id;
+    const createdAt = result.rows[0].created_at;
+    const referenceNumber = generateReference(id);
     logMessage(`DB_INSERT personal_info ${referenceNumber}`);
-    res.json({ referenceNumber });
+    res.json({ referenceNumber, createdAt });
   } catch (e) {
     logMessage(`SUBMIT_ERROR ${e.message}`);
     res.status(500).json({ error: 'Failed to save' });

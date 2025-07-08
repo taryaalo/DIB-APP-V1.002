@@ -23,7 +23,8 @@ CREATE TABLE personal_info (
     email VARCHAR(100),
     residence_expiry DATE,
     census_card_number VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ai_model VARCHAR(20)
 );
 
 -- Address information linked to personal_info

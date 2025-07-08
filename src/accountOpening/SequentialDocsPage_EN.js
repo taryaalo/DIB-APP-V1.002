@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { extractDocumentData } from '../utils/docExtractor';
 import { extractPassportData, extractNIDData } from '../utils/passportNidExtractors';
 import { mapExtractedFields } from '../utils/fieldMapper';
@@ -24,7 +24,7 @@ const DOCS = [
 
 const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
   const { language } = useLanguage();
-  const { setFormData } = useFormData();
+  const { setFormData, formData } = useFormData();
   const [current, setCurrent] = useState(0);
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -33,8 +33,12 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [provider, setProvider] = useState('chatgpt');
+  const [provider, setProvider] = useState(formData.provider || 'chatgpt');
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    setFormData(d => ({ ...d, provider }));
+  }, [provider]);
 
   const handleDragEvents = (e) => {
     e.preventDefault();

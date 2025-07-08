@@ -9,6 +9,8 @@ import { useLanguage } from '../contexts/LanguageContext';
 const SuccessPage_EN = ({ onNavigate, state }) => {
     const { language } = useLanguage();
     const reference = state?.referenceNumber;
+    const createdAt = state?.createdAt;
+    const aiModel = state?.aiModel;
     return (
         <div className="success-page">
             <div className="header-switchers" style={{ position: 'absolute', top: 20, right: 20 }}>
@@ -20,6 +22,12 @@ const SuccessPage_EN = ({ onNavigate, state }) => {
             <p className="success-message">{t('successMsg', language)}</p>
             {reference && (
                 <p className="reference-number">{t('referenceLabel', language)}: {reference}</p>
+            )}
+            {createdAt && (
+                <p className="creation-date">{t('createdAt', language)}: {new Date(createdAt).toLocaleString()}</p>
+            )}
+            {aiModel && (
+                <p className="ai-model">{t('aiModelUsed', language)}: {aiModel}</p>
             )}
             <button className="btn-next" onClick={() => onNavigate('languageSelection')}>{t('backToHome', language)}</button>
             <Footer />

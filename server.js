@@ -22,6 +22,20 @@ function logMessage(msg) {
   });
 }
 
+function logActivity(msg) {
+  logMessage(msg);
+  pool.query('INSERT INTO activity_log (activity) VALUES ($1)', [msg]).catch(e =>
+    console.error('Activity log error:', e.message)
+  );
+}
+
+function logError(msg) {
+  logMessage(msg);
+  pool.query('INSERT INTO error_log (error) VALUES ($1)', [msg]).catch(e =>
+    console.error('Error log error:', e.message)
+  );
+}
+
 const https = require('https');
 const http = require('http');
 
@@ -34,8 +48,8 @@ const pool = new Pool({
 });
 
 // Log database connection events and errors
-pool.on('connect', () => logMessage('DB_CONNECT'));
-pool.on('error', (err) => logMessage(`DB_ERROR ${err.message}`));
+pool.on('connect', () => logActivity('DB_CONNECT'));
+pool.on('error', (err) => logError(`DB_ERROR ${err.message}`));
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
@@ -86,7 +100,7 @@ app.get('/api/cache-extracted/:docType', (req, res) => {
 app.post('/api/log', (req, res) => {
   const { message } = req.body || {};
   if (message) {
-    logMessage(message);
+    logActivity(message);
   }
   res.json({ success: true });
 });
@@ -131,7 +145,7 @@ app.post('/api/submit-form', async (req, res) => {
     const id = result.rows[0].id;
     const createdAt = result.rows[0].created_at;
     const referenceNumber = generateReference(id);
-    logMessage(`DB_INSERT personal_info ${referenceNumber}`);
+    logActivity(`DB_INSERT personal_info ${referenceNumber}`);
 
     if (form.addressInfo) {
       const a = form.addressInfo;
@@ -149,10 +163,24 @@ app.post('/api/submit-form', async (req, res) => {
       );
     }
 
+    const nid = Array.isArray(form.nidDigits) ? form.nidDigits.join('') : '';
+    const folder = nid && nid.length === 12 ? nid :
+      '10000' + Array.from({ length: 7 }, () => Math.floor(Math.random() * 10)).join('');
+    const userDir = path.join('uploads', folder);
+    if (!fs.existsSync(userDir)) {
+      fs.mkdirSync(userDir, { recursive: true });
+    }
+
     for (const [docType, fileName] of Object.entries(cachedUploads)) {
+      const newPath = path.join(userDir, path.basename(fileName));
+      try {
+        fs.renameSync(fileName, newPath);
+      } catch (err) {
+        logError(`MOVE_FILE_ERROR ${err.message}`);
+      }
       await pool.query(
         'INSERT INTO uploaded_documents (personal_id, doc_type, file_name, reference_number) VALUES ($1,$2,$3,$4)',
-        [id, docType, fileName, referenceNumber]
+        [id, docType, newPath, referenceNumber]
       );
     }
     cachedForm = {};
@@ -160,7 +188,7 @@ app.post('/api/submit-form', async (req, res) => {
     cachedExtracted = {};
     res.json({ referenceNumber, createdAt });
   } catch (e) {
-    logMessage(`SUBMIT_ERROR ${e.message}`);
+    logError(`SUBMIT_ERROR ${e.message}`);
     res.status(500).json({ error: 'Failed to save' });
   }
 });
@@ -169,10 +197,10 @@ app.post('/api/chatgpt', async (req, res) => {
   const { prompt, base64Data, mimeType } = req.body || {};
   try {
     const data = await callChatGPT(prompt, base64Data, mimeType);
-    logMessage(`CHATGPT_RESPONSE ${JSON.stringify(data)}`);
+    logActivity(`CHATGPT_RESPONSE ${JSON.stringify(data)}`);
     res.json(data);
   } catch (e) {
-    logMessage(`CHATGPT_ERROR ${e.message}`);
+    logError(`CHATGPT_ERROR ${e.message}`);
     const status = e.message === 'Missing API key' ? 400 : 500;
     res.status(status).json({ error: e.message });
   }
@@ -183,13 +211,13 @@ app.get('/api/test-db', async (req, res) => {
     await pool.query('SELECT 1');
     res.json({ connected: true });
   } catch (e) {
-    logMessage(`DB_TEST_ERROR ${e.message}`);
+    logError(`DB_TEST_ERROR ${e.message}`);
     res.status(500).json({ connected: false, error: e.message });
   }
 });
 
 app.use((err, req, res, next) => {
-  logMessage(`ERROR ${err.message}`);
+  logError(`ERROR ${err.message}`);
   res.status(500).json({ error: 'Server error' });
 });
 

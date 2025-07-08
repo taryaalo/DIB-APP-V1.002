@@ -19,6 +19,7 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
         serviceType: formData.serviceType || ''
     };
     const [form, setForm] = useState(initialForm);
+    const [submitError, setSubmitError] = useState('');
 
     useEffect(() => {
         async function cacheAndLoad() {
@@ -41,6 +42,7 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
     }, []);
 
     const handleConfirm = async () => {
+        setSubmitError('');
         try {
             const resp = await fetch(`${API_BASE_URL}/api/submit-form`, {
                 method: 'POST',
@@ -51,11 +53,11 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
                 const data = await resp.json();
                 onNavigate('success', { referenceNumber: data.referenceNumber, createdAt: data.createdAt, aiModel: formData.provider });
             } else {
-                onNavigate('success', { referenceNumber: null });
+                setSubmitError(t('dbSaveError', language));
             }
         } catch (e) {
             console.error(e);
-            onNavigate('success', { referenceNumber: null });
+            setSubmitError(t('dbSaveError', language));
         }
     };
 
@@ -149,6 +151,7 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
                         )}
                     </ul>
                 </div>
+                {submitError && <p className="error-message">{submitError}</p>}
                 <div className="form-actions">
                     <button className="btn-export" onClick={handleExport} style={{marginRight:'10px'}}>{t('exportPdf', language)}</button>
                     <button className="btn-next" onClick={handleConfirm}>{t('confirm', language)}</button>

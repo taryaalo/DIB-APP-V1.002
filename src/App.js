@@ -22,6 +22,7 @@ import ConfirmPage_EN from './accountOpening/ConfirmPage_EN';
 import EServicesLanding from './eServices/EServicesLandingPage';
 import SequentialDocsPage_EN from './accountOpening/SequentialDocsPage_EN';
 import LookupPage_EN from './completeAccount/LookupPage_EN';
+import ReviewDocsPage_EN from './completeAccount/ReviewDocsPage_EN';
 
 
 // ---=== Main App Component ===---
@@ -60,6 +61,7 @@ const AppContent = () => {
             case 'eServices': return <EServicesLanding onNavigate={handleNavigation} />;
             case 'selectUser': return <SelectUserPage_EN onNavigate={handleNavigation} />;
             case 'completeAccount': return <LookupPage_EN onNavigate={handleNavigation} />;
+            case 'reviewDocs': return <ReviewDocsPage_EN onNavigate={handleNavigation} state={state} />;
             
             case 'personalDocs':
             case 'businessmenDocs':

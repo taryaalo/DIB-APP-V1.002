@@ -63,25 +63,27 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
 
     const handleExport = async () => {
         const doc = new jsPDF();
-        // Using the built-in Helvetica font avoids issues with missing
-        // font metrics in some environments.
+        const isArabic = language === 'ar';
         doc.setFont('helvetica');
+        const pageWidth = doc.internal.pageSize.getWidth();
         doc.setFontSize(18);
-        doc.text(t('confirmData', language), 105, 20, { align: 'center', lang: 'ar' });
+        doc.text(t('confirmData', language), pageWidth / 2, 20, { align: 'center', lang: isArabic ? 'ar' : 'en' });
 
         const ref = form.referenceNumber || 'N/A';
         doc.setDrawColor(0, 150, 0);
         doc.setFillColor(200, 255, 200);
-        doc.roundedRect(40, 30, 130, 15, 3, 3, 'FD');
+        doc.roundedRect(10, 30, pageWidth - 20, 15, 3, 3, 'FD');
+        const textX = isArabic ? pageWidth - 15 : 15;
         doc.setTextColor(0, 0, 0);
-        doc.text(`${t('referenceLabel', language)}: ${ref}`, 45, 40, { lang: 'ar' });
+        doc.text(`${t('referenceLabel', language)}: ${ref}`, textX, 40, { align: isArabic ? 'right' : 'left', lang: isArabic ? 'ar' : 'en' });
 
         doc.setFontSize(12);
         let y = 55;
         Object.entries(form).forEach(([k, v]) => {
             if (!v || typeof v === 'object') return;
             const value = Array.isArray(v) ? v.join('') : v;
-            doc.text(`${k}: ${value}`, 10, y, { lang: 'ar' });
+            const label = t(k, language) || k;
+            doc.text(`${label}: ${value}`, textX, y, { align: isArabic ? 'right' : 'left', lang: isArabic ? 'ar' : 'en' });
             y += 8;
         });
         doc.save('confirmation.pdf');

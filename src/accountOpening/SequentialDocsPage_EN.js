@@ -209,7 +209,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
             )}
             {image && (
               <div className="result-container">
-                <div className="image-preview-box">
+                <div className={`image-preview-box ${isLoading ? 'scanning' : ''}` }>
                   <img src={image} alt="preview" />
                   <button
                     type="button"

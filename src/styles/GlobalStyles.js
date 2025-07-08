@@ -300,6 +300,8 @@ const GlobalStyles = () => (
     .btn-next { background-color: var(--primary-color); color: var(--text-color-light); border: none; padding: 15px 50px; font-size: 1.2rem; font-weight: 700; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; width: 100%; max-width: 400px; }
     .btn-next:hover { background-color: var(--primary-dark); box-shadow: 0 8px 20px rgba(62, 138, 150, 0.4); }
     .btn-next:disabled { background-color: #999; cursor: not-allowed; box-shadow: none; }
+    .btn-export { background-color: var(--accent-color); color: var(--text-color-light); border: none; padding: 12px 30px; font-size: 1rem; font-weight: 700; border-radius: 12px; cursor: pointer; transition: background-color 0.3s ease; }
+    .btn-export:hover { background-color: var(--primary-dark); }
     .btn-back { background: none; border: none; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; }
     .btn-refresh {
         background-color: var(--primary-color);

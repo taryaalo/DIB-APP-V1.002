@@ -115,15 +115,16 @@ app.post('/api/submit-form', async (req, res) => {
     form.email || null,
     form.residenceExpiry || null,
     form.censusCardNumber || null,
-    form.aiModel || null
+    form.aiModel || null,
+    form.serviceType || null
   ];
   const query = `INSERT INTO personal_info (
       full_name, first_name, middle_name, last_name, passport_number,
       passport_issue_date, passport_expiry_date, birth_place, dob, gender,
       nationality, family_record_number, phone, email, residence_expiry,
-      census_card_number, ai_model
+      census_card_number, ai_model, service_type
     ) VALUES (
-      $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17
+      $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18
     ) RETURNING id, created_at`;
   try {
     const result = await pool.query(query, values);
@@ -131,6 +132,32 @@ app.post('/api/submit-form', async (req, res) => {
     const createdAt = result.rows[0].created_at;
     const referenceNumber = generateReference(id);
     logMessage(`DB_INSERT personal_info ${referenceNumber}`);
+
+    if (form.addressInfo) {
+      const a = form.addressInfo;
+      await pool.query(
+        'INSERT INTO address_info (personal_id, country, city, area, residential_address) VALUES ($1,$2,$3,$4,$5)',
+        [id, a.country || null, a.city || null, a.area || null, a.residentialAddress || null]
+      );
+    }
+
+    if (form.workInfo) {
+      const w = form.workInfo;
+      await pool.query(
+        'INSERT INTO work_income_info (personal_id, employment_status, job_title, employer, employer_address, employer_phone, source_of_income, monthly_income) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)',
+        [id, w.employmentStatus || null, w.jobTitle || null, w.employer || null, w.employerAddress || null, w.employerPhone || null, w.sourceOfIncome || null, w.monthlyIncome || null]
+      );
+    }
+
+    for (const [docType, fileName] of Object.entries(cachedUploads)) {
+      await pool.query(
+        'INSERT INTO uploaded_documents (personal_id, doc_type, file_name, reference_number) VALUES ($1,$2,$3,$4)',
+        [id, docType, fileName, referenceNumber]
+      );
+    }
+    cachedForm = {};
+    cachedUploads = {};
+    cachedExtracted = {};
     res.json({ referenceNumber, createdAt });
   } catch (e) {
     logMessage(`SUBMIT_ERROR ${e.message}`);

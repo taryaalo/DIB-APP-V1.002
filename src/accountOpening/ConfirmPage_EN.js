@@ -13,7 +13,12 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 const ConfirmPage_EN = ({ onNavigate, state }) => {
     const { language } = useLanguage();
     const { formData } = useFormData();
-    const initialForm = state?.form || formData.personalInfo || {};
+    const initialForm = state?.form || {
+        ...(formData.personalInfo || {}),
+        addressInfo: formData.addressInfo || {},
+        workInfo: formData.workInfo || {},
+        serviceType: formData.serviceType || ''
+    };
     const [form, setForm] = useState(initialForm);
 
     useEffect(() => {
@@ -68,13 +73,23 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
         doc.addFileToVFS('NotoSansArabic.ttf', fontBase64);
         doc.addFont('NotoSansArabic.ttf', 'NotoSansArabic', 'normal');
         doc.setFont('NotoSansArabic');
-        doc.text('Account Confirmation', 10, 10, { lang: 'ar' });
-        let y = 20;
+        doc.setFontSize(18);
+        doc.text(t('confirmData', language), 105, 20, { align: 'center', lang: 'ar' });
+
+        const ref = form.referenceNumber || 'N/A';
+        doc.setDrawColor(0, 150, 0);
+        doc.setFillColor(200, 255, 200);
+        doc.roundedRect(40, 30, 130, 15, 3, 3, 'FD');
+        doc.setTextColor(0, 0, 0);
+        doc.text(`${t('referenceLabel', language)}: ${ref}`, 45, 40, { lang: 'ar' });
+
+        doc.setFontSize(12);
+        let y = 55;
         Object.entries(form).forEach(([k, v]) => {
-            if (!v) return;
+            if (!v || typeof v === 'object') return;
             const value = Array.isArray(v) ? v.join('') : v;
             doc.text(`${k}: ${value}`, 10, y, { lang: 'ar' });
-            y += 10;
+            y += 8;
         });
         doc.save('confirmation.pdf');
     };
@@ -122,10 +137,29 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
                         {form.enableEmail && (
                             <li><strong>{t('email', language)}:</strong> {form.email}</li>
                         )}
+                        {form.addressInfo && (
+                            <>
+                                <li><strong>{t('country', language)}:</strong> {form.addressInfo.country}</li>
+                                <li><strong>{t('city', language)}:</strong> {form.addressInfo.city}</li>
+                                <li><strong>{t('area', language)}:</strong> {form.addressInfo.area}</li>
+                                <li><strong>{t('residentialAddress', language)}:</strong> {form.addressInfo.residentialAddress}</li>
+                            </>
+                        )}
+                        {form.workInfo && (
+                            <>
+                                <li><strong>{t('employmentStatus', language)}:</strong> {form.workInfo.employmentStatus}</li>
+                                <li><strong>{t('jobTitle', language)}:</strong> {form.workInfo.jobTitle}</li>
+                                <li><strong>{t('employer', language)}:</strong> {form.workInfo.employer}</li>
+                                <li><strong>{t('employerAddress', language)}:</strong> {form.workInfo.employerAddress}</li>
+                                <li><strong>{t('employerPhone', language)}:</strong> {form.workInfo.employerPhone}</li>
+                                <li><strong>{t('sourceOfIncome', language)}:</strong> {form.workInfo.sourceOfIncome}</li>
+                                <li><strong>{t('monthlyIncome', language)}:</strong> {form.workInfo.monthlyIncome}</li>
+                            </>
+                        )}
                     </ul>
                 </div>
                 <div className="form-actions">
-                    <button className="btn-back" onClick={handleExport} style={{marginRight:'10px'}}>{t('exportPdf', language)}</button>
+                    <button className="btn-export" onClick={handleExport} style={{marginRight:'10px'}}>{t('exportPdf', language)}</button>
                     <button className="btn-next" onClick={handleConfirm}>{t('confirm', language)}</button>
                 </div>
             </main>

@@ -222,6 +222,35 @@ app.get('/api/test-db', async (req, res) => {
   }
 });
 
+app.get('/api/customer', async (req, res) => {
+  const { reference, nid } = req.query;
+  if (!reference && !nid) {
+    return res.status(400).json({ error: 'missing_identifier' });
+  }
+  try {
+    let personal;
+    if (reference) {
+      personal = await pool.query('SELECT * FROM personal_info WHERE reference_number=$1', [reference]);
+    } else {
+      personal = await pool.query('SELECT * FROM personal_info WHERE national_id=$1 ORDER BY created_at DESC LIMIT 1', [nid]);
+    }
+    if (personal.rows.length === 0) return res.status(404).json({ error: 'not_found' });
+    const p = personal.rows[0];
+    const address = await pool.query('SELECT * FROM address_info WHERE personal_id=$1 LIMIT 1', [p.id]);
+    const work = await pool.query('SELECT * FROM work_income_info WHERE personal_id=$1 LIMIT 1', [p.id]);
+    const docs = await pool.query('SELECT doc_type, file_name, reference_number, confirmed_by_admin FROM uploaded_documents WHERE personal_id=$1', [p.id]);
+    res.json({
+      personalInfo: p,
+      addressInfo: address.rows[0] || null,
+      workInfo: work.rows[0] || null,
+      uploadedDocuments: docs.rows
+    });
+  } catch (e) {
+    logError(`GET_CUSTOMER_ERROR ${e.message}`);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
 app.use((err, req, res, next) => {
   logError(`ERROR ${err.message}`);
   res.status(500).json({ error: 'Server error' });

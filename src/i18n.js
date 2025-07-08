@@ -92,6 +92,11 @@ const translations = {
   gemini: { en: 'Gemini', ar: 'Gemini' },
   chatgpt: { en: 'ChatGPT', ar: 'شات جي بي تي' },
   change_document: { en: 'Change Document', ar: 'تغيير المستند' },
+  search: { en: 'Search', ar: 'بحث' },
+  referenceOrNid: { en: 'Reference Number or National ID', ar: 'رقم المرجع أو الرقم الوطني' },
+  not_found: { en: 'No data found.', ar: 'لم يتم العثور على بيانات.' },
+  server_error: { en: 'Server error.', ar: 'خطأ في الخادم.' },
+  missing_identifier: { en: 'Please enter a reference number or national ID.', ar: 'يرجى إدخال رقم المرجع أو الرقم الوطني.' },
   error_extracting_data: {
     en: 'Failed to extract data. Please try again.',
     ar: 'فشل استخراج البيانات. يرجى المحاولة مرة أخرى.'

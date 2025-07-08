@@ -26,7 +26,7 @@ const LandingPage_EN = ({ onNavigate }) => {
             <OpenAccountIcon />
             <span>{t('openAccount', language)}</span>
           </button>
-          <button onClick={() => onNavigate('selectUser')} className="btn-secondary">
+          <button onClick={() => onNavigate('completeAccount')} className="btn-secondary">
             <CompleteAccountIcon />
             <span>{t('completeAccount', language)}</span>
           </button>

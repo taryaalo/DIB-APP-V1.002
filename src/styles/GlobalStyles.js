@@ -366,6 +366,8 @@ const GlobalStyles = () => (
     body[dir="ltr"] .date-input-container svg { right: 15px; }
     .national-id-group { display: flex; gap: 10px; justify-content: space-between; }
     .national-id-input { width: 40px; height: 50px; text-align: center; font-size: 1.5rem; border: 1px solid #ccc; border-radius: 8px; background-color: var(--form-input-bg); color: var(--form-input-text); }
+    body[dir="rtl"] .national-id-group { direction: ltr; }
+    body[dir="rtl"] .national-id-input { direction: ltr; }
     .upload-checklist { list-style: none; padding: 0; margin-bottom: 20px; width: 100%; max-width: 600px; }
     .upload-checklist li { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; font-weight: 600; color: var(--text-color-dark); }
     .passport-info { width: 100%; max-width: 600px; height: 100px; margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; background-color: var(--form-input-bg); color: var(--form-input-text); box-sizing: border-box; }
@@ -436,6 +438,15 @@ const GlobalStyles = () => (
         color: var(--text-color-dark);
         opacity: 0.8;
         margin-bottom: 40px;
+    }
+    .reference-number {
+        background-color: rgba(40,167,69,0.1);
+        border: 1px solid #28a745;
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: #28a745;
+        font-weight: 600;
+        margin-bottom: 20px;
     }
 
     /* ---=== Upload Extractor Styles ===--- */

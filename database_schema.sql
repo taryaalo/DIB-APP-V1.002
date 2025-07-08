@@ -19,6 +19,7 @@ CREATE TABLE personal_info (
     gender VARCHAR(10),
     nationality VARCHAR(50),
     family_record_number VARCHAR(50),
+    national_id VARCHAR(20),
     phone VARCHAR(20),
     email VARCHAR(100),
     residence_expiry DATE,
@@ -33,6 +34,7 @@ CREATE TABLE personal_info (
 CREATE TABLE address_info (
     id SERIAL PRIMARY KEY,
     personal_id INT REFERENCES personal_info(id) ON DELETE CASCADE,
+    national_id VARCHAR(20),
     country VARCHAR(50),
     city VARCHAR(50),
     area VARCHAR(100),
@@ -43,6 +45,7 @@ CREATE TABLE address_info (
 CREATE TABLE work_income_info (
     id SERIAL PRIMARY KEY,
     personal_id INT REFERENCES personal_info(id) ON DELETE CASCADE,
+    national_id VARCHAR(20),
     employment_status VARCHAR(50),
     job_title VARCHAR(100),
     employer VARCHAR(100),
@@ -56,6 +59,7 @@ CREATE TABLE work_income_info (
 CREATE TABLE uploaded_documents (
     id SERIAL PRIMARY KEY,
     personal_id INT REFERENCES personal_info(id) ON DELETE CASCADE,
+    national_id VARCHAR(20),
     doc_type VARCHAR(50),
     file_name TEXT NOT NULL,
     reference_number VARCHAR(100) UNIQUE NOT NULL,

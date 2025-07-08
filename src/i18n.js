@@ -99,7 +99,11 @@ const translations = {
   testDb: { en: 'Test DB Connection', ar: 'اختبار الاتصال بقاعدة البيانات' },
   testingDb: { en: 'Testing connection...', ar: 'جاري اختبار الاتصال...' },
   dbConnected: { en: 'Database connected!', ar: 'تم الاتصال بقاعدة البيانات!' },
-  dbFailed: { en: 'Database connection failed.', ar: 'فشل الاتصال بقاعدة البيانات.' }
+  dbFailed: { en: 'Database connection failed.', ar: 'فشل الاتصال بقاعدة البيانات.' },
+  dbSaveError: {
+    en: 'Failed to save data. Please try again. If the same error happens again please contact the Support IT department.',
+    ar: 'فشل حفظ البيانات. يرجى المحاولة مرة أخرى. إذا تكرر الخطأ يرجى التواصل مع قسم دعم تقنية المعلومات.'
+  }
 };
 
 export const t = (key, lang = 'en') => {

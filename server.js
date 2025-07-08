@@ -33,6 +33,10 @@ const pool = new Pool({
   database: process.env.PG_DATABASE || 'dib_app_data',
 });
 
+// Log database connection events and errors
+pool.on('connect', () => logMessage('DB_CONNECT'));
+pool.on('error', (err) => logMessage(`DB_ERROR ${err.message}`));
+
 const app = express();
 const upload = multer({ dest: 'uploads/' });
 const HTTP_PORT = process.env.PORT || 7003;
@@ -93,7 +97,6 @@ function generateReference() {
 
 app.post('/api/submit-form', async (req, res) => {
   const form = req.body || {};
-  const referenceNumber = generateReference();
   const values = [
     form.fullName,
     form.firstNameEn || null,
@@ -119,9 +122,11 @@ app.post('/api/submit-form', async (req, res) => {
       census_card_number
     ) VALUES (
       $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16
-    )`;
+    ) RETURNING id`;
   try {
-    await pool.query(query, values);
+    const result = await pool.query(query, values);
+    const referenceNumber = result.rows[0].id;
+    logMessage(`DB_INSERT personal_info ${referenceNumber}`);
     res.json({ referenceNumber });
   } catch (e) {
     logMessage(`SUBMIT_ERROR ${e.message}`);

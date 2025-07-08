@@ -206,7 +206,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                         <div className="form-group"><input name="birthPlace" value={form.birthPlace} onChange={handleChange} type="text" className="form-input" placeholder={t('birthPlace', language)} /></div>
                         <div className="form-group"><input name="familyRecordNumber" value={form.familyRecordNumber} onChange={handleChange} required type="text" className="form-input" placeholder={t('familyRecordNumber', language)} /></div>
                         {flow !== 'expat' && (
-                            <div className="form-group" style={{display:'flex', gap:'5px'}}>
+                            <div className="form-group national-id-group">
                                 {form.nidDigits.map((d, idx) => (
                                     <input
                                         key={idx}

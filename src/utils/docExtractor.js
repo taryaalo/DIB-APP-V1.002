@@ -49,26 +49,26 @@ const DOC_CONFIGS = {
 };
 
 async function callGemini(payload) {
-  const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
-  const geminiUrl = process.env.REACT_APP_GEMINI_URL ||
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
-  const apiUrl = `${geminiUrl}?key=${apiKey}`;
+  try {
+    const resp = await fetch(`${API_BASE_URL}/api/gemini`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
 
-  const resp = await fetch(apiUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-
-  const result = await resp.json();
-  if (result.candidates && result.candidates[0].content.parts[0].text) {
-    try {
-      return JSON.parse(result.candidates[0].content.parts[0].text);
-    } catch {
-      return null;
+    if (!resp.ok) {
+      const text = await resp.text();
+      logToServer(`GEMINI_ERROR ${resp.status} ${text}`);
+      throw new Error(`Gemini request failed: ${resp.status}`);
     }
+
+    const result = await resp.json();
+    logToServer(`GEMINI_RESPONSE ${JSON.stringify(result)}`);
+    return result;
+  } catch (e) {
+    logToServer(`GEMINI_ERROR ${e.message}`);
+    throw e;
   }
-  return null;
 }
 
 async function callChatGPT(prompt, base64Data, mimeType) {

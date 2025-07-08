@@ -3,7 +3,7 @@ const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const { callChatGPT } = require('./ai');
+const { callChatGPT, callGemini } = require('./ai');
 const { Pool } = require('pg');
 
 // Load environment variables from the .env file if present
@@ -169,7 +169,8 @@ app.post('/api/submit-form', async (req, res) => {
       );
     }
 
-    const folder = nid && nid.length === 12 ? nid :
+    const cleanNid = nid && /^[0-9]{12}$/.test(nid) ? nid : null;
+    const folder = cleanNid ||
       '10000' + Array.from({ length: 7 }, () => Math.floor(Math.random() * 10)).join('');
     const userDir = path.join('uploads', folder);
     if (!fs.existsSync(userDir)) {
@@ -207,6 +208,18 @@ app.post('/api/chatgpt', async (req, res) => {
     res.json(data);
   } catch (e) {
     logError(`CHATGPT_ERROR ${e.message}`);
+    const status = e.message === 'Missing API key' ? 400 : 500;
+    res.status(status).json({ error: e.message });
+  }
+});
+
+app.post('/api/gemini', async (req, res) => {
+  try {
+    const data = await callGemini(req.body || {});
+    logActivity(`GEMINI_RESPONSE ${JSON.stringify(data)}`);
+    res.json(data);
+  } catch (e) {
+    logError(`GEMINI_ERROR ${e.message}`);
     const status = e.message === 'Missing API key' ? 400 : 500;
     res.status(status).json({ error: e.message });
   }

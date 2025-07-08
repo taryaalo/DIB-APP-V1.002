@@ -8,6 +8,13 @@ import { t } from '../i18n';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
+const sanitize = (str) => String(str)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#x27;');
+
 const LookupPage_EN = ({ onNavigate }) => {
   const { language } = useLanguage();
   const [identifier, setIdentifier] = useState('');
@@ -44,7 +51,9 @@ const LookupPage_EN = ({ onNavigate }) => {
     <ul className="confirmation-list">
       {Object.entries(obj || {}).map(([k, v]) => (
         v !== null && v !== undefined && (
-          <li key={k}><strong>{t(k, language) || k}:</strong> {String(v)}</li>
+          <li key={k}>
+            <strong>{t(k, language) || k}:</strong> {sanitize(v)}
+          </li>
         )
       ))}
     </ul>

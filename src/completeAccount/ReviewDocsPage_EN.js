@@ -19,15 +19,48 @@ const ReviewDocsPage_EN = ({ onNavigate, state }) => {
   const { language } = useLanguage();
   const [docs, setDocs] = useState([]);
   const [valid, setValid] = useState({});
+  const [uploading, setUploading] = useState({});
 
   useEffect(() => {
     const uploaded = state?.uploadedDocuments || [];
     const sorted = [...uploaded].sort((a, b) => a.doc_type.localeCompare(b.doc_type));
     setDocs(sorted);
+    const initValid = {};
+    sorted.forEach(d => {
+      initValid[d.reference_number] = d.confirmed_by_admin;
+    });
+    setValid(initValid);
   }, [state]);
 
-  const toggleValid = (id) => {
-    setValid(v => ({ ...v, [id]: !v[id] }));
+  const toggleValid = async (id) => {
+    const newVal = !valid[id];
+    setValid(v => ({ ...v, [id]: newVal }));
+    try {
+      await fetch(`${API_BASE_URL}/api/approve-document`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reference: id, approved: newVal })
+      });
+    } catch (e) { console.error(e); }
+  };
+
+  const handleFileChange = async (ref, file) => {
+    if (!file) return;
+    setUploading(u => ({ ...u, [ref]: true }));
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/update-document/${ref}`, {
+        method: 'POST',
+        body: formData
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        setDocs(d => d.map(doc => doc.reference_number === ref ? { ...doc, file_name: data.path, confirmed_by_admin: false } : doc));
+        setValid(v => ({ ...v, [ref]: false }));
+      }
+    } catch (e) { console.error(e); }
+    setUploading(u => ({ ...u, [ref]: false }));
   };
 
   return (
@@ -54,11 +87,14 @@ const ReviewDocsPage_EN = ({ onNavigate, state }) => {
                 <input type="checkbox" checked={!!valid[doc.reference_number]} onChange={() => toggleValid(doc.reference_number)} />
                 {t('valid', language)}
               </label>
+              <div style={{marginTop:'10px'}}>
+                <input type="file" onChange={e => handleFileChange(doc.reference_number, e.target.files[0])} />
+              </div>
             </div>
           ))}
         </div>
         <div className="form-actions">
-          <button className="btn-next" onClick={() => onNavigate('landing')}>{t('next', language)}</button>
+          <button className="btn-next" disabled={!docs.length || !docs.every(d => valid[d.reference_number])} onClick={() => onNavigate('reviewWorkInfo', { ...state, uploadedDocuments: docs })}>{t('next', language)}</button>
         </div>
       </main>
       <Footer />

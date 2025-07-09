@@ -59,6 +59,8 @@ const HTTPS_PORT = process.env.HTTPS_PORT || 7103;
 app.use(cors());
 // Allow slightly larger payloads for image data
 app.use(express.json({ limit: '20mb' }));
+// Serve uploaded files statically so the React app can display them
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 let cachedForm = {};
 let cachedUploads = {};
@@ -260,6 +262,40 @@ app.get('/api/customer', async (req, res) => {
     });
   } catch (e) {
     logError(`GET_CUSTOMER_ERROR ${e.message}`);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
+// Update an uploaded document with a new file
+app.post('/api/update-document/:reference', upload.single('file'), async (req, res) => {
+  const ref = req.params.reference;
+  if (!req.file) return res.status(400).json({ error: 'missing_file' });
+  try {
+    const existing = await pool.query('SELECT file_name FROM uploaded_documents WHERE reference_number=$1', [ref]);
+    if (existing.rows.length === 0) return res.status(404).json({ error: 'not_found' });
+    const oldPath = existing.rows[0].file_name;
+    const dir = path.dirname(oldPath);
+    const newPath = path.join(dir, path.basename(req.file.path));
+    fs.renameSync(req.file.path, newPath);
+    await pool.query('UPDATE uploaded_documents SET file_name=$1, confirmed_by_admin=FALSE WHERE reference_number=$2', [newPath, ref]);
+    logActivity(`DOC_UPDATED ${ref}`);
+    res.json({ path: newPath });
+  } catch (e) {
+    logError(`DOC_UPDATE_ERROR ${e.message}`);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
+// Approve or unapprove an uploaded document
+app.post('/api/approve-document', async (req, res) => {
+  const { reference, approved } = req.body || {};
+  if (!reference) return res.status(400).json({ error: 'missing_reference' });
+  try {
+    await pool.query('UPDATE uploaded_documents SET confirmed_by_admin=$1 WHERE reference_number=$2', [approved, reference]);
+    logActivity(`DOC_APPROVE ${reference} ${approved}`);
+    res.json({ success: true });
+  } catch (e) {
+    logError(`DOC_APPROVE_ERROR ${e.message}`);
     res.status(500).json({ error: 'server_error' });
   }
 });

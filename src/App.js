@@ -24,6 +24,7 @@ import SequentialDocsPage_EN from './accountOpening/SequentialDocsPage_EN';
 import LookupPage_EN from './completeAccount/LookupPage_EN';
 import ReviewDocsPage_EN from './completeAccount/ReviewDocsPage_EN';
 import ReviewWorkInfoPage_EN from './completeAccount/ReviewWorkInfoPage_EN';
+import ReviewAddressInfoPage_EN from './completeAccount/ReviewAddressInfoPage_EN';
 
 
 // ---=== Main App Component ===---
@@ -64,6 +65,7 @@ const AppContent = () => {
             case 'completeAccount': return <LookupPage_EN onNavigate={handleNavigation} />;
             case 'reviewDocs': return <ReviewDocsPage_EN onNavigate={handleNavigation} state={state} />;
             case 'reviewWorkInfo': return <ReviewWorkInfoPage_EN onNavigate={handleNavigation} state={state} />;
+            case 'reviewAddressInfo': return <ReviewAddressInfoPage_EN onNavigate={handleNavigation} state={state} />;
             
             case 'personalDocs':
             case 'businessmenDocs':

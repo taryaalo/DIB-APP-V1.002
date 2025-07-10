@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { LOGO_COLOR } from '../assets/imagePaths';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
@@ -6,34 +6,16 @@ import Footer from '../common/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
 import { t } from '../i18n';
 
-const ReviewWorkInfoPage_EN = ({ onNavigate, state }) => {
+const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
   const { language } = useLanguage();
-  const work = state?.workInfo || {};
-  const [valid, setValid] = useState({});
-
-  useEffect(() => {
-    const init = {};
-    Object.keys(work).forEach(k => {
-      if (work[k]) init[k] = false;
-    });
-    setValid(init);
-  }, [work]);
-
-  const toggleValid = (key) => {
-    setValid(v => ({ ...v, [key]: !v[key] }));
-  };
+  const address = state?.addressInfo || {};
 
   const renderList = (obj) => (
     <ul className="confirmation-list">
       {Object.entries(obj).map(([k, v]) => (
         v ? (
-          <li key={k} style={{display:'flex',alignItems:'center',gap:'5px'}}>
-            <label style={{display:'flex',alignItems:'center',gap:'5px'}}>
-              <input type="checkbox" checked={!!valid[k]} onChange={() => toggleValid(k)} />
-              <span>
-                <strong>{t(k, language)}:</strong> {v}
-              </span>
-            </label>
+          <li key={k}>
+            <strong>{t(k, language)}:</strong> {v}
           </li>
         ) : null
       ))}
@@ -48,20 +30,16 @@ const ReviewWorkInfoPage_EN = ({ onNavigate, state }) => {
           <ThemeSwitcher />
           <LanguageSwitcher />
         </div>
-        <button onClick={() => onNavigate('reviewDocs', state)} className="btn-back">
+        <button onClick={() => onNavigate('reviewWorkInfo', state)} className="btn-back">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
           <span>{t('back', language)}</span>
         </button>
       </header>
       <main className="form-main">
-        <h2 className="form-title">{t('workInfoTitle', language)}</h2>
-        {renderList(work)}
+        <h2 className="form-title">{t('addressInfoTitle', language)}</h2>
+        {renderList(address)}
         <div className="form-actions">
-          <button
-            className="btn-next"
-            disabled={Object.keys(valid).length === 0 || !Object.values(valid).every(Boolean)}
-            onClick={() => onNavigate('reviewAddressInfo', state)}
-          >
+          <button className="btn-next" onClick={() => onNavigate('landing')}>
             {t('next', language)}
           </button>
         </div>
@@ -71,4 +49,4 @@ const ReviewWorkInfoPage_EN = ({ onNavigate, state }) => {
   );
 };
 
-export default ReviewWorkInfoPage_EN;
+export default ReviewAddressInfoPage_EN;

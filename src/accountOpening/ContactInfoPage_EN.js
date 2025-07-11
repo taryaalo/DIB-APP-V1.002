@@ -8,6 +8,8 @@ import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFormData } from '../contexts/FormContext';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
+
 const ContactInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
     const { language } = useLanguage();
     const { formData, setFormData } = useFormData();
@@ -24,8 +26,23 @@ const ContactInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
         setForm(f => ({ ...f, [name]: value }));
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setFormData(d => ({ ...d, addressInfo: form }));
+        const nid = (formData.personalInfo?.nidDigits || []).join('');
+        const reference = formData.personalInfo?.referenceNumber;
+        try {
+            if (nid || reference) {
+                await fetch(`${API_BASE_URL}/api/address-info`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        reference,
+                        nid,
+                        ...form
+                    })
+                });
+            }
+        } catch (e) { console.error(e); }
         onNavigate(nextPage);
     };
 

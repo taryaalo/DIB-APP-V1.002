@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { LOGO_COLOR } from '../assets/imagePaths';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
@@ -6,9 +6,29 @@ import Footer from '../common/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
 import { t } from '../i18n';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
+
 const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
   const { language } = useLanguage();
-  const address = state?.addressInfo || {};
+  const [address, setAddress] = useState(state?.addressInfo || {});
+
+  useEffect(() => {
+    const load = async () => {
+      const params = new URLSearchParams();
+      if (state?.personalInfo?.reference_number) params.append('reference', state.personalInfo.reference_number);
+      else if (state?.personalInfo?.national_id) params.append('nid', state.personalInfo.national_id);
+      if (params.toString()) {
+        try {
+          const resp = await fetch(`${API_BASE_URL}/api/address-info?${params.toString()}`);
+          if (resp.ok) {
+            const data = await resp.json();
+            if (data) setAddress(data);
+          }
+        } catch (e) { console.error(e); }
+      }
+    };
+    load();
+  }, [state]);
 
   const renderList = (obj) => (
     <ul className="confirmation-list">

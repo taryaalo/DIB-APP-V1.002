@@ -60,21 +60,25 @@ const ReviewWorkInfoPage_EN = ({ onNavigate, state }) => {
     } catch (e) { console.error(e); }
   };
 
-  const renderList = (obj) => (
-    <ul className="confirmation-list">
-      {Object.entries(obj).map(([k, v]) => (
-        v ? (
-          <li key={k} style={{display:'flex',alignItems:'center',gap:'5px'}}>
-            <label style={{display:'flex',alignItems:'center',gap:'5px'}}>
-              <input type="checkbox" checked={!!valid[k]} onChange={() => toggleValid(k)} />
-              <span>
-                <strong>{t(k, language)}:</strong> {v}
-              </span>
-            </label>
-          </li>
-        ) : null
-      ))}
-    </ul>
+  const renderTable = (obj) => (
+    <table className="confirmation-table">
+      <tbody>
+        {Object.entries(obj).map(([k, v]) => (
+          v ? (
+            <tr key={k}>
+              <td><strong>{t(k, language)}</strong></td>
+              <td>{v}</td>
+              <td className="checkbox-cell">
+                <div className="custom-checkbox">
+                  <input type="checkbox" checked={!!valid[k]} onChange={() => toggleValid(k)} />
+                  <span className="checkmark"></span>
+                </div>
+              </td>
+            </tr>
+          ) : null
+        ))}
+      </tbody>
+    </table>
   );
 
   return (
@@ -104,7 +108,7 @@ const ReviewWorkInfoPage_EN = ({ onNavigate, state }) => {
           </form>
         ) : (
           <>
-            {renderList(work)}
+            {renderTable(work)}
             <button type="button" className="btn-next" onClick={() => setEditing(true)}>{t('unlock', language)}</button>
           </>
         )}

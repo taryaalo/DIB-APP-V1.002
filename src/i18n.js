@@ -115,7 +115,16 @@ const translations = {
   },
   pendingApprovals: { en: 'Pending Approvals', ar: 'المراجع غير المعتمدة' },
   approve: { en: 'Approve', ar: 'اعتماد' },
-  unlock: { en: 'Unlock', ar: 'فتح الحقول' }
+  unlock: { en: 'Unlock', ar: 'فتح الحقول' },
+  registerMobileApp: { en: 'Registration for Bank Mobile Application', ar: 'التسجيل في تطبيق المصرف' },
+  registerSmsService: { en: 'Registration for Bank SMS Service', ar: 'التسجيل في خدمة الرسائل القصيرة' },
+  registerLocalCard: { en: 'Registration for Local Card', ar: 'التسجيل للبطاقة المحلية' },
+  registerInternationalCard: { en: 'Registration for International Card', ar: 'التسجيل للبطاقة الدولية' },
+  completeAccountRequest: { en: 'Complete Account Opening Request', ar: 'إتمام طلب فتح الحساب' },
+  accountSummary: { en: 'Customer Information Summary', ar: 'ملخص معلومات العميل' },
+  customerId: { en: 'Customer ID', ar: 'رقم العميل' },
+  yes: { en: 'Yes', ar: 'نعم' },
+  no: { en: 'No', ar: 'لا' }
 };
 
 export const t = (key, lang = 'en') => {

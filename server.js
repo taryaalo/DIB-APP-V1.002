@@ -199,15 +199,24 @@ app.get('/api/work-info', async (req, res) => {
   const { reference, nid } = req.query;
   if (!reference && !nid) return res.status(400).json({ error: 'missing_identifier' });
   try {
-    let personal;
+    let work;
     if (reference) {
-      personal = await pool.query('SELECT id FROM personal_info WHERE reference_number=$1', [reference]);
+      work = await pool.query(
+        `SELECT w.* FROM work_income_info w
+         JOIN personal_info p ON w.personal_id = p.id
+         WHERE p.reference_number=$1
+         ORDER BY w.id DESC LIMIT 1`,
+        [reference]
+      );
     } else {
-      personal = await pool.query('SELECT id FROM personal_info WHERE national_id=$1 ORDER BY created_at DESC LIMIT 1', [nid]);
+      work = await pool.query(
+        `SELECT w.* FROM work_income_info w
+         JOIN personal_info p ON w.personal_id = p.id
+         WHERE p.national_id=$1
+         ORDER BY w.id DESC LIMIT 1`,
+        [nid]
+      );
     }
-    if (personal.rows.length === 0) return res.status(404).json({ error: 'not_found' });
-    const pid = personal.rows[0].id;
-    const work = await pool.query('SELECT * FROM work_income_info WHERE personal_id=$1 LIMIT 1', [pid]);
     res.json(work.rows[0] || null);
   } catch (e) {
     logError(`WORK_INFO_GET_ERROR ${e.message}`);

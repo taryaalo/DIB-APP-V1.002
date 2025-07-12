@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
-import { CalendarIcon } from '../common/Icons';
+import { CalendarIcon, LockIcon } from '../common/Icons';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import Footer from '../common/Footer';
@@ -39,6 +39,13 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
         },
         ...(formData.personalInfo || {}),
         ...(state?.form || {})
+    });
+    const [locked, setLocked] = useState(() => {
+        const obj = {};
+        Object.entries(form).forEach(([k, v]) => {
+            if (typeof v !== 'object' && v) obj[k] = true;
+        });
+        return obj;
     });
 
     const [loading, setLoading] = useState(false);
@@ -158,6 +165,12 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
         if (inputs[next]) inputs[next].focus();
     };
 
+    const lockProps = (name) => ({
+        readOnly: !!locked[name],
+        className: `form-input${locked[name] ? ' locked' : ''}`,
+        onDoubleClick: () => setLocked(l => ({ ...l, [name]: false }))
+    });
+
 
     const handleSubmit = () => {
         if (!agreements.agree1 || !agreements.agree2) {
@@ -193,18 +206,18 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                 <form className="form-container" onSubmit={e => {e.preventDefault(); handleSubmit();}} noValidate>
                     <div className="form-section">
                         <h3>{t('personalInfo', language)}</h3>
-                        <div className="form-group"><input name="fullName" value={form.fullName} onChange={handleChange} required type="text" className="form-input" placeholder={t('fullName', language)} /></div>
-                        <div className="form-group"><input name="firstNameEn" value={form.firstNameEn} onChange={handleChange} required type="text" className="form-input" placeholder={t('firstNameEn', language)} /></div>
-                        <div className="form-group"><input name="middleNameEn" value={form.middleNameEn} onChange={handleChange} required type="text" className="form-input" placeholder={t('middleNameEn', language)} /></div>
-                        <div className="form-group"><input name="lastNameEn" value={form.lastNameEn} onChange={handleChange} required type="text" className="form-input" placeholder={t('lastNameEn', language)} /></div>
-                        <div className="form-group date-input-container"><input name="dob" value={form.dob} required type="text" className="form-input" placeholder={t('dateOfBirth', language)} onFocus={(e) => e.target.type='date'} onBlur={(e) => e.target.type='text'} onChange={handleChange}/><CalendarIcon/></div>
-                        <div className="form-group"><select name="gender" value={form.gender} onChange={handleChange} required className="form-input"><option value="">{t('gender', language)}</option><option value="male">{t('male', language)}</option><option value="female">{t('female', language)}</option></select></div>
-                        <div className="form-group"><select name="nationality" value={form.nationality} onChange={handleChange} className="form-input"><option value="">{t('nationality', language)}</option><option value="libyan">{t('libyan', language)}</option><option value="other">{t('other', language)}</option></select></div>
-                        <div className="form-group"><input name="passportNumber" value={form.passportNumber} onChange={handleChange} type="text" className="form-input" placeholder={t('passportNumber', language)} /></div>
-                        <div className="form-group date-input-container"><input name="passportIssueDate" value={form.passportIssueDate} onChange={handleChange} type="text" className="form-input" placeholder={t('passportIssueDate', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
-                        <div className="form-group date-input-container"><input name="passportExpiryDate" value={form.passportExpiryDate} onChange={handleChange} type="text" className="form-input" placeholder={t('passportExpiryDate', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
-                        <div className="form-group"><input name="birthPlace" value={form.birthPlace} onChange={handleChange} type="text" className="form-input" placeholder={t('birthPlace', language)} /></div>
-                        <div className="form-group"><input name="familyRecordNumber" value={form.familyRecordNumber} onChange={handleChange} required type="text" className="form-input" placeholder={t('familyRecordNumber', language)} /></div>
+                        <div className="form-group"><input name="fullName" value={form.fullName} onChange={handleChange} required type="text" {...lockProps('fullName')} placeholder={t('fullName', language)} /><LockIcon className="lock-icon" /></div>
+                        <div className="form-group"><input name="firstNameEn" value={form.firstNameEn} onChange={handleChange} required type="text" {...lockProps('firstNameEn')} placeholder={t('firstNameEn', language)} /><LockIcon className="lock-icon" /></div>
+                        <div className="form-group"><input name="middleNameEn" value={form.middleNameEn} onChange={handleChange} required type="text" {...lockProps('middleNameEn')} placeholder={t('middleNameEn', language)} /><LockIcon className="lock-icon" /></div>
+                        <div className="form-group"><input name="lastNameEn" value={form.lastNameEn} onChange={handleChange} required type="text" {...lockProps('lastNameEn')} placeholder={t('lastNameEn', language)} /><LockIcon className="lock-icon" /></div>
+                        <div className="form-group date-input-container"><input name="dob" value={form.dob} required type="text" {...lockProps('dob')} placeholder={t('dateOfBirth', language)} onFocus={(e) => e.target.type='date'} onBlur={(e) => e.target.type='text'} onChange={handleChange}/><CalendarIcon/></div>
+                        <div className="form-group"><select name="gender" value={form.gender} onChange={handleChange} required disabled={locked.gender} className={`form-input${locked.gender ? ' locked' : ''}`} onDoubleClick={() => setLocked(l => ({...l, gender: false}))}><option value="">{t('gender', language)}</option><option value="male">{t('male', language)}</option><option value="female">{t('female', language)}</option></select><LockIcon className="lock-icon" /></div>
+                        <div className="form-group"><select name="nationality" value={form.nationality} onChange={handleChange} disabled={locked.nationality} className={`form-input${locked.nationality ? ' locked' : ''}`} onDoubleClick={() => setLocked(l => ({...l, nationality: false}))}><option value="">{t('nationality', language)}</option><option value="libyan">{t('libyan', language)}</option><option value="other">{t('other', language)}</option></select><LockIcon className="lock-icon" /></div>
+                        <div className="form-group"><input name="passportNumber" value={form.passportNumber} onChange={handleChange} type="text" {...lockProps('passportNumber')} placeholder={t('passportNumber', language)} /><LockIcon className="lock-icon" /></div>
+                        <div className="form-group date-input-container"><input name="passportIssueDate" value={form.passportIssueDate} onChange={handleChange} type="text" {...lockProps('passportIssueDate')} placeholder={t('passportIssueDate', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
+                        <div className="form-group date-input-container"><input name="passportExpiryDate" value={form.passportExpiryDate} onChange={handleChange} type="text" {...lockProps('passportExpiryDate')} placeholder={t('passportExpiryDate', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
+                        <div className="form-group"><input name="birthPlace" value={form.birthPlace} onChange={handleChange} type="text" {...lockProps('birthPlace')} placeholder={t('birthPlace', language)} /><LockIcon className="lock-icon" /></div>
+                        <div className="form-group"><input name="familyRecordNumber" value={form.familyRecordNumber} onChange={handleChange} required type="text" {...lockProps('familyRecordNumber')} placeholder={t('familyRecordNumber', language)} /><LockIcon className="lock-icon" /></div>
                         {flow !== 'expat' && (
                             <div className="form-group national-id-group">
                                 {form.nidDigits.map((d, idx) => (
@@ -225,11 +238,11 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                         )}
                         {flow === 'expat' && (
                             <>
-                                <div className="form-group date-input-container"><input name="residenceExpiry" value={form.residenceExpiry} onChange={handleChange} required type="text" className="form-input" placeholder={t('residenceExpiry', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
-                                <div className="form-group"><input name="censusCardNumber" value={form.censusCardNumber} onChange={handleChange} required type="text" className="form-input" placeholder={t('censusCardNumber', language)} /></div>
+                                <div className="form-group date-input-container"><input name="residenceExpiry" value={form.residenceExpiry} onChange={handleChange} required type="text" {...lockProps('residenceExpiry')} placeholder={t('residenceExpiry', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
+                                <div className="form-group"><input name="censusCardNumber" value={form.censusCardNumber} onChange={handleChange} required type="text" {...lockProps('censusCardNumber')} placeholder={t('censusCardNumber', language)} /><LockIcon className="lock-icon" /></div>
                             </>
                         )}
-                        <div className="form-group"><input name="phone" value={form.phone} onChange={handleChange} required type="tel" className="form-input" placeholder={t('phoneNumber', language)} /></div>
+                        <div className="form-group"><input name="phone" value={form.phone} onChange={handleChange} required type="tel" {...lockProps('phone')} placeholder={t('phoneNumber', language)} /><LockIcon className="lock-icon" /></div>
                         <div className="form-group"><label><input type="checkbox" name="enableEmail" checked={form.enableEmail} onChange={handleChange} /> {t('enableEmail', language)}</label></div>
                         {form.enableEmail && (
                             <div className="form-group">
@@ -239,9 +252,10 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                                     onChange={handleChange}
                                     required
                                     type="email"
-                                    className="form-input"
+                                    {...lockProps('email')}
                                     placeholder={t('email', language)}
                                 />
+                                <LockIcon className="lock-icon" />
                             </div>
                         )}
                     </div>

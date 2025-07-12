@@ -349,6 +349,13 @@ const GlobalStyles = () => (
     .form-section h3 { font-size: 1.8rem; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; color: var(--text-color-dark); }
     .form-group { margin-bottom: 20px; position: relative; }
     .form-input { width: 100%; padding: 15px; font-size: 1rem; border: 1px solid #ccc; border-radius: 8px; background-color: var(--form-input-bg); color: var(--form-input-text); transition: all 0.3s ease; box-sizing: border-box; }
+    .form-input.locked {
+        background-color: #f3f3f3;
+        color: #666;
+        pointer-events: none;
+    }
+    .lock-icon { display: none; position: absolute; top: 50%; right: 12px; transform: translateY(-50%); color: #999; pointer-events: none; }
+    .form-input.locked + .lock-icon { display: block; }
     body[dir="rtl"] .form-input { font-family: var(--font-primary-ar); }
     body[dir="ltr"] .form-input { font-family: var(--font-primary-en); }
     .form-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(62, 138, 150, 0.3); }
@@ -552,6 +559,9 @@ const GlobalStyles = () => (
         .theme-switcher-button { width: 26px; height: 26px; }
         .language-switcher span { padding: 4px 8px; }
         .header-switchers { gap: 15px; }
+        .form-main { padding: 20px; }
+        .form-container { max-width: 100%; }
+        .confirmation-document { padding: 20px; }
     }
   `}</style>
 );

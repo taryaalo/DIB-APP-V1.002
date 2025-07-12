@@ -10,7 +10,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
   const { language } = useLanguage();
-  const [address, setAddress] = useState(state?.addressInfo || {});
+  const [info, setInfo] = useState(state?.personalInfo || {});
 
   useEffect(() => {
     const load = async () => {
@@ -19,10 +19,10 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
       else if (state?.personalInfo?.national_id) params.append('nid', state.personalInfo.national_id);
       if (params.toString()) {
         try {
-          const resp = await fetch(`${API_BASE_URL}/api/address-info?${params.toString()}`);
+          const resp = await fetch(`${API_BASE_URL}/api/personal-info?${params.toString()}`);
           if (resp.ok) {
             const data = await resp.json();
-            if (data) setAddress(data);
+            if (data) setInfo(data);
           }
         } catch (e) { console.error(e); }
       }
@@ -57,7 +57,7 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
       </header>
       <main className="form-main">
         <h2 className="form-title">{t('addressInfoTitle', language)}</h2>
-        {renderList(address)}
+          {renderList(info)}
         <div className="form-actions">
           <button className="btn-next" onClick={() => onNavigate('landing')}>
             {t('next', language)}

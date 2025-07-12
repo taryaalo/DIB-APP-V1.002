@@ -215,6 +215,24 @@ app.get('/api/work-info', async (req, res) => {
   }
 });
 
+app.get('/api/personal-info', async (req, res) => {
+  const { reference, nid } = req.query;
+  if (!reference && !nid) return res.status(400).json({ error: 'missing_identifier' });
+  try {
+    let personal;
+    if (reference) {
+      personal = await pool.query('SELECT * FROM personal_info WHERE reference_number=$1', [reference]);
+    } else {
+      personal = await pool.query('SELECT * FROM personal_info WHERE national_id=$1 ORDER BY created_at DESC LIMIT 1', [nid]);
+    }
+    if (personal.rows.length === 0) return res.status(404).json({ error: 'not_found' });
+    res.json(personal.rows[0]);
+  } catch (e) {
+    logError(`PERSONAL_INFO_GET_ERROR ${e.message}`);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
 function generateReference(createdAt) {
    const datePart = createdAt.toISOString().split('T')[0].replace(/-/g, '');
    const randomPart = Math.floor(1000000000 + Math.random() * 9000000000);

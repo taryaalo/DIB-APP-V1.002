@@ -327,10 +327,9 @@ app.post('/api/submit-form', async (req, res) => {
       } catch (err) {
         logError(`MOVE_FILE_ERROR ${err.message}`);
       }
-      const docReference = generateReference(new Date());
       await pool.query(
         'INSERT INTO uploaded_documents (personal_id, national_id, doc_type, file_name, reference_number) VALUES ($1,$2,$3,$4,$5)',
-        [id, nid, docType, newPath, docReference]
+        [id, nid, docType, newPath, referenceNumber]
       );
     }
     cachedForm = {};
@@ -468,10 +467,11 @@ app.post('/api/add-document', upload.single('file'), async (req, res) => {
     if (personal.rows.length === 0) return res.status(404).json({ error: 'not_found' });
     const pid = personal.rows[0].id;
     const nat = personal.rows[0].national_id;
-    const docReference = generateReference(new Date());
-    await pool.query('INSERT INTO uploaded_documents (personal_id, national_id, doc_type, file_name, reference_number) VALUES ($1,$2,$3,$4,$5)', [pid, nat, docType, req.file.path, docReference]);
-    logActivity(`DOC_ADDED ${docReference}`);
-    res.json({ referenceNumber: docReference, path: req.file.path });
+    const refResult = await pool.query('SELECT reference_number FROM personal_info WHERE id=$1', [pid]);
+    const refNum = refResult.rows[0].reference_number;
+    await pool.query('INSERT INTO uploaded_documents (personal_id, national_id, doc_type, file_name, reference_number) VALUES ($1,$2,$3,$4,$5)', [pid, nat, docType, req.file.path, refNum]);
+    logActivity(`DOC_ADDED ${refNum}`);
+    res.json({ referenceNumber: refNum, path: req.file.path });
   } catch (e) {
     logError(`ADD_DOC_ERROR ${e.message}`);
     res.status(500).json({ error: 'server_error' });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LOGO_COLOR } from '../assets/imagePaths';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
@@ -20,6 +20,20 @@ const LookupPage_EN = ({ onNavigate }) => {
   const [identifier, setIdentifier] = useState('');
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
+  const [pending, setPending] = useState([]);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const resp = await fetch(`${API_BASE_URL}/api/pending-docs`);
+        if (resp.ok) {
+          const data = await resp.json();
+          setPending(data);
+        }
+      } catch (e) { console.error(e); }
+    }
+    load();
+  }, []);
 
   const handleLookup = async () => {
     setError('');
@@ -45,6 +59,17 @@ const LookupPage_EN = ({ onNavigate }) => {
       console.error(e);
       setError('server_error');
     }
+  };
+
+  const approveRef = async (ref) => {
+    try {
+      await fetch(`${API_BASE_URL}/api/approve-document`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reference: ref, approved: true })
+      });
+      setPending(p => p.filter(r => r !== ref));
+    } catch (e) { console.error(e); }
   };
 
   const renderList = (obj) => (
@@ -114,6 +139,24 @@ const LookupPage_EN = ({ onNavigate }) => {
                 </button>
               </div>
             </>
+          )}
+          {pending.length > 0 && (
+            <div style={{marginTop:'40px'}}>
+              <h3>{t('pendingApprovals', language)}</h3>
+              <table className="confirmation-table">
+                <thead>
+                  <tr><th>{t('referenceLabel', language)}</th><th></th></tr>
+                </thead>
+                <tbody>
+                  {pending.map(ref => (
+                    <tr key={ref}>
+                      <td>{ref}</td>
+                      <td><button type="button" onClick={() => approveRef(ref)}>{t('approve', language)}</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       </main>

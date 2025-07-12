@@ -108,7 +108,7 @@ app.post('/api/log', (req, res) => {
 });
 
 app.post('/api/address-info', async (req, res) => {
-  const { reference, nid, country, city, area, residentialAddress } = req.body || {};
+  const { reference, nid, country, city, area, residentialAddress, adminChange } = req.body || {};
   if (!reference && !nid) return res.status(400).json({ error: 'missing_identifier' });
   try {
     let personal;
@@ -128,12 +128,14 @@ app.post('/api/address-info', async (req, res) => {
         [country || null, city || null, area || null, residentialAddress || null, pid]
       );
       logActivity(`DB_UPDATE address_info ${pid}`);
+      if (adminChange) logActivity(`ADMIN_UPDATE address_info ${pid}`);
     } else {
       await pool.query(
         'INSERT INTO address_info (personal_id, national_id, reference_number, country, city, area, residential_address) VALUES ($1,$2,$3,$4,$5,$6,$7)',
         [pid, natId, refNum, country || null, city || null, area || null, residentialAddress || null]
       );
       logActivity(`DB_INSERT address_info ${pid}`);
+      if (adminChange) logActivity(`ADMIN_INSERT address_info ${pid}`);
     }
     res.json({ success: true });
   } catch (e) {
@@ -143,7 +145,7 @@ app.post('/api/address-info', async (req, res) => {
 });
 
 app.post('/api/work-info', async (req, res) => {
-  const { reference, nid, employmentStatus, jobTitle, employer, employerAddress, employerPhone, sourceOfIncome, monthlyIncome } = req.body || {};
+  const { reference, nid, employmentStatus, jobTitle, employer, employerAddress, employerPhone, sourceOfIncome, monthlyIncome, adminChange } = req.body || {};
   if (!reference && !nid) return res.status(400).json({ error: 'missing_identifier' });
   try {
     let personal;
@@ -163,12 +165,14 @@ app.post('/api/work-info', async (req, res) => {
         [employmentStatus || null, jobTitle || null, employer || null, employerAddress || null, employerPhone || null, sourceOfIncome || null, monthlyIncome || null, pid]
       );
       logActivity(`DB_UPDATE work_income_info ${pid}`);
+      if (adminChange) logActivity(`ADMIN_UPDATE work_income_info ${pid}`);
     } else {
       await pool.query(
         'INSERT INTO work_income_info (personal_id, national_id, reference_number, employment_status, job_title, employer, employer_address, employer_phone, source_of_income, monthly_income) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
         [pid, natId, refNum, employmentStatus || null, jobTitle || null, employer || null, employerAddress || null, employerPhone || null, sourceOfIncome || null, monthlyIncome || null]
       );
       logActivity(`DB_INSERT work_income_info ${pid}`);
+      if (adminChange) logActivity(`ADMIN_INSERT work_income_info ${pid}`);
     }
     res.json({ success: true });
   } catch (e) {
@@ -433,6 +437,43 @@ app.post('/api/approve-document', async (req, res) => {
     res.json({ success: true });
   } catch (e) {
     logError(`DOC_APPROVE_ERROR ${e.message}`);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
+// List all uploaded document references awaiting admin approval
+app.get('/api/pending-docs', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT reference_number FROM uploaded_documents WHERE confirmed_by_admin=FALSE ORDER BY created_at DESC');
+    res.json(result.rows.map(r => r.reference_number));
+  } catch (e) {
+    logError(`PENDING_DOCS_ERROR ${e.message}`);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
+// Add a new uploaded document for an existing customer
+app.post('/api/add-document', upload.single('file'), async (req, res) => {
+  const { reference, nid, docType } = req.body || {};
+  if (!req.file || (!reference && !nid) || !docType) {
+    return res.status(400).json({ error: 'missing_parameters' });
+  }
+  try {
+    let personal;
+    if (reference) {
+      personal = await pool.query('SELECT id, national_id FROM personal_info WHERE reference_number=$1', [reference]);
+    } else {
+      personal = await pool.query('SELECT id, national_id FROM personal_info WHERE national_id=$1 ORDER BY created_at DESC LIMIT 1', [nid]);
+    }
+    if (personal.rows.length === 0) return res.status(404).json({ error: 'not_found' });
+    const pid = personal.rows[0].id;
+    const nat = personal.rows[0].national_id;
+    const docReference = generateReference(new Date());
+    await pool.query('INSERT INTO uploaded_documents (personal_id, national_id, doc_type, file_name, reference_number) VALUES ($1,$2,$3,$4,$5)', [pid, nat, docType, req.file.path, docReference]);
+    logActivity(`DOC_ADDED ${docReference}`);
+    res.json({ referenceNumber: docReference, path: req.file.path });
+  } catch (e) {
+    logError(`ADD_DOC_ERROR ${e.message}`);
     res.status(500).json({ error: 'server_error' });
   }
 });

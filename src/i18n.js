@@ -99,6 +99,8 @@ const translations = {
   missing_identifier: { en: 'Please enter a reference number or national ID.', ar: 'يرجى إدخال رقم المرجع أو الرقم الوطني.' },
   reviewDocuments: { en: 'Review Uploaded Documents', ar: 'مراجعة المستندات المرفوعة' },
   valid: { en: 'Valid', ar: 'صالح' },
+  invalid: { en: 'Invalid', ar: 'غير صالح' },
+  selectValidation: { en: 'Select validation', ar: 'اختر التحقق' },
   error_extracting_data: {
     en: 'Failed to extract data. Please try again.',
     ar: 'فشل استخراج البيانات. يرجى المحاولة مرة أخرى.'
@@ -110,7 +112,10 @@ const translations = {
   dbSaveError: {
     en: 'Failed to save data. Please try again. If the same error happens again please contact the Support IT department.',
     ar: 'فشل حفظ البيانات. يرجى المحاولة مرة أخرى. إذا تكرر الخطأ يرجى التواصل مع قسم دعم تقنية المعلومات.'
-  }
+  },
+  pendingApprovals: { en: 'Pending Approvals', ar: 'المراجع غير المعتمدة' },
+  approve: { en: 'Approve', ar: 'اعتماد' },
+  unlock: { en: 'Unlock', ar: 'فتح الحقول' }
 };
 
 export const t = (key, lang = 'en') => {

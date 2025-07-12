@@ -14,6 +14,7 @@ const DOC_LABELS = {
   letter: 'accountOpeningLetter',
   photo: 'recentPersonalPhoto'
 };
+const DOC_TYPES = Object.keys(DOC_LABELS);
 
 const ReviewDocsPage_EN = ({ onNavigate, state }) => {
   const { language } = useLanguage();
@@ -63,6 +64,25 @@ const ReviewDocsPage_EN = ({ onNavigate, state }) => {
     setUploading(u => ({ ...u, [ref]: false }));
   };
 
+  const handleNewDoc = async (docType, file) => {
+    if (!file) return;
+    setUploading(u => ({ ...u, [docType]: true }));
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('docType', docType);
+    formData.append('reference', state.personalInfo.reference_number);
+    try {
+      const resp = await fetch(`${API_BASE_URL}/api/add-document`, { method: 'POST', body: formData });
+      if (resp.ok) {
+        const data = await resp.json();
+        const newDoc = { doc_type: docType, file_name: data.path, reference_number: data.referenceNumber, confirmed_by_admin: false };
+        setDocs(d => [...d, newDoc]);
+        setValid(v => ({ ...v, [newDoc.reference_number]: false }));
+      }
+    } catch (e) { console.error(e); }
+    setUploading(u => ({ ...u, [docType]: false }));
+  };
+
   return (
     <div className="form-page">
       <header className="header docs-header">
@@ -79,22 +99,32 @@ const ReviewDocsPage_EN = ({ onNavigate, state }) => {
       <main className="form-main">
         <h2 className="form-title">{t('reviewDocuments', language)}</h2>
         <div className="docs-grid">
-          {docs.map(doc => (
-            <div key={doc.reference_number} className="image-preview-box" style={{alignItems:'center'}}>
-              <img src={`${API_BASE_URL}/${doc.file_name}`} alt={doc.doc_type} />
-              <div style={{marginTop:'10px', fontWeight:'600'}}>{t(DOC_LABELS[doc.doc_type] || doc.doc_type, language)}</div>
-              <label style={{marginTop:'10px', display:'flex', alignItems:'center', gap:'5px'}}>
-                <input type="checkbox" checked={!!valid[doc.reference_number]} onChange={() => toggleValid(doc.reference_number)} />
-                {t('valid', language)}
-              </label>
-              <div style={{marginTop:'10px'}}>
-                <input type="file" onChange={e => handleFileChange(doc.reference_number, e.target.files[0])} />
+          {DOC_TYPES.map(type => {
+            const doc = docs.find(d => d.doc_type === type);
+            return doc ? (
+              <div key={doc.reference_number} className="image-preview-box" style={{alignItems:'center'}}>
+                <img src={`${API_BASE_URL}/${doc.file_name}`} alt={doc.doc_type} />
+                <div style={{marginTop:'10px', fontWeight:'600'}}>{t(DOC_LABELS[doc.doc_type] || doc.doc_type, language)}</div>
+                <label style={{marginTop:'10px', display:'flex', alignItems:'center', gap:'5px'}}>
+                  <input type="checkbox" checked={!!valid[doc.reference_number]} onChange={() => toggleValid(doc.reference_number)} />
+                  {t('valid', language)}
+                </label>
+                <div style={{marginTop:'10px'}}>
+                  <input type="file" onChange={e => handleFileChange(doc.reference_number, e.target.files[0])} />
+                </div>
               </div>
-            </div>
-          ))}
+            ) : (
+              <div key={type} className="image-preview-box" style={{alignItems:'center', justifyContent:'center'}}>
+                <div style={{fontWeight:'600'}}>{t(DOC_LABELS[type], language)}</div>
+                <div style={{marginTop:'10px'}}>
+                  <input type="file" onChange={e => handleNewDoc(type, e.target.files[0])} disabled={uploading[type]} />
+                </div>
+              </div>
+            );
+          })}
         </div>
         <div className="form-actions">
-          <button className="btn-next" disabled={!docs.length || !docs.every(d => valid[d.reference_number])} onClick={() => onNavigate('reviewWorkInfo', { ...state, uploadedDocuments: docs })}>{t('next', language)}</button>
+          <button className="btn-next" disabled={!DOC_TYPES.every(t => docs.some(d => d.doc_type === t && valid[d.reference_number]))} onClick={() => onNavigate('reviewWorkInfo', { ...state, uploadedDocuments: docs })}>{t('next', language)}</button>
         </div>
       </main>
       <Footer />

@@ -11,6 +11,9 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
   const { language } = useLanguage();
   const [info, setInfo] = useState(state?.personalInfo || {});
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState({});
+  const [validationChoice, setValidationChoice] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -22,13 +25,20 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
           const resp = await fetch(`${API_BASE_URL}/api/address-info?${params.toString()}`);
           if (resp.ok) {
             const data = await resp.json();
-            if (data) setInfo(data);
+            if (data) {
+              setInfo(data);
+              setForm(data);
+            }
           }
         } catch (e) { console.error(e); }
       }
     };
     load();
   }, [state]);
+
+  useEffect(() => {
+    if (!editing) setForm(info);
+  }, [info]);
 
   const renderList = (obj) => (
     <ul className="confirmation-list">
@@ -41,6 +51,20 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
       ))}
     </ul>
   );
+
+  const handleSave = async () => {
+    const ref = state?.personalInfo?.reference_number;
+    if (!ref) return;
+    try {
+      await fetch(`${API_BASE_URL}/api/address-info`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reference: ref, adminChange: true, ...form })
+      });
+      setInfo(form);
+      setEditing(false);
+    } catch (e) { console.error(e); }
+  };
 
   return (
     <div className="form-page">
@@ -57,9 +81,28 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
       </header>
       <main className="form-main">
         <h2 className="form-title">{t('addressInfoTitle', language)}</h2>
-          {renderList(info)}
+        {editing ? (
+          <form className="form-container" onSubmit={e=>{e.preventDefault();handleSave();}}>
+            <div className="form-group"><input className="form-input" value={form.country || ''} onChange={e=>setForm({...form,country:e.target.value})} placeholder={t('country', language)} /></div>
+            <div className="form-group"><input className="form-input" value={form.city || ''} onChange={e=>setForm({...form,city:e.target.value})} placeholder={t('city', language)} /></div>
+            <div className="form-group"><input className="form-input" value={form.area || ''} onChange={e=>setForm({...form,area:e.target.value})} placeholder={t('area', language)} /></div>
+            <div className="form-group"><input className="form-input" value={form.residential_address || ''} onChange={e=>setForm({...form,residential_address:e.target.value})} placeholder={t('residentialAddress', language)} /></div>
+          </form>
+        ) : (
+          <>
+            {renderList(info)}
+            <button type="button" className="btn-next" onClick={() => setEditing(true)}>{t('unlock', language)}</button>
+          </>
+        )}
+        <div className="form-group" style={{marginTop:'20px'}}>
+          <select className="form-input" value={validationChoice} onChange={e=>setValidationChoice(e.target.value)}>
+            <option value="">{t('selectValidation', language)}</option>
+            <option value="valid">{t('valid', language)}</option>
+            <option value="invalid">{t('invalid', language)}</option>
+          </select>
+        </div>
         <div className="form-actions">
-          <button className="btn-next" onClick={() => onNavigate('landing')}>
+          <button className="btn-next" disabled={!validationChoice} onClick={() => onNavigate('landing')}>
             {t('next', language)}
           </button>
         </div>

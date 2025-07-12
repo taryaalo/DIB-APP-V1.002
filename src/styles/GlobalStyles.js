@@ -459,7 +459,7 @@ const GlobalStyles = () => (
     .result-container { display: flex; gap: 30px; width: 100%; max-width: 1200px; flex-grow: 1; min-height: 0; }
     .image-preview-box, .data-result-box { background-color: var(--form-input-bg); border-radius: 15px; padding: 30px; box-shadow: 0 5px 20px var(--shadow-color); flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
     .image-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
-    .image-preview-box.scanning::after { content: ''; position: absolute; left: 0; top: -100%; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%); animation: scan 2s linear infinite; }
+    .image-preview-box.scanning::after { content: ""; position: absolute; left: 0; top: -50%; width: 100%; height: 50%; background: linear-gradient(180deg, rgba(0,255,170,0) 0%, rgba(0,255,170,0.5) 50%, rgba(0,255,170,0) 100%); box-shadow: 0 0 20px rgba(0,255,170,0.6); animation: scan 1.5s ease-in-out infinite; pointer-events: none; }
     .data-result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .data-result-header h3 { margin: 0; color: var(--text-color-dark); }
     .copy-btn { background-color: var(--secondary-color); color: var(--text-color-dark); border: 1px solid #ccc; padding: 8px 12px; font-size: 0.9rem; font-weight: 600; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
@@ -471,7 +471,7 @@ const GlobalStyles = () => (
     body[dir="rtl"] .data-value { font-family: var(--font-primary-ar); }
     .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes scan { 0% { top: -100%; } 100% { top: 100%; } }
+    @keyframes scan { 0% { top: -50%; } 100% { top: 100%; } }
     .error-message { color: #e53e3e; font-weight: 600; background-color: rgba(229, 62, 62, 0.1); padding: 15px; border-radius: 8px; text-align: center; }
     .db-status { margin-top: 10px; font-weight: 600; }
     .db-status.success { color: var(--success-color); }

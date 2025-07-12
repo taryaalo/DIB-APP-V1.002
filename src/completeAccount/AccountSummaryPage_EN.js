@@ -6,6 +6,8 @@ import Footer from '../common/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
 import { t } from '../i18n';
 import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { logToServer } from '../utils/logger';
 
 const mockFetchCustomerId = () =>
   new Promise(resolve => setTimeout(() => resolve('CUST-0001'), 500));
@@ -31,35 +33,42 @@ const AccountSummaryPage_EN = ({ onNavigate, state }) => {
   );
 
   const handleExport = () => {
-    const doc = new jsPDF();
-    doc.setFont('helvetica');
-    const pageWidth = doc.internal.pageSize.getWidth();
-    doc.setFontSize(18);
-    doc.text(t('accountSummary', language), pageWidth / 2, 20, { align: 'center' });
-    let y = 35;
-    const addSection = (title, obj) => {
-      doc.setFontSize(14);
-      doc.text(title, 15, y);
-      y += 8;
-      doc.setFontSize(12);
-      Object.entries(obj || {}).forEach(([k, v]) => {
-        if (!v) return;
-        const value = Array.isArray(v) ? v.join('') : v;
-        doc.text(`${t(k, language)}: ${value}`, 20, y);
-        y += 6;
+    try {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      doc.addImage(LOGO_COLOR, 'PNG', pageWidth / 2 - 20, 10, 40, 40);
+      doc.setFontSize(16);
+      doc.text(t('accountSummary', language), pageWidth / 2, 55, { align: 'center' });
+
+      const rows = [];
+      const pushRows = (obj) => {
+        Object.entries(obj || {}).forEach(([k, v]) => {
+          if (!v) return;
+          rows.push([t(k, language), Array.isArray(v) ? v.join('') : v]);
+        });
+      };
+      pushRows(state.personalInfo);
+      pushRows(state.addressInfo);
+      pushRows(state.workInfo);
+      pushRows({
+        mobileApp: state.eServices?.mobileApp ? t('yes', language) : t('no', language),
+        sms: state.eServices?.sms ? t('yes', language) : t('no', language),
+        localCard: state.eServices?.localCard ? t('yes', language) : t('no', language),
+        internationalCard: state.eServices?.internationalCard ? t('yes', language) : t('no', language)
       });
-    };
-    addSection(t('personalInfo', language), state.personalInfo || {});
-    addSection(t('addressInfoTitle', language), state.addressInfo || {});
-    addSection(t('workInfoTitle', language), state.workInfo || {});
-    addSection(t('registerEServices', language), {
-      mobileApp: state.eServices?.mobileApp ? t('yes', language) : t('no', language),
-      sms: state.eServices?.sms ? t('yes', language) : t('no', language),
-      localCard: state.eServices?.localCard ? t('yes', language) : t('no', language),
-      internationalCard: state.eServices?.internationalCard ? t('yes', language) : t('no', language)
-    });
-    doc.text(`${t('customerId', language)}: ${customerId}`, 15, y);
-    doc.save('account_summary.pdf');
+      rows.push([t('customerId', language), customerId]);
+
+      autoTable(doc, {
+        startY: 65,
+        head: [[t('label', language), t('value', language)]],
+        body: rows,
+        theme: 'grid',
+        styles: { font: 'helvetica', fontSize: 10 }
+      });
+      doc.save('account_summary.pdf');
+    } catch (e) {
+      logToServer(`PDF_EXPORT_ERROR ${e.message}`);
+    }
   };
 
   return (

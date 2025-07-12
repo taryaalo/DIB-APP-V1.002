@@ -124,7 +124,9 @@ const translations = {
   accountSummary: { en: 'Customer Information Summary', ar: 'ملخص معلومات العميل' },
   customerId: { en: 'Customer ID', ar: 'رقم العميل' },
   yes: { en: 'Yes', ar: 'نعم' },
-  no: { en: 'No', ar: 'لا' }
+  no: { en: 'No', ar: 'لا' },
+  label: { en: 'Field', ar: 'الحقل' },
+  value: { en: 'Value', ar: 'القيمة' }
 };
 
 export const t = (key, lang = 'en') => {

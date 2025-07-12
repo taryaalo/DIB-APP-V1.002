@@ -7,6 +7,8 @@ import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFormData } from '../contexts/FormContext';
 import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { logToServer } from '../utils/logger';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 const ConfirmPage_EN = ({ onNavigate, state }) => {
@@ -57,36 +59,35 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
             }
         } catch (e) {
             console.error(e);
+            logToServer(`SUBMIT_ERROR ${e.message}`);
             setSubmitError(t('dbSaveError', language));
         }
     };
 
     const handleExport = async () => {
-        const doc = new jsPDF();
-        const isArabic = language === 'ar';
-        doc.setFont('helvetica');
-        const pageWidth = doc.internal.pageSize.getWidth();
-        doc.setFontSize(18);
-        doc.text(t('confirmData', language), pageWidth / 2, 20, { align: 'center', lang: isArabic ? 'ar' : 'en' });
+        try {
+            const doc = new jsPDF();
+            const isArabic = language === 'ar';
+            const pageWidth = doc.internal.pageSize.getWidth();
+            doc.addImage(LOGO_WHITE, 'PNG', pageWidth / 2 - 20, 10, 40, 40);
+            doc.setFontSize(16);
+            doc.text(t('welcomeTitle', language), pageWidth / 2, 55, { align: 'center', lang: isArabic ? 'ar' : 'en' });
 
-        const ref = form.referenceNumber || 'N/A';
-        doc.setDrawColor(0, 150, 0);
-        doc.setFillColor(200, 255, 200);
-        doc.roundedRect(10, 30, pageWidth - 20, 15, 3, 3, 'FD');
-        const textX = isArabic ? pageWidth - 15 : 15;
-        doc.setTextColor(0, 0, 0);
-        doc.text(`${t('referenceLabel', language)}: ${ref}`, textX, 40, { align: isArabic ? 'right' : 'left', lang: isArabic ? 'ar' : 'en' });
+            const rows = Object.entries(form)
+                .filter(([k, v]) => v && typeof v !== 'object')
+                .map(([k, v]) => [t(k, language) || k, Array.isArray(v) ? v.join('') : v]);
 
-        doc.setFontSize(12);
-        let y = 55;
-        Object.entries(form).forEach(([k, v]) => {
-            if (!v || typeof v === 'object') return;
-            const value = Array.isArray(v) ? v.join('') : v;
-            const label = t(k, language) || k;
-            doc.text(`${label}: ${value}`, textX, y, { align: isArabic ? 'right' : 'left', lang: isArabic ? 'ar' : 'en' });
-            y += 8;
-        });
-        doc.save('confirmation.pdf');
+            autoTable(doc, {
+                startY: 65,
+                head: [[t('label', language), t('value', language)]],
+                body: rows,
+                theme: 'grid',
+                styles: { font: 'helvetica', fontSize: 10, halign: isArabic ? 'right' : 'left' }
+            });
+            doc.save('confirmation.pdf');
+        } catch (e) {
+            logToServer(`PDF_EXPORT_ERROR ${e.message}`);
+        }
     };
 
     return (

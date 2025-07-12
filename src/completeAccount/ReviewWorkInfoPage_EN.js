@@ -12,6 +12,9 @@ const ReviewWorkInfoPage_EN = ({ onNavigate, state }) => {
   const { language } = useLanguage();
   const [work, setWork] = useState({});
   const [valid, setValid] = useState({});
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState({});
+  const [validationChoice, setValidationChoice] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -21,7 +24,10 @@ const ReviewWorkInfoPage_EN = ({ onNavigate, state }) => {
         const resp = await fetch(`${API_BASE_URL}/api/work-info?reference=${encodeURIComponent(ref)}`);
         if (resp.ok) {
           const data = await resp.json();
-          if (data) setWork(data);
+          if (data) {
+            setWork(data);
+            setForm(data);
+          }
         }
       } catch (e) { console.error(e); }
     };
@@ -34,10 +40,25 @@ const ReviewWorkInfoPage_EN = ({ onNavigate, state }) => {
       if (work[k]) init[k] = false;
     });
     setValid(init);
+    if (!editing) setForm(work);
   }, [work]);
 
   const toggleValid = (key) => {
     setValid(v => ({ ...v, [key]: !v[key] }));
+  };
+
+  const handleSave = async () => {
+    const ref = state?.personalInfo?.reference_number;
+    if (!ref) return;
+    try {
+      await fetch(`${API_BASE_URL}/api/work-info`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reference: ref, adminChange: true, ...form })
+      });
+      setWork(form);
+      setEditing(false);
+    } catch (e) { console.error(e); }
   };
 
   const renderList = (obj) => (
@@ -72,15 +93,31 @@ const ReviewWorkInfoPage_EN = ({ onNavigate, state }) => {
       </header>
       <main className="form-main">
         <h2 className="form-title">{t('workInfoTitle', language)}</h2>
-        {renderList(work)}
+        {editing ? (
+          <form className="form-container" onSubmit={e => {e.preventDefault(); handleSave();}}>
+            <div className="form-group"><input name="employment_status" value={form.employment_status || ''} onChange={e=>setForm({...form, employment_status:e.target.value})} className="form-input" placeholder={t('employmentStatus', language)} /></div>
+            <div className="form-group"><input name="job_title" value={form.job_title || ''} onChange={e=>setForm({...form, job_title:e.target.value})} className="form-input" placeholder={t('jobTitle', language)} /></div>
+            <div className="form-group"><input name="employer" value={form.employer || ''} onChange={e=>setForm({...form, employer:e.target.value})} className="form-input" placeholder={t('employer', language)} /></div>
+            <div className="form-group"><input name="employer_address" value={form.employer_address || ''} onChange={e=>setForm({...form, employer_address:e.target.value})} className="form-input" placeholder={t('employerAddress', language)} /></div>
+            <div className="form-group"><input name="employer_phone" value={form.employer_phone || ''} onChange={e=>setForm({...form, employer_phone:e.target.value})} className="form-input" placeholder={t('employerPhone', language)} /></div>
+            <div className="form-group"><input name="source_of_income" value={form.source_of_income || ''} onChange={e=>setForm({...form, source_of_income:e.target.value})} className="form-input" placeholder={t('sourceOfIncome', language)} /></div>
+            <div className="form-group"><input name="monthly_income" value={form.monthly_income || ''} onChange={e=>setForm({...form, monthly_income:e.target.value})} className="form-input" placeholder={t('monthlyIncome', language)} /></div>
+          </form>
+        ) : (
+          <>
+            {renderList(work)}
+            <button type="button" className="btn-next" onClick={() => setEditing(true)}>{t('unlock', language)}</button>
+          </>
+        )}
+        <div className="form-group" style={{marginTop:'20px'}}>
+          <select className="form-input" value={validationChoice} onChange={e=>setValidationChoice(e.target.value)}>
+            <option value="">{t('selectValidation', language)}</option>
+            <option value="valid">{t('valid', language)}</option>
+            <option value="invalid">{t('invalid', language)}</option>
+          </select>
+        </div>
         <div className="form-actions">
-          <button
-            className="btn-next"
-            disabled={Object.keys(valid).length === 0 || !Object.values(valid).every(Boolean)}
-            onClick={() => onNavigate('reviewAddressInfo', state)}
-          >
-            {t('next', language)}
-          </button>
+          <button className="btn-next" disabled={!validationChoice} onClick={() => onNavigate('reviewAddressInfo', state)}>{t('next', language)}</button>
         </div>
       </main>
       <Footer />

@@ -27,7 +27,8 @@ CREATE TABLE personal_info (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     reference_number VARCHAR(100) UNIQUE,
     ai_model VARCHAR(20),
-    service_type VARCHAR(50)
+    service_type VARCHAR(50),
+    confirmed_by_admin BOOLEAN DEFAULT FALSE
 );
 
 -- Address information linked to personal_info
@@ -38,7 +39,8 @@ CREATE TABLE address_info (
     country VARCHAR(50),
     city VARCHAR(50),
     area VARCHAR(100),
-    residential_address TEXT
+    residential_address TEXT,
+    confirmed_by_admin BOOLEAN DEFAULT FALSE
 );
 
 -- Work and income information linked to personal_info
@@ -52,7 +54,8 @@ CREATE TABLE work_income_info (
     employer_address TEXT,
     employer_phone VARCHAR(20),
     source_of_income VARCHAR(100),
-    monthly_income VARCHAR(100)
+    monthly_income VARCHAR(100),
+    confirmed_by_admin BOOLEAN DEFAULT FALSE
 );
 
 -- Uploaded documents linked to personal_info
@@ -62,7 +65,7 @@ CREATE TABLE uploaded_documents (
     national_id VARCHAR(20),
     doc_type VARCHAR(50),
     file_name TEXT NOT NULL,
-    reference_number VARCHAR(100) UNIQUE NOT NULL,
+    reference_number VARCHAR(100) NOT NULL,
     confirmed_by_admin BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

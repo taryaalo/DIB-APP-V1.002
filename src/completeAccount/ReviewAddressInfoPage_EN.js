@@ -19,7 +19,7 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
       else if (state?.personalInfo?.national_id) params.append('nid', state.personalInfo.national_id);
       if (params.toString()) {
         try {
-          const resp = await fetch(`${API_BASE_URL}/api/personal-info?${params.toString()}`);
+          const resp = await fetch(`${API_BASE_URL}/api/address-info?${params.toString()}`);
           if (resp.ok) {
             const data = await resp.json();
             if (data) setInfo(data);

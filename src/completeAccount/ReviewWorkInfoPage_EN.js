@@ -10,23 +10,20 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 const ReviewWorkInfoPage_EN = ({ onNavigate, state }) => {
   const { language } = useLanguage();
-  const [work, setWork] = useState(state?.workInfo || {});
+  const [work, setWork] = useState({});
   const [valid, setValid] = useState({});
 
   useEffect(() => {
     const load = async () => {
-      const params = new URLSearchParams();
-      if (state?.personalInfo?.reference_number) params.append('reference', state.personalInfo.reference_number);
-      else if (state?.personalInfo?.national_id) params.append('nid', state.personalInfo.national_id);
-      if (params.toString()) {
-        try {
-          const resp = await fetch(`${API_BASE_URL}/api/work-info?${params.toString()}`);
-          if (resp.ok) {
-            const data = await resp.json();
-            if (data) setWork(data);
-          }
-        } catch (e) { console.error(e); }
-      }
+      const ref = state?.personalInfo?.reference_number;
+      if (!ref) return;
+      try {
+        const resp = await fetch(`${API_BASE_URL}/api/work-info?reference=${encodeURIComponent(ref)}`);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data) setWork(data);
+        }
+      } catch (e) { console.error(e); }
     };
     load();
   }, [state]);

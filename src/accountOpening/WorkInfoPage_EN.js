@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
@@ -23,6 +23,24 @@ const WorkInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
         monthlyIncome: '',
         ...(formData.workInfo || {})
     });
+
+    useEffect(() => {
+        const reference = formData.personalInfo?.referenceNumber;
+        if (!reference) return;
+        async function load() {
+            try {
+                const resp = await fetch(`${API_BASE_URL}/api/work-info?reference=${encodeURIComponent(reference)}`);
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (data) {
+                        setForm(f => ({ ...f, ...data }));
+                        setFormData(d => ({ ...d, workInfo: data }));
+                    }
+                }
+            } catch (e) { console.error(e); }
+        }
+        load();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

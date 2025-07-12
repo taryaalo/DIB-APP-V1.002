@@ -25,6 +25,8 @@ import LookupPage_EN from './completeAccount/LookupPage_EN';
 import ReviewDocsPage_EN from './completeAccount/ReviewDocsPage_EN';
 import ReviewWorkInfoPage_EN from './completeAccount/ReviewWorkInfoPage_EN';
 import ReviewAddressInfoPage_EN from './completeAccount/ReviewAddressInfoPage_EN';
+import EServicesRegistrationPage_EN from './completeAccount/EServicesRegistrationPage_EN';
+import AccountSummaryPage_EN from './completeAccount/AccountSummaryPage_EN';
 
 
 // ---=== Main App Component ===---
@@ -66,6 +68,8 @@ const AppContent = () => {
             case 'reviewDocs': return <ReviewDocsPage_EN onNavigate={handleNavigation} state={state} />;
             case 'reviewWorkInfo': return <ReviewWorkInfoPage_EN onNavigate={handleNavigation} state={state} />;
             case 'reviewAddressInfo': return <ReviewAddressInfoPage_EN onNavigate={handleNavigation} state={state} />;
+            case 'eServicesReg': return <EServicesRegistrationPage_EN onNavigate={handleNavigation} state={state} />;
+            case 'accountSummary': return <AccountSummaryPage_EN onNavigate={handleNavigation} state={state} />;
             
             case 'personalDocs':
             case 'businessmenDocs':

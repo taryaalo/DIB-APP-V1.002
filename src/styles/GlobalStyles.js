@@ -439,6 +439,9 @@ const GlobalStyles = () => (
     .confirmation-table button:hover {
         background-color: var(--primary-dark);
     }
+    .confirmation-table td.checkbox-cell {
+        text-align: right;
+    }
     
     /* ---=== Success Page ===--- */
     .success-page {
@@ -499,8 +502,8 @@ const GlobalStyles = () => (
         background:
             repeating-linear-gradient(
                 to bottom,
-                rgba(255,255,255,0.15) 0px,
-                rgba(255,255,255,0.15) 2px,
+                rgba(255,255,255,0.3) 0px,
+                rgba(255,255,255,0.3) 2px,
                 transparent 2px,
                 transparent 4px
             );

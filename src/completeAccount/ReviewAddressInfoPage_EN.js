@@ -94,7 +94,7 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
           </>
         )}
         <div className="form-actions">
-          <button className="btn-next" onClick={() => onNavigate('landing')}>
+          <button className="btn-next" onClick={() => onNavigate('eServicesReg', state)}>
             {t('approve', language)}
           </button>
         </div>

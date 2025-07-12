@@ -113,13 +113,14 @@ app.post('/api/address-info', async (req, res) => {
   try {
     let personal;
     if (reference) {
-      personal = await pool.query('SELECT id, national_id FROM personal_info WHERE reference_number=$1', [reference]);
+      personal = await pool.query('SELECT id, national_id, reference_number FROM personal_info WHERE reference_number=$1', [reference]);
     } else {
-      personal = await pool.query('SELECT id, national_id FROM personal_info WHERE national_id=$1 ORDER BY created_at DESC LIMIT 1', [nid]);
+      personal = await pool.query('SELECT id, national_id, reference_number FROM personal_info WHERE national_id=$1 ORDER BY created_at DESC LIMIT 1', [nid]);
     }
     if (personal.rows.length === 0) return res.status(404).json({ error: 'not_found' });
     const pid = personal.rows[0].id;
     const natId = personal.rows[0].national_id;
+    const refNum = personal.rows[0].reference_number;
     const existing = await pool.query('SELECT id FROM address_info WHERE personal_id=$1', [pid]);
     if (existing.rows.length) {
       await pool.query(
@@ -129,8 +130,8 @@ app.post('/api/address-info', async (req, res) => {
       logActivity(`DB_UPDATE address_info ${pid}`);
     } else {
       await pool.query(
-        'INSERT INTO address_info (personal_id, national_id, country, city, area, residential_address) VALUES ($1,$2,$3,$4,$5,$6)',
-        [pid, natId, country || null, city || null, area || null, residentialAddress || null]
+        'INSERT INTO address_info (personal_id, national_id, reference_number, country, city, area, residential_address) VALUES ($1,$2,$3,$4,$5,$6,$7)',
+        [pid, natId, refNum, country || null, city || null, area || null, residentialAddress || null]
       );
       logActivity(`DB_INSERT address_info ${pid}`);
     }
@@ -147,13 +148,14 @@ app.post('/api/work-info', async (req, res) => {
   try {
     let personal;
     if (reference) {
-      personal = await pool.query('SELECT id, national_id FROM personal_info WHERE reference_number=$1', [reference]);
+      personal = await pool.query('SELECT id, national_id, reference_number FROM personal_info WHERE reference_number=$1', [reference]);
     } else {
-      personal = await pool.query('SELECT id, national_id FROM personal_info WHERE national_id=$1 ORDER BY created_at DESC LIMIT 1', [nid]);
+      personal = await pool.query('SELECT id, national_id, reference_number FROM personal_info WHERE national_id=$1 ORDER BY created_at DESC LIMIT 1', [nid]);
     }
     if (personal.rows.length === 0) return res.status(404).json({ error: 'not_found' });
     const pid = personal.rows[0].id;
     const natId = personal.rows[0].national_id;
+    const refNum = personal.rows[0].reference_number;
     const existing = await pool.query('SELECT id FROM work_income_info WHERE personal_id=$1', [pid]);
     if (existing.rows.length) {
       await pool.query(
@@ -163,8 +165,8 @@ app.post('/api/work-info', async (req, res) => {
       logActivity(`DB_UPDATE work_income_info ${pid}`);
     } else {
       await pool.query(
-        'INSERT INTO work_income_info (personal_id, national_id, employment_status, job_title, employer, employer_address, employer_phone, source_of_income, monthly_income) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)',
-        [pid, natId, employmentStatus || null, jobTitle || null, employer || null, employerAddress || null, employerPhone || null, sourceOfIncome || null, monthlyIncome || null]
+        'INSERT INTO work_income_info (personal_id, national_id, reference_number, employment_status, job_title, employer, employer_address, employer_phone, source_of_income, monthly_income) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
+        [pid, natId, refNum, employmentStatus || null, jobTitle || null, employer || null, employerAddress || null, employerPhone || null, sourceOfIncome || null, monthlyIncome || null]
       );
       logActivity(`DB_INSERT work_income_info ${pid}`);
     }
@@ -293,16 +295,16 @@ app.post('/api/submit-form', async (req, res) => {
     if (form.addressInfo) {
       const a = form.addressInfo;
       await pool.query(
-        'INSERT INTO address_info (personal_id, national_id, country, city, area, residential_address) VALUES ($1,$2,$3,$4,$5,$6)',
-        [id, nid, a.country || null, a.city || null, a.area || null, a.residentialAddress || null]
+        'INSERT INTO address_info (personal_id, national_id, reference_number, country, city, area, residential_address) VALUES ($1,$2,$3,$4,$5,$6,$7)',
+        [id, nid, referenceNumber, a.country || null, a.city || null, a.area || null, a.residentialAddress || null]
       );
     }
 
     if (form.workInfo) {
       const w = form.workInfo;
       await pool.query(
-        'INSERT INTO work_income_info (personal_id, national_id, employment_status, job_title, employer, employer_address, employer_phone, source_of_income, monthly_income) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)',
-        [id, nid, w.employmentStatus || null, w.jobTitle || null, w.employer || null, w.employerAddress || null, w.employerPhone || null, w.sourceOfIncome || null, w.monthlyIncome || null]
+        'INSERT INTO work_income_info (personal_id, national_id, reference_number, employment_status, job_title, employer, employer_address, employer_phone, source_of_income, monthly_income) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
+        [id, nid, referenceNumber, w.employmentStatus || null, w.jobTitle || null, w.employer || null, w.employerAddress || null, w.employerPhone || null, w.sourceOfIncome || null, w.monthlyIncome || null]
       );
     }
 

@@ -13,7 +13,6 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
   const [info, setInfo] = useState(state?.personalInfo || {});
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({});
-  const [validationChoice, setValidationChoice] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -94,16 +93,9 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
             <button type="button" className="btn-next" onClick={() => setEditing(true)}>{t('unlock', language)}</button>
           </>
         )}
-        <div className="form-group" style={{marginTop:'20px'}}>
-          <select className="form-input" value={validationChoice} onChange={e=>setValidationChoice(e.target.value)}>
-            <option value="">{t('selectValidation', language)}</option>
-            <option value="valid">{t('valid', language)}</option>
-            <option value="invalid">{t('invalid', language)}</option>
-          </select>
-        </div>
         <div className="form-actions">
-          <button className="btn-next" disabled={!validationChoice} onClick={() => onNavigate('landing')}>
-            {t('next', language)}
+          <button className="btn-next" onClick={() => onNavigate('landing')}>
+            {t('approve', language)}
           </button>
         </div>
       </main>

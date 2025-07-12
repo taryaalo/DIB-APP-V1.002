@@ -409,6 +409,36 @@ const GlobalStyles = () => (
     .confirmation-header { text-align: center; font-size: 1.8rem; font-weight: 700; margin-bottom: 20px; }
     .confirmation-list { list-style: none; padding: 0; font-size: 1.1rem; }
     .confirmation-list li { margin-bottom: 8px; }
+    .confirmation-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .confirmation-table th,
+    .confirmation-table td {
+        border-bottom: 1px solid var(--secondary-color);
+        padding: 10px 15px;
+        text-align: left;
+    }
+    .confirmation-table th {
+        background-color: var(--primary-color);
+        color: var(--text-color-light);
+    }
+    .confirmation-table tbody tr:nth-child(even) {
+        background-color: rgba(0,0,0,0.02);
+    }
+    .confirmation-table button {
+        background-color: var(--primary-color);
+        color: var(--text-color-light);
+        border: none;
+        padding: 6px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    .confirmation-table button:hover {
+        background-color: var(--primary-dark);
+    }
     
     /* ---=== Success Page ===--- */
     .success-page {
@@ -459,7 +489,24 @@ const GlobalStyles = () => (
     .result-container { display: flex; gap: 30px; width: 100%; max-width: 1200px; flex-grow: 1; min-height: 0; }
     .image-preview-box, .data-result-box { background-color: var(--form-input-bg); border-radius: 15px; padding: 30px; box-shadow: 0 5px 20px var(--shadow-color); flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
     .image-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
-    .image-preview-box.scanning::after { content: ""; position: absolute; left: 0; top: -100%; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,255,170,0) 0%, rgba(0,255,170,0.4) 50%, rgba(0,255,170,0) 100%); box-shadow: 0 0 25px rgba(0,255,170,0.6); animation: scan 2s linear infinite; pointer-events: none; }
+    .image-preview-box.scanning::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: -100%;
+        width: 100%;
+        height: 100%;
+        background:
+            repeating-linear-gradient(
+                to bottom,
+                rgba(255,255,255,0.15) 0px,
+                rgba(255,255,255,0.15) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+        animation: scan 2s linear infinite;
+        pointer-events: none;
+    }
     .data-result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .data-result-header h3 { margin: 0; color: var(--text-color-dark); }
     .copy-btn { background-color: var(--secondary-color); color: var(--text-color-dark); border: 1px solid #ccc; padding: 8px 12px; font-size: 0.9rem; font-weight: 600; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; }

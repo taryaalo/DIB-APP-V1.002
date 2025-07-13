@@ -11,6 +11,7 @@ const LookupPage_EN = ({ onNavigate }) => {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [selected, setSelected] = useState(null);
+    const [page, setPage] = useState(0);
 
     useEffect(() => {
         const load = async () => {
@@ -26,15 +27,20 @@ const LookupPage_EN = ({ onNavigate }) => {
         load();
     }, []);
 
-    const filtered = apps.filter(a => {
-        const term = search.toLowerCase();
-        return (
-            (a.personalInfo.full_name || '').toLowerCase().includes(term) ||
-            (a.personalInfo.first_name || '').toLowerCase().includes(term) ||
-            (a.personalInfo.last_name || '').toLowerCase().includes(term) ||
-            (a.personalInfo.reference_number || '').toLowerCase().includes(term)
-        );
-    });
+    const filtered = apps
+        .filter(a => a.status === 'Pending')
+        .filter(a => {
+            const term = search.toLowerCase();
+            return (
+                (a.personalInfo.full_name || '').toLowerCase().includes(term) ||
+                (a.personalInfo.first_name || '').toLowerCase().includes(term) ||
+                (a.personalInfo.last_name || '').toLowerCase().includes(term) ||
+                (a.personalInfo.reference_number || '').toLowerCase().includes(term)
+            );
+        });
+
+    const totalPages = Math.ceil(filtered.length / 10);
+    const paged = filtered.slice(page * 10, page * 10 + 10);
 
     const infoSection = (title, data) => {
         if (!data) return null;
@@ -110,7 +116,7 @@ const LookupPage_EN = ({ onNavigate }) => {
                         {loading && (
                             <tr><td colSpan="6" style={{textAlign:'center',padding:'20px'}}>Loading...</td></tr>
                         )}
-                        {filtered.map(app => (
+                        {paged.map(app => (
                             <tr key={app.personalInfo.id} className="hover-row">
                                 <td>
                                     <div style={{fontWeight:'600'}}>{app.personalInfo.first_name} {app.personalInfo.last_name}</div>
@@ -128,6 +134,11 @@ const LookupPage_EN = ({ onNavigate }) => {
                         )}
                     </tbody>
                 </table>
+                <div style={{marginTop:'10px',display:'flex',justifyContent:'center',gap:'5px'}}>
+                    {Array.from({length: totalPages}).map((_,i)=>(
+                        <button key={i} onClick={()=>setPage(i)} style={{padding:'6px 12px',borderRadius:'4px',background:i===page?'var(--primary-color)':'#ccc',color:i===page?'#fff':'#000',border:'none',cursor:'pointer'}}>{i+1}</button>
+                    ))}
+                </div>
             </main>
             <Footer />
             {selected && (

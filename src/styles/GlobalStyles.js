@@ -383,10 +383,19 @@ const GlobalStyles = () => (
     .progress-bar { width: 100%; max-width: 600px; height: 10px; background-color: #e0e0e0; border-radius: 5px; overflow: hidden; margin-bottom: 20px; }
     .progress-bar-fill { height: 100%; background-color: var(--primary-color); width: 0; transition: width 0.2s ease; }
     .agreements { width: 100%; max-width: 600px; margin-bottom: 20px; }
+    .guide-message {
+        margin-bottom: 15px;
+        padding: 10px 15px;
+        border-radius: 8px;
+        background-color: rgba(72,187,120,0.1);
+        color: var(--success-color);
+        font-weight: 600;
+    }
     .agreement-item { display: flex; align-items: center; gap: 15px; font-size: 1.1rem; font-weight: 600; color: var(--text-color-dark); }
     .agreement-item:first-child { margin-bottom: 15px; }
     .agreement-item a { color: var(--primary-dark); text-decoration: none; font-weight: 700; }
     .agreement-item a:hover { text-decoration: underline; }
+    .agreement-item svg { color: var(--primary-dark); }
     .custom-checkbox { display: inline-block; width: 28px; height: 28px; background: var(--form-input-bg); border: 2px solid #ccc; border-radius: 6px; position: relative; cursor: pointer; flex-shrink: 0; }
     .custom-checkbox input { opacity: 0; width: 0; height: 0; }
     .checkmark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background-color: #4caf50; border-radius: 4px; opacity: 0; transition: opacity 0.2s ease; }
@@ -538,9 +547,9 @@ const GlobalStyles = () => (
         content: "";
         position: absolute;
         left: 0;
-        top: -100%;
+        top: -50%;
         width: 100%;
-        height: 100%;
+        height: 50%;
         background:
             repeating-linear-gradient(
                 to bottom,
@@ -563,7 +572,18 @@ const GlobalStyles = () => (
     body[dir="rtl"] .data-value { font-family: var(--font-primary-ar); }
     .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes scan { 0% { top: -100%; } 100% { top: 100%; } }
+    @keyframes scan { 0% { top: -50%; } 100% { top: 100%; } }
+    .scan-success-check {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 32px;
+        height: 32px;
+        color: var(--success-color);
+        background: rgba(255,255,255,0.8);
+        border-radius: 50%;
+        padding: 2px;
+    }
     .error-message { color: #e53e3e; font-weight: 600; background-color: rgba(229, 62, 62, 0.1); padding: 15px; border-radius: 8px; text-align: center; }
     .db-status { margin-top: 10px; font-weight: 600; }
     .db-status.success { color: var(--success-color); }

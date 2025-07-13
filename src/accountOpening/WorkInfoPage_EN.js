@@ -25,7 +25,7 @@ const WorkInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
     });
 
     useEffect(() => {
-        const reference = formData.personalInfo?.referenceNumber;
+        const reference = formData.personalInfo?.referenceNumber || formData.personalInfo?.reference_number;
         if (!reference) return;
         async function load() {
             try {
@@ -50,7 +50,7 @@ const WorkInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
     const handleSubmit = async () => {
         setFormData(d => ({ ...d, workInfo: form }));
         const nid = (formData.personalInfo?.nidDigits || []).join('');
-        const reference = formData.personalInfo?.referenceNumber;
+        const reference = formData.personalInfo?.referenceNumber || formData.personalInfo?.reference_number;
         try {
             if (nid || reference) {
                 await fetch(`${API_BASE_URL}/api/work-info`, {

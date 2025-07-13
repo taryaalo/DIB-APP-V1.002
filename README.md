@@ -26,6 +26,13 @@ If you run the backend on a different port (e.g. 7103), update `REACT_APP_API_BA
 REACT_APP_API_BASE_URL=https://localhost:7103
 ```
 
+The Express backend tries to start both an HTTP server on `PORT` (default
+`7003`) and an HTTPS server on `HTTPS_PORT` (default `7103`). Certificate and
+key files are read from `cert.pem` and `key.pem` in the project root or from the
+`SSL_CERT_PATH` and `SSL_KEY_PATH` environment variables. If the HTTPS server
+fails to start the application continues running on HTTP only and a warning is
+written to the console and log file.
+
 The ChatGPT provider relies on a working internet connection. If requests fail with
 "Failed to fetch", ensure that your environment allows outbound HTTPS requests to
 `api.openai.com` and that your API key is valid.

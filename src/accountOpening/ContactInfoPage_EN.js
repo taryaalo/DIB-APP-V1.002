@@ -31,7 +31,7 @@ const ContactInfoPage_EN = ({ onNavigate, backPage, nextPage }) => {
         const nid = (formData.personalInfo?.nidDigits || []).join('');
         const reference = formData.personalInfo?.referenceNumber || formData.personalInfo?.reference_number;
         try {
-            if (nid || reference) {
+            if (reference) {
                 await fetch(`${API_BASE_URL}/api/address-info`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

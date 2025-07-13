@@ -580,11 +580,17 @@ const GlobalStyles = () => (
         width: 32px;
         height: 32px;
         color: var(--success-color);
-        background: rgba(255,255,255,0.8);
-        border-radius: 50%;
-        padding: 2px;
+        opacity: 0.7;
         z-index: 2;
         pointer-events: none;
+    }
+    .locked-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        cursor: not-allowed;
     }
     .error-message { color: #e53e3e; font-weight: 600; background-color: rgba(229, 62, 62, 0.1); padding: 15px; border-radius: 8px; text-align: center; }
     .db-status { margin-top: 10px; font-weight: 600; }

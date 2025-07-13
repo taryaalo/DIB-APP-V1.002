@@ -453,11 +453,12 @@ app.post('/api/update-document/:id', upload.single('file'), async (req, res) => 
 
 // Approve or unapprove an uploaded document
 app.post('/api/approve-document', async (req, res) => {
-  const { id, approved } = req.body || {};
+  const { id, approved, adminName } = req.body || {};
   if (!id) return res.status(400).json({ error: 'missing_id' });
   try {
-    await pool.query('UPDATE uploaded_documents SET confirmed_by_admin=$1 WHERE id=$2', [approved, id]);
-    logActivity(`DOC_APPROVE ${id} ${approved}`);
+    const adminIp = (req.headers['x-forwarded-for'] || req.ip || '').split(',')[0];
+    await pool.query('UPDATE uploaded_documents SET confirmed_by_admin=$1, approved_by_admin_name=$2, approved_by_admin_ip=$3 WHERE id=$4', [approved, adminName || null, adminIp, id]);
+    logActivity(`DOC_APPROVE ${id} ${approved} ${adminName || ''} ${adminIp}`);
     res.json({ success: true });
   } catch (e) {
     logError(`DOC_APPROVE_ERROR ${e.message}`);
@@ -467,12 +468,13 @@ app.post('/api/approve-document', async (req, res) => {
 
 // Update personal info approval status
 app.post('/api/application-status', async (req, res) => {
-  const { id, status } = req.body || {};
+  const { id, status, adminName } = req.body || {};
   if (!id || !status) return res.status(400).json({ error: 'missing_parameters' });
   try {
     const approved = status === 'Approved';
-    await pool.query('UPDATE personal_info SET confirmed_by_admin=$1 WHERE id=$2', [approved, id]);
-    logActivity(`APP_STATUS ${id} ${status}`);
+    const adminIp = (req.headers['x-forwarded-for'] || req.ip || '').split(',')[0];
+    await pool.query('UPDATE personal_info SET confirmed_by_admin=$1, approved_by_admin_name=$2, approved_by_admin_ip=$3 WHERE id=$4', [approved, adminName || null, adminIp, id]);
+    logActivity(`APP_STATUS ${id} ${status} ${adminName || ''} ${adminIp}`);
     res.json({ success: true });
   } catch (e) {
     logError(`APP_STATUS_ERROR ${e.message}`);

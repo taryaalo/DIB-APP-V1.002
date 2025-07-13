@@ -29,7 +29,9 @@ CREATE TABLE personal_info (
     ai_model VARCHAR(20),
     service_type VARCHAR(50),
     manual_fields TEXT[],
-    confirmed_by_admin BOOLEAN DEFAULT FALSE
+    confirmed_by_admin BOOLEAN DEFAULT FALSE,
+    approved_by_admin_name VARCHAR(100),
+    approved_by_admin_ip VARCHAR(50)
 );
 
 -- Address information linked to personal_info
@@ -70,6 +72,8 @@ CREATE TABLE uploaded_documents (
     file_name TEXT NOT NULL,
     reference_number VARCHAR(100) NOT NULL,
     confirmed_by_admin BOOLEAN DEFAULT FALSE,
+    approved_by_admin_name VARCHAR(100),
+    approved_by_admin_ip VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -256,6 +256,7 @@ function generateReference(createdAt) {
 
 app.post('/api/submit-form', async (req, res) => {
   const form = req.body || {};
+  const manualFields = Array.isArray(form.manualFields) ? form.manualFields : [];
   const nid = Array.isArray(form.nidDigits) ? form.nidDigits.join('') : null;
   const values = [
     form.fullName,
@@ -292,7 +293,7 @@ app.post('/api/submit-form', async (req, res) => {
     const createdAt = result.rows[0].created_at;
 
     const referenceNumber = generateReference(createdAt);
-    await pool.query('UPDATE personal_info SET reference_number=$1 WHERE id=$2', [referenceNumber, id]);
+    await pool.query('UPDATE personal_info SET reference_number=$1, manual_fields=$2 WHERE id=$3', [referenceNumber, manualFields, id]);
     logActivity(`DB_INSERT personal_info ${referenceNumber}`);
     logMessage(`DB_INSERT personal_info ${referenceNumber}`);
 
@@ -393,7 +394,7 @@ app.get('/api/customer', async (req, res) => {
     const p = personal.rows[0];
     const address = await pool.query('SELECT * FROM address_info WHERE personal_id=$1 LIMIT 1', [p.id]);
     const work = await pool.query('SELECT * FROM work_income_info WHERE personal_id=$1 LIMIT 1', [p.id]);
-    const docs = await pool.query('SELECT doc_type, file_name, reference_number, confirmed_by_admin FROM uploaded_documents WHERE personal_id=$1', [p.id]);
+    const docs = await pool.query('SELECT id, doc_type, file_name, reference_number, confirmed_by_admin FROM uploaded_documents WHERE personal_id=$1', [p.id]);
     res.json({
       personalInfo: p,
       addressInfo: address.rows[0] || null,
@@ -414,7 +415,7 @@ app.get('/api/applications', async (req, res) => {
     for (const p of result.rows) {
       const address = await pool.query('SELECT * FROM address_info WHERE personal_id=$1 LIMIT 1', [p.id]);
       const work = await pool.query('SELECT * FROM work_income_info WHERE personal_id=$1 LIMIT 1', [p.id]);
-      const docs = await pool.query('SELECT doc_type, file_name, reference_number, confirmed_by_admin FROM uploaded_documents WHERE personal_id=$1', [p.id]);
+      const docs = await pool.query('SELECT id, doc_type, file_name, reference_number, confirmed_by_admin FROM uploaded_documents WHERE personal_id=$1', [p.id]);
       apps.push({
         personalInfo: p,
         addressInfo: address.rows[0] || null,
@@ -431,18 +432,18 @@ app.get('/api/applications', async (req, res) => {
 });
 
 // Update an uploaded document with a new file
-app.post('/api/update-document/:reference', upload.single('file'), async (req, res) => {
-  const ref = req.params.reference;
+app.post('/api/update-document/:id', upload.single('file'), async (req, res) => {
+  const docId = req.params.id;
   if (!req.file) return res.status(400).json({ error: 'missing_file' });
   try {
-    const existing = await pool.query('SELECT file_name FROM uploaded_documents WHERE reference_number=$1', [ref]);
+    const existing = await pool.query('SELECT file_name FROM uploaded_documents WHERE id=$1', [docId]);
     if (existing.rows.length === 0) return res.status(404).json({ error: 'not_found' });
     const oldPath = existing.rows[0].file_name;
     const dir = path.dirname(oldPath);
     const newPath = path.join(dir, path.basename(req.file.path));
     fs.renameSync(req.file.path, newPath);
-    await pool.query('UPDATE uploaded_documents SET file_name=$1, confirmed_by_admin=FALSE WHERE reference_number=$2', [newPath, ref]);
-    logActivity(`DOC_UPDATED ${ref}`);
+    await pool.query('UPDATE uploaded_documents SET file_name=$1, confirmed_by_admin=FALSE WHERE id=$2', [newPath, docId]);
+    logActivity(`DOC_UPDATED ${docId}`);
     res.json({ path: newPath });
   } catch (e) {
     logError(`DOC_UPDATE_ERROR ${e.message}`);
@@ -452,11 +453,11 @@ app.post('/api/update-document/:reference', upload.single('file'), async (req, r
 
 // Approve or unapprove an uploaded document
 app.post('/api/approve-document', async (req, res) => {
-  const { reference, approved } = req.body || {};
-  if (!reference) return res.status(400).json({ error: 'missing_reference' });
+  const { id, approved } = req.body || {};
+  if (!id) return res.status(400).json({ error: 'missing_id' });
   try {
-    await pool.query('UPDATE uploaded_documents SET confirmed_by_admin=$1 WHERE reference_number=$2', [approved, reference]);
-    logActivity(`DOC_APPROVE ${reference} ${approved}`);
+    await pool.query('UPDATE uploaded_documents SET confirmed_by_admin=$1 WHERE id=$2', [approved, id]);
+    logActivity(`DOC_APPROVE ${id} ${approved}`);
     res.json({ success: true });
   } catch (e) {
     logError(`DOC_APPROVE_ERROR ${e.message}`);
@@ -508,9 +509,9 @@ app.post('/api/add-document', upload.single('file'), async (req, res) => {
     const nat = personal.rows[0].national_id;
     const refResult = await pool.query('SELECT reference_number FROM personal_info WHERE id=$1', [pid]);
     const refNum = refResult.rows[0].reference_number;
-    await pool.query('INSERT INTO uploaded_documents (personal_id, national_id, doc_type, file_name, reference_number) VALUES ($1,$2,$3,$4,$5)', [pid, nat, docType, req.file.path, refNum]);
+    const ins = await pool.query('INSERT INTO uploaded_documents (personal_id, national_id, doc_type, file_name, reference_number) VALUES ($1,$2,$3,$4,$5) RETURNING id', [pid, nat, docType, req.file.path, refNum]);
     logActivity(`DOC_ADDED ${refNum}`);
-    res.json({ referenceNumber: refNum, path: req.file.path });
+    res.json({ id: ins.rows[0].id, referenceNumber: refNum, path: req.file.path });
   } catch (e) {
     logError(`ADD_DOC_ERROR ${e.message}`);
     res.status(500).json({ error: 'server_error' });

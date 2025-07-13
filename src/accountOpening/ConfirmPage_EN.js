@@ -14,6 +14,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 const ConfirmPage_EN = ({ onNavigate, state }) => {
     const { language } = useLanguage();
     const { formData } = useFormData();
+    const manualFields = state?.manualFields || [];
     const initialForm = state?.form || {
         ...(formData.personalInfo || {}),
         addressInfo: formData.addressInfo || {},
@@ -49,7 +50,7 @@ const ConfirmPage_EN = ({ onNavigate, state }) => {
             const resp = await fetch(`${API_BASE_URL}/api/submit-form`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...form, aiModel: formData.provider })
+                body: JSON.stringify({ ...form, aiModel: formData.provider, manualFields })
             });
             if (resp.ok) {
                 const data = await resp.json();

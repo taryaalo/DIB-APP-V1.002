@@ -12,6 +12,7 @@ const LookupPage_EN = ({ onNavigate }) => {
     const [search, setSearch] = useState('');
     const [selected, setSelected] = useState(null);
     const [page, setPage] = useState(0);
+    const [statusFilter, setStatusFilter] = useState('Pending');
 
     useEffect(() => {
         const load = async () => {
@@ -28,7 +29,7 @@ const LookupPage_EN = ({ onNavigate }) => {
     }, []);
 
     const filtered = apps
-        .filter(a => a.status === 'Pending')
+        .filter(a => statusFilter === 'All' || a.status === statusFilter)
         .filter(a => {
             const term = search.toLowerCase();
             return (
@@ -99,7 +100,15 @@ const LookupPage_EN = ({ onNavigate }) => {
             <main className="form-main" style={{width:'100%',maxWidth:'1000px',margin:'0 auto'}}>
                 <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'20px',width:'100%'}}>
                     <h2 style={{fontSize:'1.5rem',fontWeight:'700'}}>Pending Applications</h2>
-                    <input className="form-input" style={{maxWidth:'250px'}} placeholder="Search..." value={search} onChange={e=>setSearch(e.target.value)} />
+                    <div style={{display:'flex',gap:'10px'}}>
+                        <select className="form-input" value={statusFilter} onChange={e=>{setStatusFilter(e.target.value);setPage(0);}}>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="All">All</option>
+                        </select>
+                        <input className="form-input" style={{maxWidth:'250px'}} placeholder="Search..." value={search} onChange={e=>setSearch(e.target.value)} />
+                    </div>
                 </div>
                 <table className="confirmation-table" style={{width:'100%'}}>
                     <thead>

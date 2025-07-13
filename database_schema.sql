@@ -28,6 +28,7 @@ CREATE TABLE personal_info (
     reference_number VARCHAR(100) UNIQUE,
     ai_model VARCHAR(20),
     service_type VARCHAR(50),
+    manual_fields TEXT[],
     confirmed_by_admin BOOLEAN DEFAULT FALSE
 );
 
@@ -36,6 +37,7 @@ CREATE TABLE address_info (
     id SERIAL PRIMARY KEY,
     personal_id INT REFERENCES personal_info(id) ON DELETE CASCADE,
     national_id VARCHAR(20),
+    reference_number VARCHAR(100),
     country VARCHAR(50),
     city VARCHAR(50),
     area VARCHAR(100),
@@ -48,6 +50,7 @@ CREATE TABLE work_income_info (
     id SERIAL PRIMARY KEY,
     personal_id INT REFERENCES personal_info(id) ON DELETE CASCADE,
     national_id VARCHAR(20),
+    reference_number VARCHAR(100),
     employment_status VARCHAR(50),
     job_title VARCHAR(100),
     employer VARCHAR(100),

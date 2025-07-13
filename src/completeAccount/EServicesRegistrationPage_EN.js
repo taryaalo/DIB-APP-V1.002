@@ -5,7 +5,7 @@ import LanguageSwitcher from '../common/LanguageSwitcher';
 import Footer from '../common/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
 import { t } from '../i18n';
-import { MobileAppIcon, SmsIcon, CardIcon } from '../common/Icons';
+import { MobileAppIcon, SmsIcon, CardIcon, VisaMasterIcon } from '../common/Icons';
 
 const EServicesRegistrationPage_EN = ({ onNavigate, state }) => {
   const { language } = useLanguage();
@@ -74,7 +74,7 @@ const EServicesRegistrationPage_EN = ({ onNavigate, state }) => {
                   <input type="checkbox" name="internationalCard" checked={services.internationalCard} onChange={handleChange} />
                   <span className="checkmark"></span>
                 </div>
-                <CardIcon />
+                <VisaMasterIcon />
                 <span>{t('registerInternationalCard', language)}</span>
               </label>
             </li>

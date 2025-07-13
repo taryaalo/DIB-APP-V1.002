@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { LOGO_WHITE } from '../assets/imagePaths';
 import { CalendarIcon, LockIcon } from '../common/Icons';
+import { logToServer } from '../utils/logger';
 import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import Footer from '../common/Footer';
@@ -165,10 +166,14 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
         if (inputs[next]) inputs[next].focus();
     };
 
+    const unlockField = (name) => {
+        setLocked(l => ({ ...l, [name]: false }));
+        logToServer(`manual_edit_${name}`);
+    };
     const lockProps = (name) => ({
         readOnly: !!locked[name],
         className: `form-input${locked[name] ? ' locked' : ''}`,
-        onDoubleClick: () => setLocked(l => ({ ...l, [name]: false }))
+        onDoubleClick: () => unlockField(name)
     });
 
 
@@ -206,6 +211,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                 <form className="form-container" onSubmit={e => {e.preventDefault(); handleSubmit();}} noValidate>
                     <div className="form-section">
                         <h3>{t('personalInfo', language)}</h3>
+                        <p className="guide-message">{t('editHint', language)}</p>
                         <div className="form-group"><input name="fullName" value={form.fullName} onChange={handleChange} required type="text" {...lockProps('fullName')} placeholder={t('fullName', language)} /><LockIcon className="lock-icon" /></div>
                         <div className="form-group"><input name="firstNameEn" value={form.firstNameEn} onChange={handleChange} required type="text" {...lockProps('firstNameEn')} placeholder={t('firstNameEn', language)} /><LockIcon className="lock-icon" /></div>
                         <div className="form-group"><input name="middleNameEn" value={form.middleNameEn} onChange={handleChange} required type="text" {...lockProps('middleNameEn')} placeholder={t('middleNameEn', language)} /><LockIcon className="lock-icon" /></div>

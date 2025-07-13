@@ -10,7 +10,7 @@ import ThemeSwitcher from '../common/ThemeSwitcher';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import AIProviderSwitcher from '../common/AIProviderSwitcher';
 import Footer from '../common/Footer';
-import { UploadIcon } from '../common/Icons';
+import { UploadIcon, SuccessIcon } from '../common/Icons';
 import { LOGO_WHITE } from '../assets/imagePaths';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFormData } from '../contexts/FormContext';
@@ -211,6 +211,7 @@ const SequentialDocsPage_EN = ({ onNavigate, backPage, nextPage }) => {
               <div className="result-container">
                 <div className={`image-preview-box ${isLoading ? 'scanning' : ''}` }>
                   <img src={image} alt="preview" />
+                  {!isLoading && data[doc.key] && <SuccessIcon className="scan-success-check" />}
                   <button
                     type="button"
                     onClick={() => fileInputRef.current.click()}

@@ -116,6 +116,10 @@ const translations = {
   pendingApprovals: { en: 'Pending Approvals', ar: 'المراجع غير المعتمدة' },
   approve: { en: 'Approve', ar: 'اعتماد' },
   unlock: { en: 'Unlock', ar: 'فتح الحقول' },
+  editHint: {
+    en: 'If any information is wrong, double-click the field to unlock and edit it.',
+    ar: 'إذا كانت هناك أخطاء في البيانات، انقر مرتين على الحقل لفتحه وتعديله.'
+  },
   registerMobileApp: { en: 'Registration for Bank Mobile Application', ar: 'التسجيل في تطبيق المصرف' },
   registerSmsService: { en: 'Registration for Bank SMS Service', ar: 'التسجيل في خدمة الرسائل القصيرة' },
   registerLocalCard: { en: 'Registration for Local Card', ar: 'التسجيل للبطاقة المحلية' },

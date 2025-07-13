@@ -121,6 +121,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
 
     const handleChange = (e, index) => {
         const { name, value, type, checked } = e.target;
+        if (locked[name]) return;
         if (name.startsWith('agree')) {
             setAgreements(a => ({ ...a, [name]: checked }));
         } else if (name === 'enableEmail') {
@@ -219,8 +220,37 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
                         <div className="form-group"><input name="middleNameEn" value={form.middleNameEn} onChange={handleChange} required type="text" {...lockProps('middleNameEn')} placeholder={t('middleNameEn', language)} /><LockIcon className="lock-icon" /></div>
                         <div className="form-group"><input name="lastNameEn" value={form.lastNameEn} onChange={handleChange} required type="text" {...lockProps('lastNameEn')} placeholder={t('lastNameEn', language)} /><LockIcon className="lock-icon" /></div>
                         <div className="form-group date-input-container"><input name="dob" value={form.dob} required type="text" {...lockProps('dob')} placeholder={t('dateOfBirth', language)} onFocus={(e) => e.target.type='date'} onBlur={(e) => e.target.type='text'} onChange={handleChange}/><CalendarIcon/></div>
-                        <div className="form-group"><select name="gender" value={form.gender} onChange={handleChange} required disabled={locked.gender} className={`form-input${locked.gender ? ' locked' : ''}`} onDoubleClick={() => setLocked(l => ({...l, gender: false}))}><option value="">{t('gender', language)}</option><option value="male">{t('male', language)}</option><option value="female">{t('female', language)}</option></select><LockIcon className="lock-icon" /></div>
-                        <div className="form-group"><select name="nationality" value={form.nationality} onChange={handleChange} disabled={locked.nationality} className={`form-input${locked.nationality ? ' locked' : ''}`} onDoubleClick={() => setLocked(l => ({...l, nationality: false}))}><option value="">{t('nationality', language)}</option><option value="libyan">{t('libyan', language)}</option><option value="other">{t('other', language)}</option></select><LockIcon className="lock-icon" /></div>
+                        <div className="form-group" style={{position:'relative'}}>
+                            <select
+                                name="gender"
+                                value={form.gender}
+                                onChange={handleChange}
+                                required
+                                disabled={locked.gender}
+                                className={`form-input${locked.gender ? ' locked' : ''}`}
+                            >
+                                <option value="">{t('gender', language)}</option>
+                                <option value="male">{t('male', language)}</option>
+                                <option value="female">{t('female', language)}</option>
+                            </select>
+                            {locked.gender && <div className="locked-overlay" onDoubleClick={() => setLocked(l => ({...l, gender: false}))}></div>}
+                            <LockIcon className="lock-icon" />
+                        </div>
+                        <div className="form-group" style={{position:'relative'}}>
+                            <select
+                                name="nationality"
+                                value={form.nationality}
+                                onChange={handleChange}
+                                className={`form-input${locked.nationality ? ' locked' : ''}`}
+                                disabled={locked.nationality}
+                            >
+                                <option value="">{t('nationality', language)}</option>
+                                <option value="libyan">{t('libyan', language)}</option>
+                                <option value="other">{t('other', language)}</option>
+                            </select>
+                            {locked.nationality && <div className="locked-overlay" onDoubleClick={() => setLocked(l => ({...l, nationality: false}))}></div>}
+                            <LockIcon className="lock-icon" />
+                        </div>
                         <div className="form-group"><input name="passportNumber" value={form.passportNumber} onChange={handleChange} type="text" {...lockProps('passportNumber')} placeholder={t('passportNumber', language)} /><LockIcon className="lock-icon" /></div>
                         <div className="form-group date-input-container"><input name="passportIssueDate" value={form.passportIssueDate} onChange={handleChange} type="text" {...lockProps('passportIssueDate')} placeholder={t('passportIssueDate', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>
                         <div className="form-group date-input-container"><input name="passportExpiryDate" value={form.passportExpiryDate} onChange={handleChange} type="text" {...lockProps('passportExpiryDate')} placeholder={t('passportExpiryDate', language)} onFocus={e=>e.target.type='date'} onBlur={e=>e.target.type='text'} /><CalendarIcon/></div>

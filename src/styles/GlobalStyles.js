@@ -352,7 +352,8 @@ const GlobalStyles = () => (
     .form-input.locked {
         background-color: #f3f3f3;
         color: #666;
-        pointer-events: none;
+        pointer-events: auto;
+        cursor: not-allowed;
     }
     .lock-icon { display: none; position: absolute; top: 50%; right: 12px; transform: translateY(-50%); color: #999; pointer-events: none; }
     .form-input.locked + .lock-icon { display: block; }
@@ -543,8 +544,8 @@ const GlobalStyles = () => (
         background:
             repeating-linear-gradient(
                 to bottom,
-                rgba(255,255,255,0.3) 0px,
-                rgba(255,255,255,0.3) 2px,
+                rgba(0,0,0,0.3) 0px,
+                rgba(0,0,0,0.3) 2px,
                 transparent 2px,
                 transparent 4px
             );

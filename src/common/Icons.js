@@ -55,21 +55,28 @@ export const UnlockIcon = () => (
 );
 
 export const MobileAppIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="18" r="1"/></svg>
-);
+
+<svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 30 30" width="30px" fill="currentColor">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/>
+</svg>);
 
 export const SmsIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h18l-4 4z"/></svg>
-);
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 30 30">
+    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+  </svg>
+  );
 
 export const CardIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10" stroke="currentColor" strokeWidth="2"/></svg>
-);
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 24 24">
+  <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zM20 18H4v-6h16v6zm0-10H4V6h16v2z"/>
+  <path d="M0 0h24v24H0z" fill="none"/>
+</svg>
+    );
 
 export const VisaMasterIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-        <rect x="2" y="4" width="20" height="16" rx="2"/>
-        <circle cx="10" cy="12" r="3" fill="white"/>
-        <circle cx="14" cy="12" r="3" fill="white"/>
-    </svg>
+<svg xmlns="http://www.w.w3.org/2000/svg" height="30" width="30" fill="currentColor" viewBox="0 0 24 24">
+  <text x="2" y="16" font-family="sans-serif" font-size="9" font-weight="bold">VISA</text>
+</svg>
 );

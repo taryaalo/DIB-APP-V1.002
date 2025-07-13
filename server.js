@@ -406,6 +406,30 @@ app.get('/api/customer', async (req, res) => {
   }
 });
 
+// Fetch all applications with related data
+app.get('/api/applications', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM personal_info ORDER BY created_at DESC');
+    const apps = [];
+    for (const p of result.rows) {
+      const address = await pool.query('SELECT * FROM address_info WHERE personal_id=$1 LIMIT 1', [p.id]);
+      const work = await pool.query('SELECT * FROM work_income_info WHERE personal_id=$1 LIMIT 1', [p.id]);
+      const docs = await pool.query('SELECT doc_type, file_name, reference_number, confirmed_by_admin FROM uploaded_documents WHERE personal_id=$1', [p.id]);
+      apps.push({
+        personalInfo: p,
+        addressInfo: address.rows[0] || null,
+        workInfo: work.rows[0] || null,
+        uploadedDocuments: docs.rows,
+        status: p.confirmed_by_admin ? 'Approved' : 'Pending'
+      });
+    }
+    res.json(apps);
+  } catch (e) {
+    logError(`GET_APPS_ERROR ${e.message}`);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
 // Update an uploaded document with a new file
 app.post('/api/update-document/:reference', upload.single('file'), async (req, res) => {
   const ref = req.params.reference;
@@ -488,8 +512,8 @@ http.createServer(app).listen(HTTP_PORT, () => {
 });
 
 try {
-  const keyPath = process.env.SSL_KEY_PATH || path.join(__dirname, 'key.pem');
-  const certPath = process.env.SSL_CERT_PATH || path.join(__dirname, 'cert.pem');
+  const keyPath = process.env.SSL_KEY_PATH || path.join(__dirname, 'src', 'ssl', 'key.pem');
+  const certPath = process.env.SSL_CERT_PATH || path.join(__dirname, 'src', 'ssl', 'cert.pem');
   const httpsOptions = {
     key: fs.readFileSync(keyPath),
     cert: fs.readFileSync(certPath),

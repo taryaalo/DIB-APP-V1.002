@@ -498,5 +498,7 @@ try {
     console.log(`HTTPS server running on port ${HTTPS_PORT}`);
   });
 } catch (e) {
-  console.warn('HTTPS disabled:', e.message);
+  const msg = `HTTPS server failed: ${e.message}. Continuing with HTTP only.`;
+  console.warn(msg);
+  logError(`HTTPS_ERROR ${e.message}`);
 }

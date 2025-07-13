@@ -48,6 +48,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
         });
         return obj;
     });
+    const [manualFields, setManualFields] = useState([]);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -168,6 +169,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
 
     const unlockField = (name) => {
         setLocked(l => ({ ...l, [name]: false }));
+        if (!manualFields.includes(name)) setManualFields(f => [...f, name]);
         logToServer(`manual_edit_${name}`);
     };
     const lockProps = (name) => ({
@@ -184,7 +186,7 @@ const PersonalInfoPage_EN = ({ onNavigate, backPage, flow, state }) => {
         }
         setAgreeError(false);
         setFormData(data => ({ ...data, personalInfo: form }));
-        onNavigate('confirm', { form });
+        onNavigate('confirm', { form, manualFields });
     };
 
     return (

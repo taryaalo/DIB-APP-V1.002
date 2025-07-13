@@ -28,7 +28,7 @@ const ReviewDocsPage_EN = ({ onNavigate, state }) => {
     setDocs(sorted);
     const initValid = {};
     sorted.forEach(d => {
-      initValid[d.reference_number] = d.confirmed_by_admin;
+      initValid[d.id] = d.confirmed_by_admin;
     });
     setValid(initValid);
   }, [state]);
@@ -40,28 +40,28 @@ const ReviewDocsPage_EN = ({ onNavigate, state }) => {
       await fetch(`${API_BASE_URL}/api/approve-document`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reference: id, approved: newVal })
+        body: JSON.stringify({ id, approved: newVal })
       });
     } catch (e) { console.error(e); }
   };
 
-  const handleFileChange = async (ref, file) => {
+  const handleFileChange = async (docId, file) => {
     if (!file) return;
-    setUploading(u => ({ ...u, [ref]: true }));
+    setUploading(u => ({ ...u, [docId]: true }));
     const formData = new FormData();
     formData.append('file', file);
     try {
-      const resp = await fetch(`${API_BASE_URL}/api/update-document/${ref}`, {
+      const resp = await fetch(`${API_BASE_URL}/api/update-document/${docId}`, {
         method: 'POST',
         body: formData
       });
       if (resp.ok) {
         const data = await resp.json();
-        setDocs(d => d.map(doc => doc.reference_number === ref ? { ...doc, file_name: data.path, confirmed_by_admin: false } : doc));
-        setValid(v => ({ ...v, [ref]: false }));
+        setDocs(d => d.map(doc => doc.id === docId ? { ...doc, file_name: data.path, confirmed_by_admin: false } : doc));
+        setValid(v => ({ ...v, [docId]: false }));
       }
     } catch (e) { console.error(e); }
-    setUploading(u => ({ ...u, [ref]: false }));
+    setUploading(u => ({ ...u, [docId]: false }));
   };
 
   const handleNewDoc = async (docType, file) => {
@@ -75,9 +75,9 @@ const ReviewDocsPage_EN = ({ onNavigate, state }) => {
       const resp = await fetch(`${API_BASE_URL}/api/add-document`, { method: 'POST', body: formData });
       if (resp.ok) {
         const data = await resp.json();
-        const newDoc = { doc_type: docType, file_name: data.path, reference_number: data.referenceNumber, confirmed_by_admin: false };
+        const newDoc = { id: data.id, doc_type: docType, file_name: data.path, reference_number: data.referenceNumber, confirmed_by_admin: false };
         setDocs(d => [...d, newDoc]);
-        setValid(v => ({ ...v, [newDoc.reference_number]: false }));
+        setValid(v => ({ ...v, [newDoc.id]: false }));
       }
     } catch (e) { console.error(e); }
     setUploading(u => ({ ...u, [docType]: false }));
@@ -102,15 +102,15 @@ const ReviewDocsPage_EN = ({ onNavigate, state }) => {
           {DOC_TYPES.map(type => {
             const doc = docs.find(d => d.doc_type === type);
             return doc ? (
-              <div key={doc.reference_number} className="image-preview-box" style={{alignItems:'center'}}>
+              <div key={doc.id} className="image-preview-box" style={{alignItems:'center'}}>
                 <img src={`${API_BASE_URL}/${doc.file_name}`} alt={doc.doc_type} />
                 <div style={{marginTop:'10px', fontWeight:'600'}}>{t(DOC_LABELS[doc.doc_type] || doc.doc_type, language)}</div>
                 <label style={{marginTop:'10px', display:'flex', alignItems:'center', gap:'5px'}}>
-                  <input type="checkbox" checked={!!valid[doc.reference_number]} onChange={() => toggleValid(doc.reference_number)} />
+                  <input type="checkbox" checked={!!valid[doc.id]} onChange={() => toggleValid(doc.id)} />
                   {t('valid', language)}
                 </label>
                 <div style={{marginTop:'10px'}}>
-                  <input type="file" onChange={e => handleFileChange(doc.reference_number, e.target.files[0])} />
+                  <input type="file" onChange={e => handleFileChange(doc.id, e.target.files[0])} />
                 </div>
               </div>
             ) : (
@@ -124,7 +124,7 @@ const ReviewDocsPage_EN = ({ onNavigate, state }) => {
           })}
         </div>
         <div className="form-actions">
-          <button className="btn-next" disabled={!DOC_TYPES.every(t => docs.some(d => d.doc_type === t && valid[d.reference_number]))} onClick={() => onNavigate('reviewWorkInfo', { ...state, uploadedDocuments: docs })}>{t('next', language)}</button>
+          <button className="btn-next" disabled={!DOC_TYPES.every(t => docs.some(d => d.doc_type === t && valid[d.id]))} onClick={() => onNavigate('reviewWorkInfo', { ...state, uploadedDocuments: docs })}>{t('next', language)}</button>
         </div>
       </main>
       <Footer />

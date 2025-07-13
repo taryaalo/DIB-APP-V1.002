@@ -5,6 +5,7 @@ import LanguageSwitcher from '../common/LanguageSwitcher';
 import Footer from '../common/Footer';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
+const ADMIN_NAME = process.env.REACT_APP_ADMIN_NAME || 'Admin';
 
 const LookupPage_EN = ({ onNavigate }) => {
     const [apps, setApps] = useState([]);
@@ -83,7 +84,7 @@ const LookupPage_EN = ({ onNavigate }) => {
             await fetch(`${API_BASE_URL}/api/application-status`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, status })
+                body: JSON.stringify({ id, status, adminName: ADMIN_NAME })
             });
         } catch (e) { console.error(e); }
     };

@@ -583,6 +583,8 @@ const GlobalStyles = () => (
         background: rgba(255,255,255,0.8);
         border-radius: 50%;
         padding: 2px;
+        z-index: 2;
+        pointer-events: none;
     }
     .error-message { color: #e53e3e; font-weight: 600; background-color: rgba(229, 62, 62, 0.1); padding: 15px; border-radius: 8px; text-align: center; }
     .db-status { margin-top: 10px; font-weight: 600; }

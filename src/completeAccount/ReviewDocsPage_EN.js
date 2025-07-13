@@ -7,6 +7,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { t } from '../i18n';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
+const ADMIN_NAME = process.env.REACT_APP_ADMIN_NAME || 'Admin';
 
 const DOC_LABELS = {
   passport: 'passportPhoto',
@@ -40,7 +41,7 @@ const ReviewDocsPage_EN = ({ onNavigate, state }) => {
       await fetch(`${API_BASE_URL}/api/approve-document`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, approved: newVal })
+        body: JSON.stringify({ id, approved: newVal, adminName: ADMIN_NAME })
       });
     } catch (e) { console.error(e); }
   };

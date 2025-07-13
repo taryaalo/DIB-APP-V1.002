@@ -124,8 +124,8 @@ app.post('/api/address-info', async (req, res) => {
     const existing = await pool.query('SELECT id FROM address_info WHERE personal_id=$1', [pid]);
     if (existing.rows.length) {
       await pool.query(
-        'UPDATE address_info SET country=$1, city=$2, area=$3, residential_address=$4 WHERE personal_id=$5',
-        [country || null, city || null, area || null, residentialAddress || null, pid]
+        'UPDATE address_info SET country=$1, city=$2, area=$3, residential_address=$4, reference_number=$5 WHERE personal_id=$6',
+        [country || null, city || null, area || null, residentialAddress || null, refNum, pid]
       );
       logActivity(`DB_UPDATE address_info ${pid}`);
       if (adminChange) logActivity(`ADMIN_UPDATE address_info ${pid}`);
@@ -161,8 +161,8 @@ app.post('/api/work-info', async (req, res) => {
     const existing = await pool.query('SELECT id FROM work_income_info WHERE personal_id=$1', [pid]);
     if (existing.rows.length) {
       await pool.query(
-        'UPDATE work_income_info SET employment_status=$1, job_title=$2, employer=$3, employer_address=$4, employer_phone=$5, source_of_income=$6, monthly_income=$7 WHERE personal_id=$8',
-        [employmentStatus || null, jobTitle || null, employer || null, employerAddress || null, employerPhone || null, sourceOfIncome || null, monthlyIncome || null, pid]
+        'UPDATE work_income_info SET employment_status=$1, job_title=$2, employer=$3, employer_address=$4, employer_phone=$5, source_of_income=$6, monthly_income=$7, reference_number=$8 WHERE personal_id=$9',
+        [employmentStatus || null, jobTitle || null, employer || null, employerAddress || null, employerPhone || null, sourceOfIncome || null, monthlyIncome || null, refNum, pid]
       );
       logActivity(`DB_UPDATE work_income_info ${pid}`);
       if (adminChange) logActivity(`ADMIN_UPDATE work_income_info ${pid}`);
@@ -436,13 +436,15 @@ app.post('/api/update-document/:id', upload.single('file'), async (req, res) => 
   const docId = req.params.id;
   if (!req.file) return res.status(400).json({ error: 'missing_file' });
   try {
-    const existing = await pool.query('SELECT file_name FROM uploaded_documents WHERE id=$1', [docId]);
+    const existing = await pool.query('SELECT personal_id, file_name FROM uploaded_documents WHERE id=$1', [docId]);
     if (existing.rows.length === 0) return res.status(404).json({ error: 'not_found' });
     const oldPath = existing.rows[0].file_name;
     const dir = path.dirname(oldPath);
     const newPath = path.join(dir, path.basename(req.file.path));
     fs.renameSync(req.file.path, newPath);
-    await pool.query('UPDATE uploaded_documents SET file_name=$1, confirmed_by_admin=FALSE WHERE id=$2', [newPath, docId]);
+    const refRes = await pool.query('SELECT reference_number FROM personal_info WHERE id=$1', [existing.rows[0].personal_id]);
+    const refNum = refRes.rows[0].reference_number;
+    await pool.query('UPDATE uploaded_documents SET file_name=$1, confirmed_by_admin=FALSE, reference_number=$2 WHERE id=$3', [newPath, refNum, docId]);
     logActivity(`DOC_UPDATED ${docId}`);
     res.json({ path: newPath });
   } catch (e) {

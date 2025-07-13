@@ -39,12 +39,13 @@ CREATE TABLE address_info (
     id SERIAL PRIMARY KEY,
     personal_id INT REFERENCES personal_info(id) ON DELETE CASCADE,
     national_id VARCHAR(20),
-    reference_number VARCHAR(100),
+    reference_number VARCHAR(100) NOT NULL REFERENCES personal_info(reference_number),
     country VARCHAR(50),
     city VARCHAR(50),
     area VARCHAR(100),
     residential_address TEXT,
-    confirmed_by_admin BOOLEAN DEFAULT FALSE
+    confirmed_by_admin BOOLEAN DEFAULT FALSE,
+    UNIQUE(reference_number)
 );
 
 -- Work and income information linked to personal_info
@@ -52,7 +53,7 @@ CREATE TABLE work_income_info (
     id SERIAL PRIMARY KEY,
     personal_id INT REFERENCES personal_info(id) ON DELETE CASCADE,
     national_id VARCHAR(20),
-    reference_number VARCHAR(100),
+    reference_number VARCHAR(100) NOT NULL REFERENCES personal_info(reference_number),
     employment_status VARCHAR(50),
     job_title VARCHAR(100),
     employer VARCHAR(100),
@@ -60,7 +61,8 @@ CREATE TABLE work_income_info (
     employer_phone VARCHAR(20),
     source_of_income VARCHAR(100),
     monthly_income VARCHAR(100),
-    confirmed_by_admin BOOLEAN DEFAULT FALSE
+    confirmed_by_admin BOOLEAN DEFAULT FALSE,
+    UNIQUE(reference_number)
 );
 
 -- Uploaded documents linked to personal_info
@@ -70,7 +72,7 @@ CREATE TABLE uploaded_documents (
     national_id VARCHAR(20),
     doc_type VARCHAR(50),
     file_name TEXT NOT NULL,
-    reference_number VARCHAR(100) NOT NULL,
+    reference_number VARCHAR(100) NOT NULL REFERENCES personal_info(reference_number),
     confirmed_by_admin BOOLEAN DEFAULT FALSE,
     approved_by_admin_name VARCHAR(100),
     approved_by_admin_ip VARCHAR(50),

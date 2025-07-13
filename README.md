@@ -28,7 +28,7 @@ REACT_APP_API_BASE_URL=https://localhost:7103
 
 The Express backend tries to start both an HTTP server on `PORT` (default
 `7003`) and an HTTPS server on `HTTPS_PORT` (default `7103`). Certificate and
-key files are read from `cert.pem` and `key.pem` in the project root or from the
+key files are read from `src/ssl/cert.pem` and `src/ssl/key.pem` or from the
 `SSL_CERT_PATH` and `SSL_KEY_PATH` environment variables. If the HTTPS server
 fails to start the application continues running on HTTP only and a warning is
 written to the console and log file.

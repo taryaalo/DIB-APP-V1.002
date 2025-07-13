@@ -464,6 +464,21 @@ app.post('/api/approve-document', async (req, res) => {
   }
 });
 
+// Update personal info approval status
+app.post('/api/application-status', async (req, res) => {
+  const { id, status } = req.body || {};
+  if (!id || !status) return res.status(400).json({ error: 'missing_parameters' });
+  try {
+    const approved = status === 'Approved';
+    await pool.query('UPDATE personal_info SET confirmed_by_admin=$1 WHERE id=$2', [approved, id]);
+    logActivity(`APP_STATUS ${id} ${status}`);
+    res.json({ success: true });
+  } catch (e) {
+    logError(`APP_STATUS_ERROR ${e.message}`);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
 // List all uploaded document references awaiting admin approval
 app.get('/api/pending-docs', async (req, res) => {
   try {

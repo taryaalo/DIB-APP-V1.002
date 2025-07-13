@@ -6,7 +6,7 @@ import Footer from '../common/Footer';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
-const LookupPage_EN = () => {
+const LookupPage_EN = ({ onNavigate }) => {
     const [apps, setApps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
@@ -29,10 +29,10 @@ const LookupPage_EN = () => {
     const filtered = apps.filter(a => {
         const term = search.toLowerCase();
         return (
-            a.personalInfo.full_name.toLowerCase().includes(term) ||
-            a.personalInfo.first_name.toLowerCase().includes(term) ||
-            a.personalInfo.last_name.toLowerCase().includes(term) ||
-            a.personalInfo.reference_number.toLowerCase().includes(term)
+            (a.personalInfo.full_name || '').toLowerCase().includes(term) ||
+            (a.personalInfo.first_name || '').toLowerCase().includes(term) ||
+            (a.personalInfo.last_name || '').toLowerCase().includes(term) ||
+            (a.personalInfo.reference_number || '').toLowerCase().includes(term)
         );
     });
 
@@ -60,7 +60,7 @@ const LookupPage_EN = () => {
                 <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(150px,1fr))',gap:'15px'}}>
                     {docs.map(doc => (
                         <div key={doc.file_name} style={{textAlign:'center'}}>
-                            <img src={doc.file_name} alt={doc.doc_type} style={{width:'100%',height:'120px',objectFit:'cover',borderRadius:'8px',marginBottom:'5px'}} />
+                            <img src={`${API_BASE_URL}/${doc.file_name}`} alt={doc.doc_type} style={{width:'100%',height:'120px',objectFit:'cover',borderRadius:'8px',marginBottom:'5px'}} />
                             <p style={{fontSize:'0.9rem',fontWeight:'600'}}>{doc.doc_type}</p>
                         </div>
                     ))}
@@ -69,9 +69,16 @@ const LookupPage_EN = () => {
         );
     };
 
-    const updateStatus = (id, status) => {
-        setApps(a => a.map(app => app.personalInfo.id === id ? {...app, status} : app));
+    const updateStatus = async (id, status) => {
+        setApps(a => a.map(app => app.personalInfo.id === id ? { ...app, status } : app));
         setSelected(null);
+        try {
+            await fetch(`${API_BASE_URL}/api/application-status`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, status })
+            });
+        } catch (e) { console.error(e); }
     };
 
     return (
@@ -112,7 +119,7 @@ const LookupPage_EN = () => {
                                 <td>{app.personalInfo.reference_number}</td>
                                 <td>{app.personalInfo.service_type}</td>
                                 <td>{new Date(app.personalInfo.created_at).toLocaleDateString()}</td>
-                                <td><span className={`status-badge status-${app.status.toLowerCase()}`}>{app.status}</span></td>
+                                <td><span className={`status-badge status-${(app.status || '').toLowerCase()}`}>{app.status || 'Pending'}</span></td>
                                 <td><button onClick={() => setSelected(app)}>Review</button></td>
                             </tr>
                         ))}
@@ -140,6 +147,9 @@ const LookupPage_EN = () => {
                         <div style={{display:'flex',justifyContent:'flex-end',gap:'10px',marginTop:'20px'}}>
                             <button onClick={()=>updateStatus(selected.personalInfo.id,'Rejected')} className="btn-next" style={{backgroundColor:'#ef4444'}}>
                                 Reject
+                            </button>
+                            <button onClick={()=>onNavigate('reviewDocs', selected)} className="btn-next" style={{backgroundColor:'#fbbf24'}}>
+                                Edit
                             </button>
                             <button onClick={()=>updateStatus(selected.personalInfo.id,'Approved')} className="btn-next" style={{backgroundColor:'#22c55e'}}>
                                 Approve

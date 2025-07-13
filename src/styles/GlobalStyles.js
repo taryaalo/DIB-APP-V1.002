@@ -449,6 +449,40 @@ const GlobalStyles = () => (
     .confirmation-table td.checkbox-cell {
         text-align: right;
     }
+
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .status-pending { background-color: #eab308; color: white; }
+    .status-approved { background-color: #22c55e; color: white; }
+    .status-rejected { background-color: #ef4444; color: white; }
+
+    .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+    .modal-backdrop.open { opacity: 1; }
+    .modal-content {
+        background-color: var(--docs-bg);
+        border-radius: 10px;
+        max-height: 90vh;
+        overflow-y: auto;
+        transform: scale(0.95);
+        transition: transform 0.3s ease-in-out;
+    }
+    .modal-backdrop.open .modal-content { transform: scale(1); }
     
     /* ---=== Success Page ===--- */
     .success-page {

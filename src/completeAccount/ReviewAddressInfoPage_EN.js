@@ -7,12 +7,14 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { t } from '../i18n';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
+const ADMIN_NAME = process.env.REACT_APP_ADMIN_NAME || 'Admin';
 
 const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
   const { language } = useLanguage();
   const [info, setInfo] = useState(state?.personalInfo || {});
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({});
+  const [approved, setApproved] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -27,6 +29,7 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
             if (data) {
               setInfo(data);
               setForm(data);
+              setApproved(!!data.confirmed_by_admin);
             }
           }
         } catch (e) { console.error(e); }
@@ -37,6 +40,7 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
 
   useEffect(() => {
     if (!editing) setForm(info);
+    setApproved(!!info.confirmed_by_admin);
   }, [info]);
 
   const renderList = (obj) => (
@@ -62,6 +66,20 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
       });
       setInfo(form);
       setEditing(false);
+    } catch (e) { console.error(e); }
+  };
+
+  const toggleApproved = async () => {
+    const ref = state?.personalInfo?.reference_number;
+    if (!ref) return;
+    const newVal = !approved;
+    setApproved(newVal);
+    try {
+      await fetch(`${API_BASE_URL}/api/address-validation`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reference: ref, approved: newVal, adminName: ADMIN_NAME })
+      });
     } catch (e) { console.error(e); }
   };
 
@@ -93,7 +111,11 @@ const ReviewAddressInfoPage_EN = ({ onNavigate, state }) => {
             <button type="button" className="btn-next" onClick={() => setEditing(true)}>{t('unlock', language)}</button>
           </>
         )}
-        <div className="form-actions">
+        <div className="form-actions" style={{display:'flex',alignItems:'center',gap:'10px'}}>
+          <label style={{display:'flex',alignItems:'center',gap:'5px'}}>
+            <input type="checkbox" checked={approved} onChange={toggleApproved} />
+            {t('valid', language)}
+          </label>
           <button className="btn-next" onClick={() => onNavigate('eServicesReg', state)}>
             {t('approve', language)}
           </button>

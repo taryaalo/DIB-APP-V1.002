@@ -522,6 +522,76 @@ app.post('/api/add-document', upload.single('file'), async (req, res) => {
   }
 });
 
+// Update selected service type for an existing customer
+app.post('/api/service-type', async (req, res) => {
+  const { reference, nid, serviceType } = req.body || {};
+  if (!serviceType || (!reference && !nid)) {
+    return res.status(400).json({ error: 'missing_parameters' });
+  }
+  try {
+    let personal;
+    if (reference) {
+      personal = await pool.query('SELECT id FROM personal_info WHERE reference_number=$1', [reference]);
+    } else {
+      personal = await pool.query('SELECT id FROM personal_info WHERE national_id=$1 ORDER BY created_at DESC LIMIT 1', [nid]);
+    }
+    if (personal.rows.length === 0) return res.status(404).json({ error: 'not_found' });
+    const pid = personal.rows[0].id;
+    await pool.query('UPDATE personal_info SET service_type=$1 WHERE id=$2', [serviceType, pid]);
+    logActivity(`SERVICE_TYPE_UPDATE ${pid}`);
+    res.json({ success: true });
+  } catch (e) {
+    logError(`SERVICE_TYPE_ERROR ${e.message}`);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
+// Approve or reject address information
+app.post('/api/address-validation', async (req, res) => {
+  const { reference, nid, approved, adminName } = req.body || {};
+  if (!reference && !nid) return res.status(400).json({ error: 'missing_identifier' });
+  try {
+    let personal;
+    if (reference) {
+      personal = await pool.query('SELECT id FROM personal_info WHERE reference_number=$1', [reference]);
+    } else {
+      personal = await pool.query('SELECT id FROM personal_info WHERE national_id=$1 ORDER BY created_at DESC LIMIT 1', [nid]);
+    }
+    if (personal.rows.length === 0) return res.status(404).json({ error: 'not_found' });
+    const pid = personal.rows[0].id;
+    const adminIp = (req.headers['x-forwarded-for'] || req.ip || '').split(',')[0];
+    await pool.query('UPDATE address_info SET confirmed_by_admin=$1 WHERE personal_id=$2', [approved, pid]);
+    logActivity(`ADDRESS_VALIDATE ${pid} ${approved} ${adminName || ''} ${adminIp}`);
+    res.json({ success: true });
+  } catch (e) {
+    logError(`ADDRESS_VALIDATE_ERROR ${e.message}`);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
+// Approve or reject work and income information
+app.post('/api/work-validation', async (req, res) => {
+  const { reference, nid, approved, adminName } = req.body || {};
+  if (!reference && !nid) return res.status(400).json({ error: 'missing_identifier' });
+  try {
+    let personal;
+    if (reference) {
+      personal = await pool.query('SELECT id FROM personal_info WHERE reference_number=$1', [reference]);
+    } else {
+      personal = await pool.query('SELECT id FROM personal_info WHERE national_id=$1 ORDER BY created_at DESC LIMIT 1', [nid]);
+    }
+    if (personal.rows.length === 0) return res.status(404).json({ error: 'not_found' });
+    const pid = personal.rows[0].id;
+    const adminIp = (req.headers['x-forwarded-for'] || req.ip || '').split(',')[0];
+    await pool.query('UPDATE work_income_info SET confirmed_by_admin=$1 WHERE personal_id=$2', [approved, pid]);
+    logActivity(`WORK_VALIDATE ${pid} ${approved} ${adminName || ''} ${adminIp}`);
+    res.json({ success: true });
+  } catch (e) {
+    logError(`WORK_VALIDATE_ERROR ${e.message}`);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
 app.use((err, req, res, next) => {
   logError(`ERROR ${err.message}`);
   res.status(500).json({ error: 'Server error' });

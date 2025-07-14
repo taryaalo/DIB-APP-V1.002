@@ -9,6 +9,8 @@ import { t } from '../i18n';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useFormData } from '../contexts/FormContext';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
+
 const SelectUserPage_EN = ({ onNavigate }) => {
   useEffect(() => {
     const card = document.querySelector('.tilt-effect');
@@ -33,10 +35,21 @@ const SelectUserPage_EN = ({ onNavigate }) => {
   }, []);
 
   const { language } = useLanguage();
-  const { setFormData } = useFormData();
+  const { formData, setFormData } = useFormData();
 
-  const selectService = (type, page) => {
+  const selectService = async (type, page) => {
     setFormData(d => ({ ...d, serviceType: type }));
+    const reference = formData.personalInfo?.referenceNumber || formData.personalInfo?.reference_number;
+    const nid = (formData.personalInfo?.nidDigits || []).join('');
+    if (reference) {
+      try {
+        await fetch(`${API_BASE_URL}/api/service-type`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reference, nid, serviceType: type })
+        });
+      } catch (e) { console.error(e); }
+    }
     onNavigate(page);
   };
 
